@@ -11,11 +11,9 @@ namespace MooGame
             bool playOn = true;
             Console.WriteLine("Enter your user name:\n");
             string name = Console.ReadLine();
-            //GameEngine engine = new GameEngine();
 
             while (playOn)
             {
-
                 string goal = GameEngine.CreateGoal();
                 Console.WriteLine("New game:\n");
 
@@ -26,18 +24,18 @@ namespace MooGame
                 string bullsAndCows = string.Empty;
                 while (!bullsAndCows.Contains("BBBB,"))
                 {
-                    bullsAndCows = GameEngine.GuessTheNumber(goal);
+                    bullsAndCows = GameEngine.GuessTheNumber(goal.ToString());
                     numberOfGuesses++;
                 }
 
                 //Scoreboard => seperate part of the code?
                 //Fetch the result-file
+                //Creates a new player every time despite person continuing on the game.
                 StreamWriter output = new StreamWriter("result.txt", append: true);
                 output.WriteLine(name + "#&#" + numberOfGuesses);
                 output.Close();
 
                 ShowTopList();
-
 
                 //Clearer instructions (y/n and catch)
                 Console.WriteLine("Correct, it took " + numberOfGuesses + " guesses. \nContinue?");
@@ -49,13 +47,16 @@ namespace MooGame
             }
         }
 
-        //shoulb be small an do one thing
+        //should be small an do one thing
+        //names need to be fixed and the method shortened down a bit
         static void ShowTopList()
         {
+            //Fetch input
             StreamReader input = new StreamReader("result.txt");
             List<PlayerData> results = new List<PlayerData>();
-            string line;
-            while ((line = input.ReadLine()) != null)
+            //what is line used for?
+            string line = input.ReadLine();
+            while (line != null)
             {
                 string[] nameAndScore = line.Split(new string[] { "#&#" }, StringSplitOptions.None);
                 string name = nameAndScore[0];
@@ -66,11 +67,14 @@ namespace MooGame
                 {
                     results.Add(pd);
                 }
+                //pos = -1 => does not hit else
                 else
                 {
                     results[pos].UpdatePlayerScore(guesses);
                 }
             }
+
+            //Prints out the score
             results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
             Console.WriteLine("Player   games average");
             foreach (PlayerData p in results)
@@ -81,26 +85,32 @@ namespace MooGame
         }
     }
 
-    //TODO: Consider whether the enigne should be static or not.
-    public static class GameEngine
+    public class Game
     {
+        public Game() { }
         public static string CreateGoal()
         {
             Random randomGenerator = new Random();
-            string goal = "";
+            string goal = string.Empty;
             for (int i = 0; i < 4; i++)
             {
                 int random = randomGenerator.Next(10);
-                string randomDigit = "" + random;
+                string randomDigit = random.ToString();
                 while (goal.Contains(randomDigit))
                 {
                     random = randomGenerator.Next(10);
-                    randomDigit = "" + random;
+                    randomDigit = random.ToString();
                 }
-                goal = goal + randomDigit;
+                goal += randomDigit;
             }
             return goal;
         }
+    }
+
+    class GuessResult
+    {
+        public int Bulls { get; }
+        public int Cows { get; }
         public static string GuessTheNumber(string goal)
         {
             string guess = Console.ReadLine();
@@ -120,6 +130,7 @@ namespace MooGame
             }
             else
             {
+                GuessResult guessResult = new GuessResult();
                 return CheckBullsAndCows(goal, guess);
             }
         }
