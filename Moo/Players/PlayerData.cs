@@ -4,20 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Moo
+namespace Moo.Players
 {
-  class PlayerData
+    public class PlayerData : IPLayer
     {
         public string Name { get; private set; }
         public int NumberOfGamesPlayed { get; private set; }
-        public int totalGuesses;
+        int totalGuesses { get; set; }
+        public bool IsActive { get; private set; }
 
         public PlayerData(string name, int gamesPlayed, int guesses)
         {
-            this.Name = name;
+            Name = name;
             NumberOfGamesPlayed = gamesPlayed;
             totalGuesses = guesses;
         }
+
+        public PlayerData(string name, int gamesPlayed, int guesses, bool isActive = true)
+        {
+            Name = name;
+            NumberOfGamesPlayed = gamesPlayed;
+            totalGuesses = guesses;
+            IsActive = isActive;
+        }
+
 
         public void UpdatePlayerScore(int guesses)
         {
@@ -29,6 +39,5 @@ namespace Moo
         {
             return (double)totalGuesses / NumberOfGamesPlayed;
         }
-
     }
 }
