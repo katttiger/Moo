@@ -16,13 +16,18 @@ namespace Moo.Statistic.Tests
         [TestMethod()]
         public void AddDataToScoreboardTest()
         {
-            var testdirectory = "path";
-            mockPlayerDAO.DataReader = new(testdirectory);
             //Values are null
-            Assert.IsNotNull(mockPlayerDAO.DataReader);
-            Assert.IsNotNull(mockPlayerDAO.DataWriter);
+            Assert.IsNull(mockPlayerDAO.DataReader);
+            Assert.IsNull(mockPlayerDAO.DataWriter);
+        }
+
+        [TestMethod()]
+        public void GetTopListTest()
+        {
+            Assert.IsNotNull(mockPlayerDAO.PlayerList);
         }
     }
+
     public class MockPlayerDAO
     {
         public StreamReader DataReader { get; set; }

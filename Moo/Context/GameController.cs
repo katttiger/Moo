@@ -27,7 +27,6 @@ namespace Moo.Context
             {
                 Ui.Clear();
                 Game.Display();
-                ShowTopList(this.Ui);
             }
             Ui.Exit();
         }
@@ -39,9 +38,9 @@ namespace Moo.Context
             List<PlayerData> results = PlayerDAO.GetTopList();
             results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
             Ui.WriteOutput("Player   games average");
-            foreach (PlayerData p in results)
+            foreach (PlayerData player in results)
             {
-                Ui.WriteOutput(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NumberOfGamesPlayed, p.CalculatePlayerAverageScore()));
+                Ui.WriteOutput(string.Format("{0,-9}{1,5:D}{2,9:F2}", player.Name, player.NumberOfGamesPlayed, player.CalculatePlayerAverageScore()));
             }
             input.Close();
         }

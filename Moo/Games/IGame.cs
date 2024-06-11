@@ -11,5 +11,6 @@ namespace Moo.Games
     {
         public bool IsPlaying { get; }
         public void Display();
+        public string PathToScore { get; }
     }
 }

@@ -7,6 +7,7 @@ namespace Moo.Games
     public class MooGame : IGame
     {
         public bool IsPlaying { get; set; } = true;
+        public string PathToScore { get; set; }
 
         GameController gameController = new();
         UI Ui = new UI();
@@ -86,12 +87,14 @@ namespace Moo.Games
 
                 while (!bullsAndCows.Contains("BBBB,"))
                 {
-                    string guess =Ui.HandleInput() ?? "";
+                    string guess = Ui.HandleInput() ?? "";
                     bullsAndCows = CheckIfGuessIsValid(goal, guess);
                     numberOfGuesses++;
                     Ui.WriteOutput($"{bullsAndCows} \n");
                 }
-                PlayerDAO.AddDataToScoreboard(name, numberOfGuesses);
+                //output.WriteLine(name + "#&#" + nGuess)
+                string result = $"{name}#&#{numberOfGuesses}";
+                PlayerDAO.AddDataToScoreboard(result, "result.txt");
                 gameController.ShowTopList(Ui);
 
                 Ui.WriteOutput(

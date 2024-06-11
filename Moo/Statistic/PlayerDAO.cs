@@ -4,23 +4,22 @@ namespace Moo.Statistic
 {
     public class PlayerDAO : IPlayerDAO
     {
-        public StreamReader DataReader { get; set; }
-        public StreamWriter DataWriter { get; set; }
-        public List<IPLayer> PlayerList { get; set; }
-        public static void AddDataToScoreboard(string name, int numberOfGuesses)
+        public static StreamReader PlayerDataReader { get; set; }
+        public static StreamWriter PlayerDataWriter { get; set; }
+        public static List<IPLayer> PlayerList { get; set; }
+        public static void AddDataToScoreboard(string result, string path)
         {
-            StreamWriter output = new StreamWriter("result.txt", append: true);
-            output.WriteLine(name + "#&#" + numberOfGuesses);
-            output.Close();
+            //output.WriteLine(name + "#&#" + nGuess)
+            PlayerDataWriter = new(path, append: true);
+            PlayerDataWriter.WriteLine(result);
+            PlayerDataWriter.Close();
         }
         public static List<PlayerData> GetTopList()
         {
-            PlayerDAO score = new PlayerDAO();
-            StreamReader input = new StreamReader("result.txt");
-            List<PlayerData> results = new List<PlayerData>();
-
+            PlayerDataReader = new("result.txt");
+            PlayerList = new List<IPLayer>();
             string? line = string.Empty;
-            while ((line = input.ReadLine()) != null)
+            while ((line = PlayerDataReader.ReadLine()) != null)
             {
                 string[] playerNameAndScore = line.Split(new string[] { "#&#" }, StringSplitOptions.None);
                 string name = playerNameAndScore[0];
@@ -28,19 +27,19 @@ namespace Moo.Statistic
 
                 //TODO: if the player is actively gaming, do not add another playerdata.
                 PlayerData playerData = new PlayerData(name, guesses);
-                int indexOfPlayerData = results.IndexOf(playerData);
+                int indexOfPlayerData = PlayerList.IndexOf(playerData);
 
                 //TODO: FIX: else is never hit. 
                 if (indexOfPlayerData < 0)
                 {
-                    results.Add(playerData);
+                    PlayerList.Add(playerData);
                 }
                 else
                 {
-                    results[indexOfPlayerData].UpdatePlayerScore(guesses);
+                    PlayerList[indexOfPlayerData].UpdatePlayerScore(guesses);
                 }
             }
-            List<PlayerData> playerList = results.Cast<PlayerData>().ToList();
+            List<PlayerData> playerList = PlayerList.Cast<PlayerData>().ToList();
             return playerList;
         }
     }
