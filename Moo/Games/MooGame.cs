@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Moo.Context;
+﻿using Moo.Context;
 using Moo.Interfaces;
-using Moo.Players;
 using Moo.Statistic;
 
 namespace Moo.Games
@@ -14,6 +7,10 @@ namespace Moo.Games
     public class MooGame : IGame
     {
         public bool IsPlaying { get; set; } = true;
+
+        GameController gameController = new();
+        UI Ui = new UI();
+
         public static string CreateGoal()
         {
             Random randomGenerator = new Random();
@@ -72,45 +69,36 @@ namespace Moo.Games
         }
         public void Display()
         {
-            Console.WriteLine("Enter your user name:\n");
-            string name = Console.ReadLine() ?? "";
+            Ui.WriteOutput("Enter your user name:\n");
+            string name = Ui.HandleInput() ?? "";
 
-            Console.WriteLine("New game: \n");
+            Ui.WriteOutput("New game: \n");
 
             while (IsPlaying)
             {
                 string goal = CreateGoal();
 
                 //comment out or remove next line to play real games!
-                Console.WriteLine($"For practice, number is: {goal} \n");
+                Ui.WriteOutput($"For practice, number is: {goal} \n");
 
                 string bullsAndCows = string.Empty;
                 int numberOfGuesses = 0;
 
                 while (!bullsAndCows.Contains("BBBB,"))
                 {
-                    string guess = Console.ReadLine() ?? "";
+                    string guess =Ui.HandleInput() ?? "";
                     bullsAndCows = CheckIfGuessIsValid(goal, guess);
                     numberOfGuesses++;
-                    Console.WriteLine($"{bullsAndCows} \n");
+                    Ui.WriteOutput($"{bullsAndCows} \n");
                 }
+                PlayerDAO.AddDataToScoreboard(name, numberOfGuesses);
+                gameController.ShowTopList(Ui);
 
-                StreamWriter output = new StreamWriter("result.txt", append: true);
-                output.WriteLine(name + "#&#" + numberOfGuesses);
-                output.Close();
-
-                //print the high score
-                UI ui = new UI();
-                GameController gameController = new();
-
-                gameController.ShowTopList(ui);
-
-                //Clearer instructions (y || n || other)
-                Console.WriteLine(
+                Ui.WriteOutput(
                     $"\n Correct. It took {numberOfGuesses} guesses. " +
                     "\n Press any button to start a new game." +
                     "\n Press n to exit.");
-                string? answer = Console.ReadLine();
+                string? answer = Ui.HandleInput();
                 if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
                 {
                     IsPlaying = false;

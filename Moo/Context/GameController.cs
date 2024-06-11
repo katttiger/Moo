@@ -9,7 +9,12 @@ namespace Moo.Context
     {
         public IUI Ui { get; set; }
         public IGame Game;
+        public PlayerDAO PlayerDAO { get; set; }
         public GameController() { }
+        public GameController(IUI ui)
+        {
+            this.Ui = ui;
+        }
         public GameController(IUI ui, IGame game)
         {
             Ui = ui;
@@ -21,7 +26,7 @@ namespace Moo.Context
             while (Game.IsPlaying)
             {
                 Ui.Clear();
-                Game.DisplayMooGame();
+                Game.Display();
                 ShowTopList(this.Ui);
             }
             Ui.Exit();
@@ -29,12 +34,10 @@ namespace Moo.Context
 
         public void ShowTopList(IUI Ui)
         {
-            //Fetches input
             StreamReader input = new StreamReader("result.txt");
-            List<PlayerData> results = Score.GetTopList();
+            input.Close();
+            List<PlayerData> results = PlayerDAO.GetTopList();
             results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
-            //Error: Object reference not set to an instance of an object
-
             Ui.WriteOutput("Player   games average");
             foreach (PlayerData p in results)
             {

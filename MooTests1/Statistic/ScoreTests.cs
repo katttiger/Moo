@@ -16,17 +16,21 @@ namespace Moo.Statistic.Tests
         [TestInitialize]
         public void Inititialize()
         {
-            StreamReader streamreader = new StreamReader("result.txt");
-            List<IPLayer> playerList = new List<IPLayer>();
-            Score score = new(streamreader, playerList);
-
+            //StreamReader streamReader = new StreamReader("result.txt");
+            List<IPLayer> players = new List<IPLayer>();
+            //Score score = new(streamReader, players);
         }
-
 
         [TestMethod()]
         public void GetTopListTest()
         {
-
+            //StreamReader reader = new StreamReader("result.txt");
         }
+    }
+
+    class MockReader
+    {
+        StreamReader reader;
+        public MockReader() { }
     }
 }

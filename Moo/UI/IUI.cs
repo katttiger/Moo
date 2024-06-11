@@ -12,6 +12,7 @@ namespace Moo.Interfaces
     {
         //Göra det vi vill göra mot konsolen
         //Input | Output
+        string HandleInput();
         void WriteOutput(string message);
         void Exit();
         void Clear();

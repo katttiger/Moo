@@ -13,23 +13,28 @@ namespace Moo.Context.Tests
     [TestClass()]
     public class GameControllerTests
     {
+        MockGameController mockGameController;
+        MockUI mockUI;
+        IGame game;
+
         [TestInitialize()]
         public void Intialize()
         {
+            mockUI = new MockUI();
+            game = new MooGame();
         }
 
         [TestMethod()]
         public void GameControllerTest()
         {
-            MockGameController mockGameController = new(new MooGame(), new UI());
+            MockGameController mockGameController = new(game, mockUI);
             Assert.IsNotNull(mockGameController.UI);
             Assert.IsNotNull(mockGameController.Game);
         }
         [TestMethod()]
         public void RunTest()
         {
-            MockUI mockUI = new MockUI();
-            Assert.IsFalse(mockUI.Exit());
+            Assert.IsFalse(mockUI.ExitTest());
         }
     }
 }
@@ -45,17 +50,19 @@ class MockGameController
     }
 }
 
-class MockUI
+class MockUI : IUI
 {
     public void Clear()
     {
 
     }
 
-    public bool Exit()
+    public bool ExitTest()
     {
         return false;
     }
+    public void Exit()
+    { }
 
     public string HandleInput()
     {
@@ -66,4 +73,5 @@ class MockUI
     {
         message = "Hello world";
     }
+
 }

@@ -6,7 +6,7 @@
         [TestInitialize()]
         public void Initialize()
         {
-            new MooGame();
+            MooGame game = new MooGame();
         }
 
         [TestMethod()]
@@ -15,12 +15,6 @@
             MooGame game = new MooGame();
             Assert.IsTrue(game.IsPlaying);
             Assert.IsNotNull(MooGame.CreateGoal());
-        }
-
-        [TestMethod()]
-        public void CheckBullsAndCowsTest()
-        {
-            MooGame game = new MooGame();
         }
 
         [TestMethod()]
