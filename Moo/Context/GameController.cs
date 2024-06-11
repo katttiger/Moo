@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moo.Games;
+﻿using Moo.Games;
 using Moo.Interfaces;
-
+using Moo.Players;
+using Moo.Statistic;
 
 namespace Moo.Context
 {
     public class GameController
     {
-        public UI Ui;
+        public IUI Ui { get; set; }
         public IGame Game;
-
-        public GameController(UI ui, IGame game)
+        public GameController() { }
+        public GameController(IUI ui, IGame game)
         {
             Ui = ui;
             this.Game = game;
@@ -24,20 +20,28 @@ namespace Moo.Context
         {
             while (Game.IsPlaying)
             {
-                Clear();
+                Ui.Clear();
                 Game.Display();
+                ShowTopList();
             }
-            Exit();
+            Ui.Exit();
         }
 
-        void Exit()
+        public void ShowTopList()
         {
-            Environment.Exit(0);
-        }
-        void Clear()
-        {
-            Console.Clear();
+            //Fetches input
+            StreamReader input = new StreamReader("result.txt");
+            List<PlayerData> results = Score.GetTopList();
+
+            results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
+
+            //Error: Object reference not set to an instance of an object
+            Ui.WriteOutput("Player   games average");
+            foreach (PlayerData p in results)
+            {
+                Ui.WriteOutput(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NumberOfGamesPlayed, p.CalculatePlayerAverageScore()));
+            }
+            input.Close();
         }
     }
-
 }

@@ -10,6 +10,6 @@ namespace Moo.Players
     {
         string Name { get; }
         int NumberOfGamesPlayed { get; }
-        int totalGuesses { get; set; }
+        //int totalGuesses { get; set; }
     }
 }

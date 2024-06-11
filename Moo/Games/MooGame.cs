@@ -4,18 +4,16 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Moo.Context;
+using Moo.Interfaces;
 using Moo.Players;
+using Moo.Statistic;
 
 namespace Moo.Games
 {
     public class MooGame : IGame
     {
-        public int Bulls { get; private set; }
-        public int Cows { get; set; }
-        public string Goal { get; private set; }
-        public IPLayer Player { get; set; }
         public bool IsPlaying { get; set; } = true;
-
         public static string CreateGoal()
         {
             Random randomGenerator = new Random();
@@ -75,8 +73,7 @@ namespace Moo.Games
         public void Display()
         {
             Console.WriteLine("Enter your user name:\n");
-            string name = Console.ReadLine();
-            Player = new PlayerData(name, 1, 1, true);
+            string name = Console.ReadLine() ?? "";
 
             Console.WriteLine("New game: \n");
 
@@ -92,7 +89,7 @@ namespace Moo.Games
 
                 while (!bullsAndCows.Contains("BBBB,"))
                 {
-                    string guess = Console.ReadLine();
+                    string guess = Console.ReadLine() ?? "";
                     bullsAndCows = CheckIfGuessIsValid(goal, guess);
                     numberOfGuesses++;
                     Console.WriteLine($"{bullsAndCows} \n");
@@ -102,7 +99,9 @@ namespace Moo.Games
                 output.WriteLine(name + "#&#" + numberOfGuesses);
                 output.Close();
                 //print the high score
-                ShowTopList();
+                GameController gameController = new();
+                Score.GetTopList();
+                gameController.ShowTopList();   
 
                 //Clearer instructions (y || n || other)
                 Console.WriteLine(
@@ -115,51 +114,6 @@ namespace Moo.Games
                     IsPlaying = false;
                 }
             }
-        }
-        public static List<PlayerData> GetTopList(StreamReader input)
-        {
-            //what is "line" used for?
-            List<PlayerData> results = new List<PlayerData>();
-            string line = string.Empty;
-            //Why is it important to declare line all the time?
-            while ((line = input.ReadLine()) != null)
-            {
-                string[] playerNameAndScore = line.Split(new string[] { "#&#" }, StringSplitOptions.None);
-                string name = playerNameAndScore[0];
-                int guesses = Convert.ToInt32(playerNameAndScore[1]);
-
-                //TODO: if the player is actively gaming, do not add another playerdata.
-                PlayerData playerData = new PlayerData(name, 1, guesses);
-                int indexOfPlayerData = results.IndexOf(playerData);
-
-                //TODO: Else is never hit.
-                //&& !results.Contains(playerData))
-                if (indexOfPlayerData < 0)
-                {
-                    results.Add(playerData);
-                }
-                //pos === -1 => does not hit else. Score is not updates when you play more rounds.
-                else
-                {
-                    results[indexOfPlayerData].UpdatePlayerScore(guesses);
-                }
-            }
-            return results;
-        }
-        public static void ShowTopList()
-        {
-            //Fetches input
-            StreamReader input = new StreamReader("result.txt");
-            List<PlayerData> results = GetTopList(input);
-
-            //Prints out the score
-            results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
-            Console.WriteLine("Player   games average");
-            foreach (PlayerData p in results)
-            {
-                Console.WriteLine(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NumberOfGamesPlayed, p.CalculatePlayerAverageScore()));
-            }
-            input.Close();
         }
     }
 }

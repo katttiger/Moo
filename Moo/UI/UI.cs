@@ -10,10 +10,20 @@ namespace Moo.Interfaces
     {
         public void Exit()
         {
+            Environment.Exit(0);
         }
         public void Clear()
         {
-
+            Console.Clear();
+        }
+        public string HandleInput()
+        {
+            //Can be made prettier
+            return Console.ReadLine() ?? "";
+        }
+        public void WriteOutput(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }
