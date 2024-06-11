@@ -10,6 +10,10 @@ namespace Moo.Players
     {
         string Name { get; }
         int NumberOfGamesPlayed { get; }
-        //int totalGuesses { get; set; }
+        int totalGuesses { get; set; }
+
+        public void UpdatePlayerScore(int guesses);
+
+        public double CalculatePlayerAverageScore();
     }
 }

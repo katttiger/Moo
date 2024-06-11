@@ -10,21 +10,12 @@ namespace Moo.Players
     {
         public string Name { get; private set; }
         public int NumberOfGamesPlayed { get; private set; }
-        int totalGuesses { get; set; }
-        public bool IsActive { get; private set; }
-
-        public PlayerData(string name, int gamesPlayed)
+        public int totalGuesses { get; set; }
+        public PlayerData(string name, int guesses)
         {
             Name = name;
-            NumberOfGamesPlayed = gamesPlayed;
-        }
-
-        public PlayerData(string name, int gamesPlayed, int guesses, bool isActive = true)
-        {
-            Name = name;
-            NumberOfGamesPlayed = gamesPlayed;
+            NumberOfGamesPlayed = 1;
             totalGuesses = guesses;
-            IsActive = isActive;
         }
 
         public void UpdatePlayerScore(int guesses)

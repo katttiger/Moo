@@ -21,21 +21,20 @@ namespace Moo.Context
             while (Game.IsPlaying)
             {
                 Ui.Clear();
-                Game.Display();
-                ShowTopList();
+                Game.DisplayMooGame();
+                ShowTopList(this.Ui);
             }
             Ui.Exit();
         }
 
-        public void ShowTopList()
+        public void ShowTopList(IUI Ui)
         {
             //Fetches input
             StreamReader input = new StreamReader("result.txt");
             List<PlayerData> results = Score.GetTopList();
-
             results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
-
             //Error: Object reference not set to an instance of an object
+
             Ui.WriteOutput("Player   games average");
             foreach (PlayerData p in results)
             {

@@ -1,5 +1,4 @@
-﻿using Moo.Players;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,9 +9,6 @@ namespace Moo.Interfaces
 {
     public interface IUI
     {
-        //Göra det vi vill göra mot konsolen
-        //Input | Output
-        void WriteOutput(string message);
         void Exit();
         void Clear();
     }
