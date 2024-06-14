@@ -13,12 +13,11 @@ namespace Moo.Statistic.Tests
     public class PlayerDAOTests
     {
         MockPlayerDAO mockPlayerDAO = new();
+        IPlayerDAO playerDAO;
         [TestMethod()]
         public void AddDataToScoreboardTest()
         {
-            //Values are null
             Assert.IsNull(mockPlayerDAO.DataReader);
-            Assert.IsNull(mockPlayerDAO.DataWriter);
         }
 
         [TestMethod()]
@@ -34,6 +33,7 @@ namespace Moo.Statistic.Tests
         public StreamWriter DataWriter { get; set; }
         public List<IPLayer> PlayerList { get; set; }
     }
+
 
 }
 

@@ -21,12 +21,11 @@ namespace Moo.Players
         public void UpdatePlayerScore(int guesses)
         {
             totalGuesses += guesses;
-            //Number of rounds?
             NumberOfGamesPlayed++;
         }
         public double CalculatePlayerAverageScore()
         {
-            return (double)totalGuesses / NumberOfGamesPlayed;
+            return totalGuesses / NumberOfGamesPlayed;
         }
     }
 }

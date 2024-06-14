@@ -72,7 +72,6 @@ namespace Moo.Games
         {
             Ui.WriteOutput("Enter your user name:\n");
             string name = Ui.HandleInput() ?? "";
-
             Ui.WriteOutput("New game: \n");
 
             while (IsPlaying)
@@ -92,6 +91,7 @@ namespace Moo.Games
                     numberOfGuesses++;
                     Ui.WriteOutput($"{bullsAndCows} \n");
                 }
+
                 //output.WriteLine(name + "#&#" + nGuess)
                 string result = $"{name}#&#{numberOfGuesses}";
                 PlayerDAO.AddDataToScoreboard(result, "result.txt");
