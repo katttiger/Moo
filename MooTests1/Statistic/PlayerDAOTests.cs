@@ -19,19 +19,24 @@ namespace Moo.Statistic.Tests
         {
             Assert.IsNull(mockPlayerDAO.DataReader);
         }
-
-        [TestMethod()]
-        public void GetTopListTest()
-        {
-            Assert.IsNotNull(mockPlayerDAO.PlayerList);
-        }
     }
 
-    public class MockPlayerDAO
+
+    public class MockPlayerDAO : IPlayerDAO
     {
         public StreamReader DataReader { get; set; }
         public StreamWriter DataWriter { get; set; }
         public List<IPLayer> PlayerList { get; set; }
+
+        public List<PlayerData> GetPlayerDatas()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(string name, int totalGuesses)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

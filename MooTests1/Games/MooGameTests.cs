@@ -5,12 +5,6 @@
     {
         MooGame game = new();
 
-        [TestInitialize()]
-        public void Initialize()
-        {
-            MooGame game;
-        }
-
         [TestMethod()]
         public void CreateGoalTest()
         {

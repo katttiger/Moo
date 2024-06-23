@@ -36,6 +36,12 @@ namespace Moo.Context.Tests
         {
             Assert.IsFalse(mockUI.ExitTest());
         }
+
+        [TestMethod()]
+        public void RunGameTest()
+        {
+            Assert.IsNotNull(game);
+        }
     }
 }
 

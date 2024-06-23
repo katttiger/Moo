@@ -13,10 +13,7 @@ namespace Program
     {
         public static void Main(string[] args)
         {
-            UI ui = new UI();
-            //TODO: add a menu to chose game
-            IGame game = new MooGame();
-            GameController controller = new GameController(ui, game);
+            GameController controller = new GameController();
             controller.Run();
         }
     }

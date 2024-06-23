@@ -9,7 +9,7 @@ namespace Moo.Games
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; }
 
-        GameController gameController = new();
+        GameController gameController = new GameController();
         UI Ui = new UI();
 
         public static string CreateGoal()
@@ -54,18 +54,25 @@ namespace Moo.Games
         }
         public static string CheckIfGuessIsValid(string goal, string guess)
         {
-            if (guess.Length > 4)
+            bool lettersInGuess = guess.All(char.IsLetter);
+            if (guess.Any(char.IsLetter))
             {
-                return "Your guess has more than 4 digits.";
-            }
-            else if (guess.Length < 4)
-            {
-                return "Your guess has less than 4 digits.";
+                return "Your guess must only contain numerical digits.";
             }
             else
             {
-                MooGame guessResult = new MooGame();
-                return CheckBullsAndCows(goal, guess);
+                if (guess.Length > 4)
+                {
+                    return "Your guess has more than 4 digits.";
+                }
+                else if (guess.Length < 4)
+                {
+                    return "Your guess has less than 4 digits.";
+                }
+                else
+                {
+                    return CheckBullsAndCows(goal, guess);
+                }
             }
         }
         public void Display()
@@ -73,12 +80,11 @@ namespace Moo.Games
             Ui.WriteOutput("Enter your user name:\n");
             string name = Ui.HandleInput() ?? "";
             Ui.WriteOutput("New game: \n");
-
             while (IsPlaying)
             {
                 string goal = CreateGoal();
 
-                //comment out or remove next line to play real games!
+                //Comment out or remove next line to play real game
                 Ui.WriteOutput($"For practice, number is: {goal} \n");
 
                 string bullsAndCows = string.Empty;
@@ -94,7 +100,7 @@ namespace Moo.Games
 
                 //output.WriteLine(name + "#&#" + nGuess)
                 string result = $"{name}#&#{numberOfGuesses}";
-                PlayerDAO.AddDataToScoreboard(result, "result.txt");
+                PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
                 gameController.ShowTopList(Ui);
 
                 Ui.WriteOutput(
