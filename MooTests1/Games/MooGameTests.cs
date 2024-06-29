@@ -1,14 +1,17 @@
-﻿namespace Moo.Games.Tests
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moo.Games;
+
+namespace Moo.Games.Tests
 {
     [TestClass()]
     public class MooGameTests
     {
         MooGame game = new();
+        MockGuess mockGuess = new MockGuess();
 
         [TestMethod()]
         public void CreateGoalTest()
         {
-            Assert.IsTrue(game.IsPlaying);
             Assert.IsNotNull(MooGame.CreateGoal());
         }
 
@@ -17,5 +20,16 @@
         {
             Assert.IsTrue(game.IsPlaying);
         }
+
+        [TestMethod()]
+        public void CheckIfGuessIsValidTest()
+        {
+        }
     }
+
+    public class MockGuess
+    {
+        string guess = string.Empty;
+    }
+
 }

@@ -11,7 +11,6 @@ namespace Moo.Games
 
         GameController gameController = new GameController();
         UI Ui = new UI();
-
         public static string CreateGoal()
         {
             Random randomGenerator = new Random();
@@ -54,7 +53,6 @@ namespace Moo.Games
         }
         public static string CheckIfGuessIsValid(string goal, string guess)
         {
-            bool lettersInGuess = guess.All(char.IsLetter);
             if (guess.Any(char.IsLetter))
             {
                 return "Your guess must only contain numerical digits.";
@@ -90,7 +88,7 @@ namespace Moo.Games
                 string bullsAndCows = string.Empty;
                 int numberOfGuesses = 0;
 
-                while (!bullsAndCows.Contains("BBBB,"))
+                while (!bullsAndCows.Equals("BBBB,"))
                 {
                     string guess = Ui.HandleInput() ?? "";
                     bullsAndCows = CheckIfGuessIsValid(goal, guess);

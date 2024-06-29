@@ -8,14 +8,18 @@ namespace Moo.Context
 {
     public class GameController
     {
+        public List<IGame> Games = new List<IGame>();
         public IUI Ui { get; set; }
         public IGame Game { get; set; }
         public PlayerDAO PlayerDAO { get; set; }
         public GameController() { }
 
+        public Creator creator;
+
         public void Run()
         {
-            ChooseGame();
+            Creator gameId = ChooseGame();
+            Game = gameId.ActivateGameFactory();
             UI ui = new UI();
             while (Game.IsPlaying)
             {
@@ -26,27 +30,35 @@ namespace Moo.Context
         }
 
         //TODO Fix a more effective solution to add games to the system
-        public void ChooseGame()
+        public Creator ChooseGame()
         {
-            string choseGameMenu = "Menu of games"
-                + "\n 1) Moo"
-                + "\n 2) MasterMind (number edition)"
-                + "\n Press n to exit";
+            Games.AddRange(new List<IGame>
+            {
+                new MooGame(),
+                new MasterMind()
+            }
+            );
+
             UI ui = new UI();
+            ui.WriteOutput("Menu of games");
+            foreach (var game in Games)
+            {
+                ui.WriteOutput($"{Games.IndexOf(game) + 1} {game.ToString().Substring(10)}");
+            }
+            ui.WriteOutput("Press n to exit");
             string input = string.Empty;
-            ui.WriteOutput(choseGameMenu);
+
+            //TODO: Improve to facilitate addition of games.
             while (input != null)
             {
                 input = ui.HandleInput();
                 if (input == "1")
                 {
-                    Game = new MooGame();
-                    break;
+                    return new MooGameCreator();
                 }
                 else if (input == "2")
                 {
-                    Game = new MasterMind();
-                    break;
+                    return new MasterMindCreator();
                 }
                 else if (input == "n")
                 {
@@ -57,6 +69,7 @@ namespace Moo.Context
                     ui.WriteOutput("Please enter a given digit.");
                 }
             }
+            return new MooGameCreator();
         }
         public void ShowTopList(IUI ui)
         {
