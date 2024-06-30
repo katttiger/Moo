@@ -9,33 +9,34 @@ using System.Threading.Tasks;
 
 namespace Moo.Games
 {
-    class MasterMind : IGame
+    public class MasterMind : IGame
     {
         public bool IsPlaying { get; set; } = true;
-
+        public List<string> ListOfGuesses = new();
         public string PathToScore { get; set; }
 
-        GameController gameController = new GameController();
-        UI Ui = new UI(); 
+        GameContext context = new GameContext();
+        UI Ui = new UI();
         public static string CreateGoal()
         {
             Random randomGenerator = new Random();
-            randomGenerator.Next(1,6);
-            return "";
-
-            //string goal = string.Empty;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    string random = randomGenerator.Next(10).ToString();
-            //    while (goal.Contains(random))
-            //    {
-            //        random = randomGenerator.Next(10).ToString();
-            //    }
-            //    goal += random;
-            //}
-            //return goal;
+            string goal = string.Empty;
+            for (int i = 0; i < 4; i++)
+            {
+                string random = randomGenerator.Next(6).ToString();
+                while (goal.Contains(random))
+                {
+                    random = randomGenerator.Next(6).ToString();
+                }
+                goal += random;
+            }
+            return goal;
         }
-        public static string CheckBullsAndCows(string goal, string guess)
+        public void DisplayListOfGuesses()
+        {
+
+        }
+        public static string CheckGuess(string goal, string guess)
         {
             throw new NotImplementedException();
         }
@@ -57,13 +58,32 @@ namespace Moo.Games
                 }
                 else
                 {
-                    return CheckBullsAndCows(goal, guess);
+                    return CheckGuess(goal, guess);
                 }
             }
         }
         public void Display()
         {
             Ui.WriteOutput("You have choosen mastermind.");
+            Ui.WriteOutput("Number of guesses: 8");
+            Ui.WriteOutput("Any number may occur more than once. ");
+            Ui.WriteOutput("Values allowed: 1, 2, 3, 4, 5, 6.");
+
+            string goal = CreateGoal();
+            string guess = string.Empty;
+            int triesLeft = 8;
+
+            while (goal != guess)
+            {
+                Ui.Clear();
+                DisplayListOfGuesses();
+                Ui.WriteOutput($"Tries left: {triesLeft}");
+                Ui.WriteOutput("Enter guess: ");
+                CheckGuess(goal, guess);
+                ListOfGuesses.Add(guess);
+                triesLeft--;
+            }
+
             Ui.Exit();
         }
 

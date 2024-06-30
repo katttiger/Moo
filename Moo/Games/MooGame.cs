@@ -9,7 +9,7 @@ namespace Moo.Games
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; }
 
-        GameController gameController = new GameController();
+        GameContext context = new GameContext();
         UI Ui = new UI();
         public static string CreateGoal()
         {
@@ -48,7 +48,6 @@ namespace Moo.Games
                     }
                 }
             }
-
             return "BBBB".Substring(0, bulls) + "," + "CCCC".Substring(0, cows);
         }
         public static string CheckIfGuessIsValid(string goal, string guess)
@@ -99,7 +98,7 @@ namespace Moo.Games
                 //output.WriteLine(name + "#&#" + nGuess)
                 string result = $"{name}#&#{numberOfGuesses}";
                 PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-                gameController.ShowTopList(Ui);
+                context.ShowTopList(Ui);
 
                 Ui.WriteOutput(
                     $"\n Correct. It took {numberOfGuesses} guesses. " +

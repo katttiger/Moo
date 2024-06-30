@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Moo.Context.Tests
 {
     [TestClass()]
-    public class GameControllerTests
+    public class GameContextTests
     {
         MockGameController mockGameController;
         MockUI mockUI;

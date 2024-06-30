@@ -32,11 +32,8 @@ namespace Moo.Statistic.PlayerDAO.Tests
         }
 
         [TestMethod()]
-        public void SaveTest(string name, int totalGuesses)
+        public void SaveTest()
         {
-            Assert.IsNotNull(name);
-            Assert.IsNotNull(totalGuesses);
-
             //_txtFileContent += name + Seperator + totalGuesses
             //+ Environment.NewLine;
             //Debug.WriteLine("Saved");

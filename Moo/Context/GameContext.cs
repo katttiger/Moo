@@ -6,21 +6,29 @@ using System.Runtime.CompilerServices;
 
 namespace Moo.Context
 {
-    public class GameController
+    public class GameContext
     {
         public List<IGame> Games = new List<IGame>();
-        public IUI Ui { get; set; }
-        public IGame Game { get; set; }
-        public PlayerDAO PlayerDAO { get; set; }
-        public GameController() { }
+        public IUI Ui;
 
-        public Creator creator;
+        public IGame Game;
+        public PlayerDAO PlayerDAO { get; set; }
+        public GameContext() { }
+
+        public GameContext(IGame game)
+        {
+            this.Game = game;
+        }
+
+        public void SetGame(IGame game)
+        {
+            this.Game = game;
+        }
 
         public void Run()
         {
-            Creator gameId = ChooseGame();
-            Game = gameId.ActivateGameFactory();
             UI ui = new UI();
+            ChooseGame();
             while (Game.IsPlaying)
             {
                 ui.Clear();
@@ -29,8 +37,8 @@ namespace Moo.Context
             ui.Exit();
         }
 
-        //TODO Fix a more effective solution to add games to the system
-        public Creator ChooseGame()
+        //TODO: Fix a more effectiva and durable solution to add games.
+        public void ChooseGame()
         {
             Games.AddRange(new List<IGame>
             {
@@ -45,31 +53,26 @@ namespace Moo.Context
             {
                 ui.WriteOutput($"{Games.IndexOf(game) + 1} {game.ToString().Substring(10)}");
             }
-            ui.WriteOutput("Press n to exit");
             string input = string.Empty;
 
             //TODO: Improve to facilitate addition of games.
-            while (input != null)
+            while (!input.Any(char.IsDigit))
             {
                 input = ui.HandleInput();
                 if (input == "1")
                 {
-                    return new MooGameCreator();
+                    SetGame(new MooGame());
                 }
                 else if (input == "2")
                 {
-                    return new MasterMindCreator();
-                }
-                else if (input == "n")
-                {
-                    ui.Exit();
+                    SetGame(new MasterMind());
+
                 }
                 else
                 {
                     ui.WriteOutput("Please enter a given digit.");
                 }
             }
-            return new MooGameCreator();
         }
         public void ShowTopList(IUI ui)
         {

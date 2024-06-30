@@ -26,5 +26,9 @@ namespace Moo.Interfaces
         {
             Console.WriteLine(message);
         }
+        public void WriteArray(string message)
+        {
+            Console.Write(message);
+        }
     }
 }

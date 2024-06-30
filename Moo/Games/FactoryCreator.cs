@@ -14,6 +14,14 @@ namespace Moo.Games
             return FactoryMethod();
         }
     }
+
+    class MockCreator : Creator
+    {
+        public override IGame FactoryMethod()
+        {
+            throw new NotImplementedException();
+        }
+    }
     class MooGameCreator : Creator
     {
         public override IGame FactoryMethod()
