@@ -8,11 +8,12 @@ namespace Moo.Games
     {
         public bool IsPlaying { get; set; } = true;
 
-        GameContext context = new GameContext();
-        UI Ui = new UI();
+        readonly GameContext context = new();
+        readonly UI Ui = new();
+
         public static string CreateGoal()
         {
-            Random randomGenerator = new Random();
+            Random randomGenerator = new();
             string goal = string.Empty;
             for (int i = 0; i < 4; i++)
             {
@@ -47,7 +48,7 @@ namespace Moo.Games
                     }
                 }
             }
-            return $"{"BBBB".Substring(0, bulls)} , {"CCCC".Substring(0, cows)}";
+            return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
         }
         private static string CheckIfGuessIsValid(string goal, string guess)
         {
@@ -81,6 +82,7 @@ namespace Moo.Games
             while (IsPlaying)
             {
                 string goal = CreateGoal();
+
                 //Comment out or remove next line to play real game
                 Ui.WriteOutput($"For practice, number is: {goal} \n");
 
@@ -93,21 +95,22 @@ namespace Moo.Games
                     numberOfGuesses++;
                     Ui.WriteOutput($"{bullsAndCows} \n");
                 }
-            }
 
-            //output.WriteLine(name + "#&#" + nGuess)
-            string result = $"{name}#&#{numberOfGuesses}";
-            PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-            context.ShowTopList(Ui);
+                //output.WriteLine(name + "#&#" + nGuess)
+                string result = $"{name}#&#{numberOfGuesses}";
+                PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
+                PlayerDAO.GetTopList("result.txt");
+                context.ShowTopList(Ui);
 
-            Ui.WriteOutput(
-                $"\n Correct. It took {numberOfGuesses} guesses. " +
-                "\n Press any button to start a new game." +
-                "\n Press n to exit.");
-            string? answer = Ui.HandleInput();
-            if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
-            {
-                IsPlaying = false;
+                Ui.WriteOutput(
+                    $"\n Correct. It took {numberOfGuesses} guesses. " +
+                    "\n Press any button to start a new game." +
+                    "\n Press n to exit.");
+                string? answer = Ui.HandleInput();
+                if (answer != null && answer != "" && answer.Contains('n'))
+                {
+                    IsPlaying = false;
+                }
             }
         }
     }

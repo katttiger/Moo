@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moo.Context;
 using Moo.Games;
+using Moo.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,14 @@ namespace Moo.Games.Tests
     [TestClass()]
     public class MasterMindTests
     {
+        readonly string mockGoal = MockMastermind.CreateGoal();
+
         [TestMethod()]
         public void CreateGoalTest()
         {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void GenerateGameBoardTest()
-        {
+            Assert.IsFalse(mockGoal.Equals(string.Empty));
         }
     }
 }
+class MockMastermind : MasterMind
+{ }

@@ -14,12 +14,6 @@ namespace Moo.Context
         public IGame Game;
         public PlayerDAO PlayerDAO { get; set; }
         public GameContext() { }
-
-        public GameContext(IGame game)
-        {
-            this.Game = game;
-        }
-
         public void SetGame(IGame game)
         {
             this.Game = game;
@@ -51,11 +45,11 @@ namespace Moo.Context
             ui.WriteOutput("Menu of games");
             foreach (var game in Games)
             {
-                ui.WriteOutput($"{Games.IndexOf(game) + 1} {game.ToString().Substring(10)}");
+                ui.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().Substring(10)}");
             }
             string input = string.Empty;
 
-            //TODO: Improve to facilitate addition of games.
+            //TODO: Improve conditional to facilitate addition of games.
             while (!input.Any(char.IsDigit))
             {
                 input = ui.HandleInput();
@@ -66,7 +60,6 @@ namespace Moo.Context
                 else if (input == "2")
                 {
                     SetGame(new MasterMind());
-
                 }
                 else
                 {

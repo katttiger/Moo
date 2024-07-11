@@ -10,22 +10,22 @@ namespace Moo.Players
     {
         public string Name { get; private set; }
         public int NumberOfGamesPlayed { get; private set; }
-        public int totalGuesses { get; set; }
+        public int TotalGuesses { get; set; }
         public PlayerData(string name, int guesses)
         {
             Name = name;
             NumberOfGamesPlayed = 1;
-            totalGuesses = guesses;
+            this.TotalGuesses = guesses;
         }
 
         public void UpdatePlayerScore(int guesses)
         {
-            totalGuesses += guesses;
+            TotalGuesses += guesses;
             NumberOfGamesPlayed++;
         }
         public double CalculatePlayerAverageScore()
         {
-            return totalGuesses / NumberOfGamesPlayed;
+            return TotalGuesses / NumberOfGamesPlayed;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Moo.Context;
 using Moo.Interfaces;
+using Moo.Statistic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -17,26 +18,26 @@ namespace Moo.Games
     {
         public bool IsPlaying { get; set; } = true;
 
-        GameContext context = new GameContext();
-        UI Ui = new UI();
+        readonly GameContext context = new();
+        readonly UI Ui = new();
         public static string CreateGoal()
         {
-            Random randomGenerator = new Random();
+            Random randomGenerator = new();
             string goal = string.Empty;
             for (int i = 0; i < 6; i++)
             {
-                string random = randomGenerator.Next(1, 6).ToString();
-                while (goal.Contains(random))
-                {
-                    random = randomGenerator.Next(6).ToString();
-                }
+                string random = randomGenerator.Next(6).ToString();
                 goal += random;
             }
             return goal;
         }
+
+        //TODO: Improve. The method does not take into consideration whether the
+        //digit has already been accounted for when there are duplicates in the 
+        //goal.
         public static string CheckGuess(string goal, string guess)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             for (int i = 0; i < 6; i++)
             {
                 for (int j = 0; j < 6; j++)
@@ -50,13 +51,11 @@ namespace Moo.Games
                         else
                         {
                             stringBuilder.Append('Y');
-
                         }
                     }
                 }
             }
             return stringBuilder.ToString();
-
         }
         private static string CheckIfGuessIsValid(string goal, string guess)
         {
@@ -78,56 +77,48 @@ namespace Moo.Games
             Ui.WriteOutput("Enter your user name:\n");
             string name = Ui.HandleInput() ?? "";
 
-            Ui.WriteOutput("Any number may occur more than once." +
-                "\n Values allowed: 0, 1, 2, 3, 4, 5." +
+            Ui.WriteOutput(
+                "Values allowed: 0-6." +
                 "\n X = Right number and position" +
                 "\n Y = Right number, wrong position \n");
             Ui.WriteOutput("New game: \n");
+            int numberOfGuesses = 0;
 
             while (IsPlaying)
             {
                 string goal = CreateGoal();
-                int triesLeft = 8;
-                string result = string.Empty;
-                string mastermindCompare = string.Empty;
 
                 //Comment out or remove next line to play real game
                 Ui.WriteOutput($"For practice, number is: {goal} \n");
 
-                Ui.WriteOutput("Enter guess: ");
+                string mastermindCompare = string.Empty;
 
-                while (!mastermindCompare.Equals("XXXXXX".ToUpper()) || triesLeft > 0)
+                while (!mastermindCompare.Equals("XXXXXX"))
                 {
-                    Ui.WriteOutput($"Tries left: {triesLeft}");
                     string guess = Ui.HandleInput();
                     mastermindCompare = CheckIfGuessIsValid(goal, guess);
-                    if (mastermindCompare.Contains('X'))
-                    {
-                        triesLeft--;
-                    }
+                    numberOfGuesses++;
                     Ui.WriteOutput($"{mastermindCompare} \n");
-                    if (mastermindCompare.Equals("XXXXXX".ToUpper()))
-                    {
-                        result = $"\n Correct. It took {8 - triesLeft} guesses.";
-                        break;
-                    }
-                    if (triesLeft == 0)
-                    {
-                        result = "\n You have no tries left. You loose.";
-                        break;
-                    }
                 }
+
+                string result = $"{name}#&#{numberOfGuesses}";
+
+                PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
+                PlayerDAO.GetTopList("result.txt");
+                context.ShowTopList(Ui);
+
+
                 Ui.WriteOutput(
-                    $"{result}" +
+                    $"\n Correct. It took {numberOfGuesses} guesses" +
                     "\n Press any button to start a new game." +
                     "\n Press n to exit.");
                 string? answer = Ui.HandleInput();
-                if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
+                if (answer != null && answer != string.Empty && answer.Contains('n'))
                 {
                     IsPlaying = false;
                 }
-            }
 
+            }
         }
     }
 }

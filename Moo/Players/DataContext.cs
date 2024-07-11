@@ -18,14 +18,16 @@ namespace Moo.Players
         void Save(string name, int totalGuesses);
         List<PlayerData> GetPlayerDatas();
     }
+
     /// <summary>
     /// This class is responsible for saving and retrieving player data.
     /// </summary>
     public class DataContext : IDataContext
     {
         #region
-        private string _fileName;
+        private readonly string _fileName;
         private const string SEPARATOR = "#&#";
+
         public DataContext(string fileName)
         {
             _fileName = fileName;
@@ -53,6 +55,10 @@ namespace Moo.Players
         }
 
         #endregion
+        public DataContext()
+        {
+
+        }
 
         /// <summary>
         /// This class mocks saving and retrieving player data.
@@ -65,6 +71,7 @@ namespace Moo.Players
             {
                 _txtFileContent = initialFileContent;
             }
+
             /// <summary>
             /// Returns
             /// </summary>
@@ -72,7 +79,7 @@ namespace Moo.Players
             /// <returns></returns>
             public List<PlayerData> GetPlayerDatas()
             {
-                List<PlayerData> results = new List<PlayerData>();
+                List<PlayerData> results = new();
                 string line;
                 string[] lines = _txtFileContent.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
                 for (int i = 0; i < lines.Length; i++)
@@ -82,7 +89,7 @@ namespace Moo.Players
                     string[] nameAndScore = line.Split(new string[] { SEPARATOR }, StringSplitOptions.None);
                     string name = nameAndScore[0];
                     int guesses = Convert.ToInt32(nameAndScore[1]);
-                    PlayerData pd = new PlayerData(name, guesses);
+                    PlayerData pd = new(name, guesses);
                     int pos = results.IndexOf(pd);
                     if (pos < 0)
                     {

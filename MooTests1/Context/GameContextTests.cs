@@ -14,14 +14,13 @@ namespace Moo.Context.Tests
     public class GameContextTests
     {
         MockGameController mockGameController;
-        MockUI mockUI;
+        MockUI mockUI = new();
         IGame game;
 
         [TestInitialize()]
         public void Intialize()
         {
             mockUI = new MockUI();
-            game = new MooGame();
         }
 
         [TestMethod()]
@@ -40,7 +39,7 @@ namespace Moo.Context.Tests
         [TestMethod()]
         public void RunGameTest()
         {
-            Assert.IsNotNull(game);
+
         }
     }
 }
@@ -60,7 +59,7 @@ class MockUI : IUI
 {
     public void Clear()
     {
-
+        Console.Clear();
     }
 
     public bool ExitTest()

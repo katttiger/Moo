@@ -10,7 +10,7 @@ namespace Moo.Players
     {
         string Name { get; }
         int NumberOfGamesPlayed { get; }
-        int totalGuesses { get; set; }
+        int TotalGuesses { get; set; }
 
         public void UpdatePlayerScore(int guesses);
 
