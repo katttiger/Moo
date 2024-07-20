@@ -98,8 +98,9 @@ namespace Moo.Games
 
                 //output.WriteLine(name + "#&#" + nGuess)
                 string result = $"{name}#&#{numberOfGuesses}";
+                PlayerDAO.AddPlayerdataToScoreboard(result, "MooResult.txt");
                 PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-                PlayerDAO.GetTopList("result.txt");
+                PlayerDAO.GetTopList("MooResult.txt");
                 context.ShowTopList(Ui);
 
                 Ui.WriteOutput(

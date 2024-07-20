@@ -2,6 +2,8 @@
 using Moo.Context;
 using Moo.Games;
 using Moo.Interfaces;
+using Moo.Players;
+using Moo.Statistic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,7 @@ namespace Moo.Context.Tests
     public class GameContextTests
     {
         MockGameController mockGameController;
+        GameContext gameContext;
         MockUI mockUI = new();
         IGame game;
 
@@ -21,15 +24,9 @@ namespace Moo.Context.Tests
         public void Intialize()
         {
             mockUI = new MockUI();
+            GameContext gameContext = new GameContext();
         }
 
-        [TestMethod()]
-        public void GameControllerTest()
-        {
-            MockGameController mockGameController = new(game, mockUI);
-            Assert.IsNotNull(mockGameController.UI);
-            Assert.IsNotNull(mockGameController.Game);
-        }
         [TestMethod()]
         public void RunTest()
         {
@@ -37,22 +34,19 @@ namespace Moo.Context.Tests
         }
 
         [TestMethod()]
-        public void RunGameTest()
+        public void ChooseGameTest()
         {
-
         }
     }
 }
 
-class MockGameController
+class MockGameController : GameContext
 {
-    public IGame Game { get; set; }
-    public IUI UI { get; set; }
-    public MockGameController(IGame game, IUI ui)
-    {
-        Game = game;
-        UI = ui;
-    }
+    public IGame Game;
+    private readonly UI UI = new();
+    private readonly List<IGame> Games = [];
+    public PlayerDAO PlayerDAO = new("mockResults");
+
 }
 
 class MockUI : IUI
@@ -61,7 +55,6 @@ class MockUI : IUI
     {
         Console.Clear();
     }
-
     public bool ExitTest()
     {
         return false;

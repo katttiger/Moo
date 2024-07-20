@@ -8,10 +8,10 @@ namespace Moo.Context
 {
     public class GameContext
     {
-        public List<IGame> Games = new List<IGame>();
-        public IUI Ui;
-
         public IGame Game;
+        private readonly UI UI = new();
+        private readonly List<IGame> Games = [];
+
         public PlayerDAO PlayerDAO { get; set; }
         public GameContext() { }
         public void SetGame(IGame game)
@@ -21,50 +21,42 @@ namespace Moo.Context
 
         public void Run()
         {
-            UI ui = new UI();
             ChooseGame();
             while (Game.IsPlaying)
             {
-                ui.Clear();
+                UI.Clear();
                 Game.Display();
             }
-            ui.Exit();
+            UI.Exit();
         }
 
         //TODO: Fix a more effectiva and durable solution to add games.
         public void ChooseGame()
         {
-            Games.AddRange(new List<IGame>
-            {
+            Games.AddRange(
+            [
                 new MooGame(),
                 new MasterMind()
-            }
-            );
+            ]);
 
-            UI ui = new UI();
-            ui.WriteOutput("Menu of games");
+            UI.WriteOutput("Menu of games");
             foreach (var game in Games)
             {
-                ui.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().Substring(10)}");
+                UI.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().Substring(10)}");
             }
             string input = string.Empty;
 
-            //TODO: Improve conditional to facilitate addition of games.
-            while (!input.Any(char.IsDigit))
+            while (!input.Any(char.IsDigit) || Game == null)
             {
-                input = ui.HandleInput();
-                if (input == "1")
+                input = UI.HandleInput();
+                foreach (var game in Games)
                 {
-                    SetGame(new MooGame());
+                    if ((Games.IndexOf(game) + 1).ToString() == input)
+                    {
+                        SetGame(game);
+                    }
                 }
-                else if (input == "2")
-                {
-                    SetGame(new MasterMind());
-                }
-                else
-                {
-                    ui.WriteOutput("Please enter a given digit.");
-                }
+                UI.WriteOutput("Please enter a valid number.");
             }
         }
         public void ShowTopList(IUI ui)

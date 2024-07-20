@@ -11,9 +11,9 @@ namespace Program
 {
     class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            GameContext controller = new GameContext();
+            GameContext controller = new();
             controller.Run();
         }
     }
