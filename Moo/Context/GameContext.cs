@@ -42,7 +42,7 @@ namespace Moo.Context
             UI.WriteOutput("Menu of games");
             foreach (var game in Games)
             {
-                UI.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().Substring(10)}");
+                UI.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().AsSpan(10)}");
             }
             string input = string.Empty;
 

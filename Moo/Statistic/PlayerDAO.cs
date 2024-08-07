@@ -5,7 +5,8 @@ using System.Runtime.CompilerServices;
 namespace Moo.Statistic
 {
     //Responsible for saving and retrieving player data.
-    public class PlayerDAO : IPlayerDAO
+    //CRUD
+    public struct PlayerDAO : IPlayerDAO
     {
         //Skicka in filePath till ctor för PlayerDAO.
         //Gör att du kan köra tester mot en annan
@@ -17,11 +18,14 @@ namespace Moo.Statistic
         {
             _fileName = filename;
         }
-
+        public static void AddPlayerdataToScoreboard(string result, string path)
+        {
+            DataMethods.Create(result, path);
+        }
         public static List<PlayerData> GetTopList(string fileName)
         {
             StreamReader reader = new(fileName);
-            List<PlayerData> playerList = new();
+            List<PlayerData> playerList = [];
 
             string line;
             while ((line = reader.ReadLine()) != null)
@@ -47,24 +51,17 @@ namespace Moo.Statistic
             return playerList;
         }
 
-        public static void AddPlayerdataToScoreboard(string result, string path)
-        {
-            StreamWriter writer = new(path, append: true);
-            writer.Write(result + writer.NewLine);
-            writer.Close();
-        }
-
         #region
         //Return list of player data from textfile
         public List<PlayerData> GetPlayerDatas()
         {
-            throw new NotImplementedException();
+            return GetTopList(_fileName);
         }
 
         //Should save player data to textfile
         public void Save(string name, int totalGuesses)
         {
-            throw new NotImplementedException();
+            AddPlayerdataToScoreboard(totalGuesses.ToString(), _fileName);
         }
 
         #endregion

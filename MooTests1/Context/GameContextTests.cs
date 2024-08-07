@@ -15,16 +15,16 @@ namespace Moo.Context.Tests
     [TestClass()]
     public class GameContextTests
     {
-        MockGameController mockGameController;
-        GameContext gameContext;
-        MockUI mockUI = new();
-        IGame game;
+        readonly MockGameController? mockGameController;
+        readonly GameContext? gameContext;
+        MockUI? mockUI = new();
+        readonly IGame? game;
 
         [TestInitialize()]
         public void Intialize()
         {
             mockUI = new MockUI();
-            GameContext gameContext = new GameContext();
+            GameContext gameContext = new();
         }
 
         [TestMethod()]
@@ -42,11 +42,10 @@ namespace Moo.Context.Tests
 
 class MockGameController : GameContext
 {
-    public IGame Game;
+    public new IGame Game;
     private readonly UI UI = new();
     private readonly List<IGame> Games = [];
     public PlayerDAO PlayerDAO = new("mockResults");
-
 }
 
 class MockUI : IUI
