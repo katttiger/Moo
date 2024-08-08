@@ -8,20 +8,27 @@ namespace Moo.Statistic
     //CRUD
     public struct PlayerDAO : IPlayerDAO
     {
-        //Skicka in filePath till ctor för PlayerDAO.
-        //Gör att du kan köra tester mot en annan
-        //textfil som du behöver skapa upp i varje test
-
-        private readonly string _fileName = string.Empty;
+        PlayerData playerData;
+        string _filename;
         private const string Seperator = "#&#";
-        public PlayerDAO(string filename)
+        public PlayerDAO(PlayerData player, string filename)
         {
-            _fileName = filename;
+            this.playerData = player;
+            this._filename = filename;
         }
 
-        public static void AddPlayerdataToScoreboard(string result, string path)
+        public List<PlayerData> GetPlayerDatas()
         {
-            DataMethods.Create(result, path);
+            throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            if (this.playerData == null)
+            {
+                DataMethods.Create(playerData, _filename);
+            }
+            throw new NotImplementedException();
         }
         public static List<PlayerData> GetTopList(string fileName)
         {
@@ -52,16 +59,37 @@ namespace Moo.Statistic
             return playerList;
         }
 
-        //Return list of player data from textfile
-        public readonly List<PlayerData> GetPlayerDatas()
-        {
-            return GetTopList(_fileName);
-        }
-
-        //Should save player data to textfile
         public void Save(string name, int totalGuesses)
         {
-            AddPlayerdataToScoreboard(totalGuesses.ToString(), _fileName);
+            throw new NotImplementedException();
         }
     }
 }
+////Skicka in filePath till ctor för PlayerDAO.
+
+////Gör att du kan köra tester mot en annan
+////textfil som du behöver skapa upp i varje test
+
+//private readonly string _fileName = string.Empty;
+//private const string Seperator = "#&#";
+//public PlayerDAO(string filename)
+//{
+//    _fileName = filename;
+//}
+
+//public static void AddPlayerdataToScoreboard(string result, string path)
+//{
+//    DataMethods.Create(result, path);
+//}
+
+////Return list of player data from textfile
+//public readonly List<PlayerData> GetPlayerDatas()
+//{
+//    return GetTopList(_fileName);
+//}
+
+////Should save player data to textfile
+//public void Save(string name, int totalGuesses)
+//{
+//    AddPlayerdataToScoreboard(totalGuesses.ToString(), _fileName);
+//}

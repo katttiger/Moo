@@ -13,7 +13,7 @@ namespace Moo.Statistic
     public class DataMethods : IDataMethods
     {
 
-        public static void Create(string data, string pathToData)
+        public static void Create(PlayerData data, string pathToData)
         {
             StreamWriter writer = new(pathToData, append: true);
             writer.Write(data + writer.NewLine);

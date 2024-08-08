@@ -12,11 +12,12 @@ namespace Moo.Games
         readonly UI Ui = new();
         private void SaveResultToHighscore(string result)
         {
+            throw new NotImplementedException();
             //move to statistics
-            PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-            PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
-            PlayerDAO.GetTopList(PathToScore);
-            PlayerDataContext.ShowTopList(Ui);
+            //PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
+            //PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
+            //PlayerDAO.GetTopList(PathToScore);
+            //PlayerDataContext.ShowTopList(Ui);
         }
         public static string CreateGoal()
         {

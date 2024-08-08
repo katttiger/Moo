@@ -74,24 +74,22 @@ namespace Moo.Games
         }
         private void SaveResultToDatabase(string result)
         {
-            PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-            PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
-            PlayerDAO.GetTopList(PathToScore);
-            PlayerDataContext.ShowTopList(Ui);
+            throw new NotImplementedException();
+            //PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
+            //PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
+            //PlayerDAO.GetTopList(PathToScore);
         }
         public void Display()
         {
             Ui.WriteOutput("Enter your user name:\n");
             string name = Ui.HandleInput() ?? "";
             Ui.WriteOutput("New game: \n");
-            int numberOfGuesses = 0;
-
-            PlayerData Player = new(name, numberOfGuesses);
+            PlayerData Player = new(name, 0);
 
             while (IsPlaying)
             {
                 string goal = CreateGoal();
-
+                int numberOfGuesses = 0;
                 //Comment out or remove next line to play real game
                 Ui.WriteOutput($"For practice, number is: {goal} \n");
 
@@ -105,11 +103,6 @@ namespace Moo.Games
                     Ui.WriteOutput($"{bullsAndCows} \n");
                 }
 
-                //output.WriteLine(name + "#&#" + nGuess)
-                string result = $"{name}#&#{numberOfGuesses}";
-                SaveResultToDatabase(result);
-                PlayerDataContext.ShowTopList(Ui);
-
                 Ui.WriteOutput(
                     $"\n Correct. It took {numberOfGuesses} guesses. " +
                     "\n Press any button to start a new game." +
@@ -118,7 +111,9 @@ namespace Moo.Games
                 if (answer != null && answer != "" && answer.Contains('n'))
                 {
                     IsPlaying = false;
-                    Player.CalculatePlayerAverageScore();
+                    string result = $"{Player.Name}#&#{Player.CalculatePlayerAverageScore()}";
+                    SaveResultToDatabase(result);
+                    PlayerDataContext.ShowTopList(Ui);
                 }
                 Player.UpdatePlayerScore(numberOfGuesses);
             }
