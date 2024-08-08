@@ -1,5 +1,6 @@
 ﻿using Moo.Context;
 using Moo.Interfaces;
+using Moo.Players;
 using Moo.Statistic;
 
 namespace Moo.Games
@@ -7,8 +8,7 @@ namespace Moo.Games
     public class MooGame : IGame
     {
         public bool IsPlaying { get; set; } = true;
-
-        readonly GameContext context = new();
+        public string PathToScore { get; set; } = "ResultMooGame";
         readonly UI Ui = new();
 
         public static string CreateGoal()
@@ -72,12 +72,21 @@ namespace Moo.Games
                 }
             }
         }
+        private void SaveResultToDatabase(string result)
+        {
+            PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
+            PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
+            PlayerDAO.GetTopList(PathToScore);
+            PlayerDataContext.ShowTopList(Ui);
+        }
         public void Display()
         {
             Ui.WriteOutput("Enter your user name:\n");
             string name = Ui.HandleInput() ?? "";
             Ui.WriteOutput("New game: \n");
             int numberOfGuesses = 0;
+
+            PlayerData Player = new(name, numberOfGuesses);
 
             while (IsPlaying)
             {
@@ -98,10 +107,8 @@ namespace Moo.Games
 
                 //output.WriteLine(name + "#&#" + nGuess)
                 string result = $"{name}#&#{numberOfGuesses}";
-                PlayerDAO.AddPlayerdataToScoreboard(result, "MooResult.txt");
-                PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-                PlayerDAO.GetTopList("MooResult.txt");
-                context.ShowTopList(Ui);
+                SaveResultToDatabase(result);
+                PlayerDataContext.ShowTopList(Ui);
 
                 Ui.WriteOutput(
                     $"\n Correct. It took {numberOfGuesses} guesses. " +
@@ -111,7 +118,9 @@ namespace Moo.Games
                 if (answer != null && answer != "" && answer.Contains('n'))
                 {
                     IsPlaying = false;
+                    Player.CalculatePlayerAverageScore();
                 }
+                Player.UpdatePlayerScore(numberOfGuesses);
             }
         }
     }

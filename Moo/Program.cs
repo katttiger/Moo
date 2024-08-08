@@ -1,11 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Moo.Context;
-using Moo.Games;
+﻿using Moo.Context;
 using Moo.Interfaces;
-
 
 namespace Program
 {
@@ -13,7 +7,9 @@ namespace Program
     {
         public static void Main()
         {
-            GameContext controller = new();
+            UI Ui = new();
+            GameContext controller = new(Ui);
+            controller.ChooseGame();
             controller.Run();
         }
     }

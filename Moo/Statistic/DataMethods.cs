@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Moo.Statistic
 {
@@ -14,13 +15,13 @@ namespace Moo.Statistic
 
         public static void Create(string data, string pathToData)
         {
-
             StreamWriter writer = new(pathToData, append: true);
             writer.Write(data + writer.NewLine);
             writer.Close();
         }
         public static List<PlayerData> Read(string pathToData)
         {
+            StreamReader reader = new(pathToData);
             throw new NotImplementedException();
         }
         public static void Update(string data, string pathToData)

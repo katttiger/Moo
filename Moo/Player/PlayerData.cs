@@ -14,7 +14,7 @@ namespace Moo.Players
         public PlayerData(string name, int guesses)
         {
             Name = name;
-            NumberOfGamesPlayed = 1;
+            NumberOfGamesPlayed = 0;
             this.TotalGuesses = guesses;
         }
         public PlayerData() { }

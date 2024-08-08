@@ -1,26 +1,23 @@
-﻿using Moo.Context;
-using Moo.Interfaces;
+﻿using Moo.Interfaces;
 using Moo.Players;
 using Moo.Statistic;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Moo.Games
 {
     public class MasterMind : IGame
     {
         public bool IsPlaying { get; set; } = true;
-
-        readonly GameContext context = new();
+        public string PathToScore { get; set; } = "ResultMastemind";
         readonly UI Ui = new();
+        private void SaveResultToHighscore(string result)
+        {
+            //move to statistics
+            PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
+            PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
+            PlayerDAO.GetTopList(PathToScore);
+            PlayerDataContext.ShowTopList(Ui);
+        }
         public static string CreateGoal()
         {
             Random randomGenerator = new();
@@ -33,7 +30,7 @@ namespace Moo.Games
             return goal;
         }
 
-        //TODO: Improve. The method does not take into consideration whether the
+        //TODO: The method does not take into consideration whether the
         //digit has already been accounted for when there are duplicates in the 
         //goal.
         public static string CheckGuess(string goal, string guess)
@@ -62,7 +59,6 @@ namespace Moo.Games
                 }
             }
             return $"{"XXXX"[..rightNumberAndPlace]}\n{"YYYY"[..rightNumberWrongPlace]}";
-            //return stringBuilder.ToString();
         }
         private static string CheckIfGuessIsValid(string goal, string guess)
         {
@@ -108,14 +104,11 @@ namespace Moo.Games
                     numberOfGuesses++;
                     Ui.WriteOutput($"{mastermindCompare} \n");
                 }
+
                 string result = $"{name}#&#{numberOfGuesses}";
-
                 playerData.TotalGuesses = numberOfGuesses;
-                PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-                PlayerDAO.AddPlayerdataToScoreboard(result, "MastermindResult.txt");
-                PlayerDAO.GetTopList("MastermindResult.txt");
-                context.ShowTopList(Ui);
-
+                PlayerDAO playerDAO = new();
+                SaveResultToHighscore(result);
 
                 Ui.WriteOutput(
                     $"\n Correct. It took {numberOfGuesses} guesses" +
@@ -126,7 +119,6 @@ namespace Moo.Games
                 {
                     IsPlaying = false;
                 }
-
             }
         }
     }

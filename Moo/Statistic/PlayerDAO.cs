@@ -18,6 +18,7 @@ namespace Moo.Statistic
         {
             _fileName = filename;
         }
+
         public static void AddPlayerdataToScoreboard(string result, string path)
         {
             DataMethods.Create(result, path);
@@ -51,9 +52,8 @@ namespace Moo.Statistic
             return playerList;
         }
 
-        #region
         //Return list of player data from textfile
-        public List<PlayerData> GetPlayerDatas()
+        public readonly List<PlayerData> GetPlayerDatas()
         {
             return GetTopList(_fileName);
         }
@@ -63,10 +63,5 @@ namespace Moo.Statistic
         {
             AddPlayerdataToScoreboard(totalGuesses.ToString(), _fileName);
         }
-
-        #endregion
-
-
-
     }
 }
