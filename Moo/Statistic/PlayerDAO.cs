@@ -1,4 +1,6 @@
-﻿using Moo.Players;
+﻿using Games.Statistic.APIMethods;
+using Moo.Interfaces;
+using Moo.Players;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -8,64 +10,30 @@ namespace Moo.Statistic
     //CRUD
     public struct PlayerDAO : IPlayerDAO
     {
-        PlayerData playerData;
-        string _filename;
+        //PlayerData PlayerData;
+
+        string PathToScore;
         private const string Seperator = "#&#";
+        public PlayerData PlayerData { get; set; }
+
         public PlayerDAO(PlayerData player, string filename)
         {
-            this.playerData = player;
-            this._filename = filename;
+            this.PlayerData = player;
+            this.PathToScore = filename;
         }
 
-        public List<PlayerData> GetPlayerDatas()
+        public List<PlayerData> GetPlayerDatas(string fileName)
         {
-            throw new NotImplementedException();
+            return DataMethods.Get(fileName);
         }
 
-        public void Save()
+        public void Save(PlayerData playerdata)
         {
-            if (this.playerData == null)
-            {
-                DataMethods.Create(playerData, _filename);
-            }
-            throw new NotImplementedException();
-        }
-        public static List<PlayerData> GetTopList(string fileName)
-        {
-            StreamReader reader = new(fileName);
-            List<PlayerData> playerList = [];
-
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                string[] playerNameAndScore = line.Split(new string[] { Seperator }, StringSplitOptions.None);
-                string name = playerNameAndScore[0];
-                int guesses = Convert.ToInt32(playerNameAndScore[1]);
-
-                PlayerData playerData = new(name, guesses);
-                int indexOfPlayerData = playerList.IndexOf(playerData);
-
-                //FIX: else is never hit.
-                if (indexOfPlayerData < 0)
-                {
-                    playerList.Add(playerData);
-                }
-                else
-                {
-                    playerList[indexOfPlayerData].UpdatePlayerScore(guesses);
-                }
-            }
-            reader.Close();
-            return playerList;
-        }
-
-        public void Save(string name, int totalGuesses)
-        {
-            throw new NotImplementedException();
+            DataMethods.Add(PlayerData, PathToScore);
         }
     }
 }
-////Skicka in filePath till ctor för PlayerDAO.
+/*///Skicka in filePath till ctor för PlayerDAO.
 
 ////Gör att du kan köra tester mot en annan
 ////textfil som du behöver skapa upp i varje test
@@ -92,4 +60,4 @@ namespace Moo.Statistic
 //public void Save(string name, int totalGuesses)
 //{
 //    AddPlayerdataToScoreboard(totalGuesses.ToString(), _fileName);
-//}
+//}*/

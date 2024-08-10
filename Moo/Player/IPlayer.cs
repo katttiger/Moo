@@ -11,9 +11,7 @@ namespace Moo.Players
         string Name { get; }
         int NumberOfGamesPlayed { get; }
         int TotalGuesses { get; set; }
-
-        public void UpdatePlayerScore(int guesses);
-
-        public double CalculatePlayerAverageScore();
+        //public void UpdatePlayerScore(int guesses);
+        //public double CalculatePlayerAverageScore();
     }
 }

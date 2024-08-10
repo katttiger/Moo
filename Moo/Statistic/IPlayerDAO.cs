@@ -4,10 +4,9 @@ namespace Moo.Statistic
 {
     public interface IPlayerDAO
     {
+        PlayerData PlayerData { get; set; }
         static List<IPLayer> PlayerList { get; set; }
-        void Save(string name, int totalGuesses);
-        List<PlayerData> GetPlayerDatas();
-
-        //Something that can read playerdata
+        void Save(PlayerData playerdata);
+        List<PlayerData> GetPlayerDatas(string fileName);
     }
 }

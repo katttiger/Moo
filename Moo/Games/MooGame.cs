@@ -74,6 +74,8 @@ namespace Moo.Games
         }
         private void SaveResultToDatabase(string result)
         {
+            PlayerDAO playerDAO = new PlayerDAO(result, PathToScore);
+            playerDAO.Save(result);
             throw new NotImplementedException();
             //PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
             //PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);

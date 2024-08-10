@@ -9,6 +9,7 @@ namespace Program
         {
             UI Ui = new();
             GameContext controller = new(Ui);
+            controller.PrintMenuOfGames();
             controller.ChooseGame();
             controller.Run();
         }
