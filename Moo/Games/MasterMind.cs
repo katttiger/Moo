@@ -1,7 +1,6 @@
 ﻿using Moo.Interfaces;
 using Moo.Players;
 using Moo.Statistic;
-using System.Text;
 
 namespace Moo.Games
 {
@@ -10,15 +9,8 @@ namespace Moo.Games
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind";
         readonly UI Ui = new();
-        private void SaveResultToHighscore(string result)
-        {
-            throw new NotImplementedException();
-            //move to statistics
-            //PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-            //PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
-            //PlayerDAO.GetTopList(PathToScore);
-            //PlayerDataContext.ShowTopList(Ui);
-        }
+        private PlayerData Player;
+
         public static string CreateGoal()
         {
             Random randomGenerator = new();
@@ -30,15 +22,10 @@ namespace Moo.Games
             }
             return goal;
         }
-
-        //TODO: The method does not take into consideration whether the
-        //digit has already been accounted for when there are duplicates in the 
-        //goal.
-        public static string CheckGuess(string goal, string guess)
+        public static string CompareGuessWithAnswer(string goal, string guess)
         {
-            StringBuilder stringBuilder = new();
-            int rightNumberAndPlace = 0;
-            int rightNumberWrongPlace = 0;
+            int numberExistsInRightPlace = 0;
+            int numberExistsInWrongPlace = 0;
 
             for (int i = 0; i < 4; i++)
             {
@@ -48,18 +35,16 @@ namespace Moo.Games
                     {
                         if (i == j)
                         {
-                            stringBuilder.Append('X');
-                            rightNumberAndPlace++;
+                            numberExistsInRightPlace++;
                         }
                         else
                         {
-                            stringBuilder.Append('Y');
-                            rightNumberWrongPlace++;
+                            numberExistsInWrongPlace++;
                         }
                     }
                 }
             }
-            return $"{"XXXX"[..rightNumberAndPlace]}\n{"YYYY"[..rightNumberWrongPlace]}";
+            return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
         }
         private static string CheckIfGuessIsValid(string goal, string guess)
         {
@@ -73,53 +58,74 @@ namespace Moo.Games
             }
             else
             {
-                return CheckGuess(goal, guess);
+                return CompareGuessWithAnswer(goal, guess);
             }
+        }
+
+        private int PlayGame()
+        {
+
+            string goal = CreateGoal();
+            int numberOfGuesses = 0;
+            //Comment out or remove next line to play real game
+            Ui.WriteOutput($"For practice, number is: {goal} \n");
+
+            string mastermindCompare = string.Empty;
+
+            while (!mastermindCompare.Equals("XXXX"))
+            {
+                string guess = Ui.HandleInput();
+                mastermindCompare = CheckIfGuessIsValid(goal, guess);
+                numberOfGuesses++;
+                Ui.WriteOutput($"{mastermindCompare} \n");
+            }
+            return numberOfGuesses;
+        }
+        void ExitGame()
+        {
+            IsPlaying = false;
+            string result = $"{Player.Name}#&#{Player.CalculatePlayerAverageScore()}";
+            SaveResultToDatabase(result);
+            PlayerDataContext.ShowTopList(Ui);
+        }
+
+        void CreatePlayer()
+        {
+            Ui.WriteOutput("Enter your user name:\n");
+            string name = Ui.HandleInput() ?? "";
+            Player = new(name, 0);
+        }
+        private void SaveResultToDatabase(string result)
+        {
+            PlayerDAO playerDAO = new PlayerDAO(Player, PathToScore);
+            playerDAO.Save(Player);
         }
 
         public void Display()
         {
-            Ui.WriteOutput("Enter your user name:\n");
-            string name = Ui.HandleInput() ?? "";
+            CreatePlayer();
 
-            PlayerData playerData = new(name, 0);
-
-            Ui.WriteOutput(
-                "Values allowed: 0-6.");
-            Ui.WriteOutput("New game: \n");
-            int numberOfGuesses = 0;
+            Ui.WriteOutput("Values allowed: 0-6.\n" +
+                    "A: Right number and place.\n" +
+                    "B: Right number, wrong place");
 
             while (IsPlaying)
             {
-                string goal = CreateGoal();
-
-                //Comment out or remove next line to play real game
-                Ui.WriteOutput($"For practice, number is: {goal} \n");
-
-                string mastermindCompare = string.Empty;
-
-                while (!mastermindCompare.Equals("XXXX"))
-                {
-                    string guess = Ui.HandleInput();
-                    mastermindCompare = CheckIfGuessIsValid(goal, guess);
-                    numberOfGuesses++;
-                    Ui.WriteOutput($"{mastermindCompare} \n");
-                }
-
-                string result = $"{name}#&#{numberOfGuesses}";
-                playerData.TotalGuesses = numberOfGuesses;
-                PlayerDAO playerDAO = new();
-                SaveResultToHighscore(result);
+                Ui.WriteOutput("New game: \n");
+                int numberOfGuesses = PlayGame();
 
                 Ui.WriteOutput(
-                    $"\n Correct. It took {numberOfGuesses} guesses" +
+                    $"\n Correct. It took {numberOfGuesses} guesses. " +
                     "\n Press any button to start a new game." +
                     "\n Press n to exit.");
                 string? answer = Ui.HandleInput();
-                if (answer != null && answer != string.Empty && answer.Contains('n'))
+
+                if (answer != null && answer != "" && answer.Contains('n'))
                 {
-                    IsPlaying = false;
+                    Player.TotalGuesses += numberOfGuesses;
+                    ExitGame();
                 }
+                Player.UpdatePlayerScore(numberOfGuesses);
             }
         }
     }

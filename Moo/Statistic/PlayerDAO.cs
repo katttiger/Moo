@@ -29,7 +29,8 @@ namespace Moo.Statistic
 
         public void Save(PlayerData playerdata)
         {
-            DataMethods.Add(PlayerData, PathToScore);
+            //DataMethods.Add(PlayerDAO, PathToScore);
+            //DataMethods.Add();
         }
     }
 }

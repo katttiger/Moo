@@ -24,7 +24,7 @@ namespace Moo.Context.Tests
         public void Intialize()
         {
             mockUI = new MockUI();
-            GameContext gameContext = new();
+            GameContext gameContext;
         }
 
         [TestMethod()]
@@ -38,14 +38,75 @@ namespace Moo.Context.Tests
         {
         }
     }
+
+
 }
 
-class MockGameController : GameContext
+class MockGameController
 {
-    public new IGame Game;
-    private readonly UI UI = new();
+    private IGame Game;
+    private readonly IUI Ui;
     private readonly List<IGame> Games = [];
-    public PlayerDAO PlayerDAO = new("mockResults");
+    bool gameHasBeenSet = false;
+    public MockGameController(IUI ui)
+    {
+        this.Ui = ui;
+    }
+
+    public void AddGameToList()
+    {
+        Games.AddRange(
+        [
+            new MooGame(),
+                new MasterMind()
+        ]);
+    }
+
+    public void SetGame(IGame game)
+    {
+        this.Game = game;
+        gameHasBeenSet = true;
+    }
+
+    public void Run()
+    {
+        while (Game.IsPlaying)
+        {
+            Ui.Clear();
+            Game.Display();
+        }
+        Ui.Exit();
+    }
+
+    public void PrintMenuOfGames()
+    {
+        AddGameToList();
+        Ui.WriteOutput("Menu of games:");
+
+        foreach (var game in Games)
+        {
+            Ui.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().AsSpan(10)}");
+        }
+    }
+
+    public void ChooseGame()
+    {
+        while (!gameHasBeenSet)
+        {
+            string input = Ui.HandleInput();
+            if (!input.Any(char.IsLetter))
+            {
+                foreach (var game in Games)
+                {
+                    if ((Games.IndexOf(game) + 1).ToString() == input)
+                    {
+                        SetGame(game);
+                    }
+                }
+                Ui.WriteOutput("Please enter a valid number.");
+            }
+        }
+    }
 }
 
 class MockUI : IUI

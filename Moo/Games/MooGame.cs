@@ -1,5 +1,4 @@
-﻿using Moo.Context;
-using Moo.Interfaces;
+﻿using Moo.Interfaces;
 using Moo.Players;
 using Moo.Statistic;
 
@@ -10,8 +9,9 @@ namespace Moo.Games
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame";
         readonly UI Ui = new();
+        private PlayerData Player;
 
-        public static string CreateGoal()
+        private static string CreateGoal()
         {
             Random randomGenerator = new();
             string goal = string.Empty;
@@ -26,7 +26,7 @@ namespace Moo.Games
             }
             return goal;
         }
-        public static string CheckBullsAndCows(string goal, string guess)
+        private static string CheckBullsAndCows(string goal, string guess)
         {
             int bulls = 0;
             int cows = 0;
@@ -72,50 +72,69 @@ namespace Moo.Games
                 }
             }
         }
-        private void SaveResultToDatabase(string result)
+
+        private int PlayGame()
         {
-            PlayerDAO playerDAO = new PlayerDAO(result, PathToScore);
-            playerDAO.Save(result);
-            throw new NotImplementedException();
-            //PlayerDAO.AddPlayerdataToScoreboard(result, "result.txt");
-            //PlayerDAO.AddPlayerdataToScoreboard(result, PathToScore);
-            //PlayerDAO.GetTopList(PathToScore);
+            string goal = CreateGoal();
+            int numberOfGuesses = 0;
+
+            //Comment out or remove next line to play real game
+            Ui.WriteOutput($"For practice, number is: {goal} \n");
+
+            string bullsAndCows = string.Empty;
+
+            while (!bullsAndCows.Equals("BBBB,"))
+            {
+                string guess = Ui.HandleInput() ?? "";
+                bullsAndCows = CheckIfGuessIsValid(goal, guess);
+                numberOfGuesses++;
+                Ui.WriteOutput($"{bullsAndCows} \n");
+            }
+            return numberOfGuesses;
         }
-        public void Display()
+        void ExitGame()
+        {
+            IsPlaying = false;
+            string result = $"{Player.Name}#&#{Player.CalculatePlayerAverageScore()}";
+            SaveResultToDatabase(result);
+            PlayerDataContext.ShowTopList(Ui);
+        }
+
+        void CreatePlayer()
         {
             Ui.WriteOutput("Enter your user name:\n");
             string name = Ui.HandleInput() ?? "";
-            Ui.WriteOutput("New game: \n");
-            PlayerData Player = new(name, 0);
+            Player = new(name, 0);
+        }
+        private void SaveResultToDatabase(string result)
+        {
+            PlayerDAO playerDAO = new PlayerDAO(Player, PathToScore);
+            playerDAO.Save(Player);
+        }
+
+        public void Display()
+        {
+            CreatePlayer();
+
+            Ui.WriteOutput("Values allowed: 0-9.\n" +
+                   "B: Right number and place.\n" +
+                   "C: Right number, wrong place");
 
             while (IsPlaying)
             {
-                string goal = CreateGoal();
-                int numberOfGuesses = 0;
-                //Comment out or remove next line to play real game
-                Ui.WriteOutput($"For practice, number is: {goal} \n");
-
-                string bullsAndCows = string.Empty;
-
-                while (!bullsAndCows.Equals("BBBB,"))
-                {
-                    string guess = Ui.HandleInput() ?? "";
-                    bullsAndCows = CheckIfGuessIsValid(goal, guess);
-                    numberOfGuesses++;
-                    Ui.WriteOutput($"{bullsAndCows} \n");
-                }
+                Ui.WriteOutput("New game: \n");
+                int numberOfGuesses = PlayGame();
 
                 Ui.WriteOutput(
                     $"\n Correct. It took {numberOfGuesses} guesses. " +
                     "\n Press any button to start a new game." +
                     "\n Press n to exit.");
-                string? answer = Ui.HandleInput();
-                if (answer != null && answer != "" && answer.Contains('n'))
+                string? answerToPlayAgain = Ui.HandleInput();
+
+                if (answerToPlayAgain != null && answerToPlayAgain != "" && answerToPlayAgain.Contains('n'))
                 {
-                    IsPlaying = false;
-                    string result = $"{Player.Name}#&#{Player.CalculatePlayerAverageScore()}";
-                    SaveResultToDatabase(result);
-                    PlayerDataContext.ShowTopList(Ui);
+                    Player.TotalGuesses += numberOfGuesses;
+                    ExitGame();
                 }
                 Player.UpdatePlayerScore(numberOfGuesses);
             }

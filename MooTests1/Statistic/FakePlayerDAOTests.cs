@@ -48,6 +48,9 @@ namespace Moo.Statistic.PlayerDAO.Tests
         {
             _txtFileContent = initialFileContent;
         }
+
+        public PlayerData PlayerData { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         //Return player data
         public List<PlayerData> GetPlayerDatas()
         {
@@ -75,11 +78,22 @@ namespace Moo.Statistic.PlayerDAO.Tests
             results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
             return results;
         }
+
+        public List<PlayerData> GetPlayerDatas(string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
         //Save to memory
         public void Save(string name, int totalGuesses)
         {
             _txtFileContent += name + "#&#" + totalGuesses + Environment.NewLine;
             Debug.WriteLine("Saved");
+        }
+
+        public void Save(PlayerData playerdata)
+        {
+            throw new NotImplementedException();
         }
     }
 }
