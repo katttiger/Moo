@@ -34,7 +34,7 @@ namespace Games.Statistic.APIMethods
                 }
                 else
                 {
-                    playerList[indexOfPlayerData].UpdatePlayerScore(guesses);
+                    playerList[indexOfPlayerData].UpdatePlayerStatus(guesses);
                 }
             }
             reader.Close();

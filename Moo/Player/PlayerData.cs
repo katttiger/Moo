@@ -17,7 +17,7 @@ namespace Moo.Players
             NumberOfGamesPlayed = 1;
             this.TotalGuesses = guesses;
         }
-        public void UpdatePlayerScore(int guesses)
+        public void UpdatePlayerStatus(int guesses)
         {
             TotalGuesses += guesses;
             NumberOfGamesPlayed++;

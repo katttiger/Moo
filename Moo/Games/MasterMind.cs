@@ -125,7 +125,7 @@ namespace Moo.Games
                     Player.TotalGuesses += numberOfGuesses;
                     ExitGame();
                 }
-                Player.UpdatePlayerScore(numberOfGuesses);
+                Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
     }

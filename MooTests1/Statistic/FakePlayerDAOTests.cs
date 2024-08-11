@@ -72,7 +72,7 @@ namespace Moo.Statistic.PlayerDAO.Tests
                 }
                 else
                 {
-                    results[pos].UpdatePlayerScore(guesses);
+                    results[pos].UpdatePlayerStatus(guesses);
                 }
             }
             results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
