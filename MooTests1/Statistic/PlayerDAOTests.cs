@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Games.Player;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moo.Players;
 using Moo.Statistic;
 using System;

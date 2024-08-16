@@ -1,14 +1,13 @@
-﻿using Moo.Interfaces;
-using Moo.Players;
-using Moo.Statistic;
-
-namespace Moo.Games
+﻿using Games.Player;
+using Games.Ui;
+using Games.UI;
+namespace Games.Games
 {
     public class MasterMind : IGame
     {
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind";
-        readonly UI Ui = new();
+        readonly UserInterface Ui = new();
         private PlayerData Player;
 
         public static string CreateGoal()

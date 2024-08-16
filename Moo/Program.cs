@@ -1,13 +1,14 @@
-﻿using Moo.Context;
-using Moo.Interfaces;
+﻿using Games.Context;
+using Games.Ui;
+using Games.UI;
 
-namespace Program
+namespace Games
 {
     class Program
     {
         public static void Main()
         {
-            UI Ui = new();
+            UserInterface Ui = new();
             GameContext controller = new(Ui);
             controller.PrintMenuOfGames();
             controller.ChooseGame();

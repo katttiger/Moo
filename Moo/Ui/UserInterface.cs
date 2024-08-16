@@ -1,13 +1,8 @@
-﻿using Moo.Players;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Games.UI;
 
-namespace Moo.Interfaces
+namespace Games.Ui
 {
-    public class UI : IUI
+    public class UserInterface : IUI
     {
         public void Exit()
         {
@@ -25,6 +20,17 @@ namespace Moo.Interfaces
         public void WriteOutput(string message)
         {
             Console.WriteLine(message);
+        }
+
+        public int ParseStringToInt(string message)
+        {
+            bool conversionWasSuccesful = int.TryParse(message, out int value);
+            if (conversionWasSuccesful)
+            {
+                return value;
+            }
+            else
+                throw new Exception($"{message} could not be converted.");
         }
     }
 }

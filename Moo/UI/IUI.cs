@@ -1,12 +1,4 @@
-﻿using Moo.Players;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Moo.Interfaces
+﻿namespace Games.UI
 {
     public interface IUI
     {
@@ -16,5 +8,6 @@ namespace Moo.Interfaces
         void WriteOutput(string message);
         void Exit();
         void Clear();
+        public int ParseStringToInt(string message);
     }
 }

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Games.Statistic.APIMethods
+namespace Games.Player.APIMethods
 {
     public interface IDataMethods
     {

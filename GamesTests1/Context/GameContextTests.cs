@@ -1,16 +1,7 @@
-﻿using Games.Context;
+﻿using Games.Games;
 using Games.UI;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moo.Games;
-using Moo.Players;
-using Moo.Statistic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Moo.Context.Tests
+namespace Games.Context.Tests
 {
     [TestClass()]
     public class GameContextTests
@@ -19,6 +10,8 @@ namespace Moo.Context.Tests
         readonly GameContext? gameContext;
         MockUI? mockUI = new();
         readonly IGame? game;
+
+        string input = "";
 
         [TestInitialize()]
         public void Intialize()
@@ -34,12 +27,10 @@ namespace Moo.Context.Tests
         }
 
         [TestMethod()]
-        public void ChooseGameTest()
+        public void ChooseGameTest(string input)
         {
         }
     }
-
-
 }
 
 class MockGameController
@@ -93,18 +84,15 @@ class MockGameController
     {
         while (!gameHasBeenSet)
         {
-            string input = Ui.HandleInput();
-            if (!input.Any(char.IsLetter))
+            int input = Ui.ParseStringToInt(Ui.HandleInput());
+            foreach (var game in Games)
             {
-                foreach (var game in Games)
+                if (Games.IndexOf(game) + 1 == input)
                 {
-                    if ((Games.IndexOf(game) + 1).ToString() == input)
-                    {
-                        SetGame(game);
-                    }
+                    SetGame(game);
                 }
-                Ui.WriteOutput("Please enter a valid number.");
             }
+            Ui.WriteOutput("Please enter a valid number.");
         }
     }
 }
@@ -132,4 +120,8 @@ class MockUI : IUI
         message = "Hello world";
     }
 
+    public int ParseStringToInt(string message)
+    {
+        throw new NotImplementedException();
+    }
 }

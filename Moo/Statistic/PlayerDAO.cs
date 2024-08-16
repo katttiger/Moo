@@ -1,26 +1,25 @@
-﻿using Games.Statistic.APIMethods;
-using Moo.Interfaces;
-using Moo.Players;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+﻿using Games.Player;
+using Games.Player.APIMethods;
 
-namespace Moo.Statistic
+namespace Games.Player
 {
     //Responsible for saving and retrieving player data.
     //CRUD
-    public struct PlayerDAO : IPlayerDAO
+    public class PlayerDAO : IPlayerDAO
     {
         //PlayerData PlayerData;
 
         string PathToScore;
         private const string Seperator = "#&#";
-        public PlayerData PlayerData { get; set; }
+        public PlayerData PlayerNameAndScore { get; set; }
 
         public PlayerDAO(PlayerData player, string filename)
         {
-            this.PlayerData = player;
-            this.PathToScore = filename;
+            PlayerNameAndScore = player;
+            PathToScore = filename;
         }
+
+        public PlayerDAO() { }
 
         public List<PlayerData> GetPlayerDatas(string fileName)
         {

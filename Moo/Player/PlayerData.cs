@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Moo.Players
+namespace Games.Player
 {
     public class PlayerData : IPLayer
     {
@@ -15,7 +15,7 @@ namespace Moo.Players
         {
             Name = name;
             NumberOfGamesPlayed = 1;
-            this.TotalGuesses = guesses;
+            TotalGuesses = guesses;
         }
         public void UpdatePlayerStatus(int guesses)
         {

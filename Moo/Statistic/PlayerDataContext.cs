@@ -1,6 +1,6 @@
-﻿using Games.Statistic.APIMethods;
-using Moo.Interfaces;
-using Moo.Players;
+﻿using Games.Player;
+using Games.Player.APIMethods;
+using Games.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Moo.Statistic
+namespace Games.Player
 {
     public class PlayerDataContext
     {
         public PlayerDataContext(string pathToData = "")
         {
-            this.PathToData = pathToData;
+            PathToData = pathToData;
         }
         string PathToData { get; set; } = "";
         public static void SavePlayerData(PlayerDAO playerDAO)
@@ -23,7 +23,7 @@ namespace Moo.Statistic
         }
         public static void ShowTopList(IUI ui)
         {
-            PlayerDAO playerDAO = new PlayerDAO();
+            PlayerDAO playerDAO = new();
             List<PlayerData> results = playerDAO.GetPlayerDatas("");
             results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
             ui.WriteOutput("Player       games average");

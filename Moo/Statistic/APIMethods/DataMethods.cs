@@ -1,6 +1,5 @@
-﻿using Moo.Players;
-using Moo.Statistic;
-namespace Games.Statistic.APIMethods
+﻿using Games.Player;
+namespace Games.Player.APIMethods
 {
     public class DataMethods : IDataMethods
     {

@@ -1,19 +1,14 @@
-﻿using Moo.Games;
-using Moo.Interfaces;
-using Moo.Statistic;
+﻿using Games.Games;
+using Games.UI;
 
-namespace Moo.Context
+namespace Games.Context
 {
-    public class GameContext
+    public class GameContext(IUI ui)
     {
         private IGame Game;
-        private readonly IUI Ui;
+        private readonly IUI Ui = ui;
         private readonly List<IGame> Games = [];
         bool gameHasBeenSet = false;
-        public GameContext(IUI ui)
-        {
-            this.Ui = ui;
-        }
 
         public void AddGameToList()
         {
@@ -26,7 +21,7 @@ namespace Moo.Context
 
         public void SetGame(IGame game)
         {
-            this.Game = game;
+            Game = game;
             gameHasBeenSet = true;
         }
 
@@ -47,7 +42,7 @@ namespace Moo.Context
 
             foreach (var game in Games)
             {
-                Ui.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().AsSpan(10)}");
+                Ui.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().AsSpan(12)}");
             }
         }
 
@@ -55,18 +50,15 @@ namespace Moo.Context
         {
             while (!gameHasBeenSet)
             {
-                string input = Ui.HandleInput();
-                if (!input.Any(char.IsLetter))
+                int input = Ui.ParseStringToInt(Ui.HandleInput());
+                foreach (var game in Games)
                 {
-                    foreach (var game in Games)
+                    if (Games.IndexOf(game) + 1 == input)
                     {
-                        if ((Games.IndexOf(game) + 1).ToString() == input)
-                        {
-                            SetGame(game);
-                        }
+                        SetGame(game);
                     }
-                    Ui.WriteOutput("Please enter a valid number.");
                 }
+                Ui.WriteOutput("Please enter a valid number.");
             }
         }
     }
