@@ -1,63 +1,36 @@
 ﻿using Games.Player;
-using Games.Player.APIMethods;
+using Games.Statistic.APIMethods;
+using Games.Ui;
 
-namespace Games.Player
+namespace Games.Statistic
 {
-    //Responsible for saving and retrieving player data.
-    //CRUD
-    public class PlayerDAO : IPlayerDAO
+    public class PlayerDAO(PlayerData player, string filename) : IPlayerDAO
     {
-        //PlayerData PlayerData;
+        private string PathToScore { get; set; } = filename;
+        public PlayerData PlayerData { get; set; } = player;
 
-        string PathToScore;
-        private const string Seperator = "#&#";
-        public PlayerData PlayerNameAndScore { get; set; }
-
-        public PlayerDAO(PlayerData player, string filename)
+        public List<PlayerData> GetPlayerData()
         {
-            PlayerNameAndScore = player;
-            PathToScore = filename;
+            return DataMethods.Get(PathToScore);
         }
-
-        public PlayerDAO() { }
-
-        public List<PlayerData> GetPlayerDatas(string fileName)
+        public void SavePlayerData()
         {
-            return DataMethods.Get(fileName);
+            DataMethods.Add(ConvertPlayerDataToString(), PathToScore);
         }
-
-        public void Save(PlayerData playerdata)
+        public string ConvertPlayerDataToString()
         {
-            //DataMethods.Add(PlayerDAO, PathToScore);
-            //DataMethods.Add();
+            return $"{PlayerData.Name}#&#{PlayerData.TotalGuesses}";
+        }
+        public void ShowTopList()
+        {
+            UserInterface userInterface = new();
+            List<PlayerData> results = GetPlayerData();
+            results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
+            userInterface.WriteOutput("Player       games average");
+            foreach (PlayerData player in results)
+            {
+                userInterface.WriteOutput(string.Format("{0,-9}{1,5:D}{2,9:F2}", player.Name, player.NumberOfGamesPlayed, player.CalculatePlayerAverageScore()));
+            }
         }
     }
 }
-/*///Skicka in filePath till ctor för PlayerDAO.
-
-////Gör att du kan köra tester mot en annan
-////textfil som du behöver skapa upp i varje test
-
-//private readonly string _fileName = string.Empty;
-//private const string Seperator = "#&#";
-//public PlayerDAO(string filename)
-//{
-//    _fileName = filename;
-//}
-
-//public static void AddPlayerdataToScoreboard(string result, string path)
-//{
-//    DataMethods.Create(result, path);
-//}
-
-////Return list of player data from textfile
-//public readonly List<PlayerData> GetPlayerDatas()
-//{
-//    return GetTopList(_fileName);
-//}
-
-////Should save player data to textfile
-//public void Save(string name, int totalGuesses)
-//{
-//    AddPlayerdataToScoreboard(totalGuesses.ToString(), _fileName);
-//}*/

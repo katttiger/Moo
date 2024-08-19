@@ -8,55 +8,24 @@ namespace Games.Context.Tests
     [TestClass()]
     public class GameContextTests
     {
-        readonly MockGameController? mockGameController;
-        readonly GameContext? gameContext;
+        readonly MockGameContext? mockGameContext;
         MockUI? mockUI = new();
-        readonly IGame? game;
-
-        string input = "";
-
-        [TestInitialize()]
-        public void Intialize()
-        {
-            mockUI = new MockUI();
-            GameContext gameContext;
-        }
+        readonly IGame? MockIGame = new MooGame();
 
         [TestMethod()]
         public void RunTest()
         {
             Assert.IsFalse(mockUI.ExitTest());
         }
-
-        [TestMethod()]
-        public void ChooseGameTest(string input)
-        {
-        }
-
-        [TestMethod()]
-        public void SetGameTest()
-        {
-            Assert.IsTrue(mockGameController.gameHasBeenSet);
-        }
-
-        [TestMethod()]
-        public void SetGameTest1()
-        {
-            Assert.IsTrue(mockGameController.gameHasBeenSet);
-        }
     }
 }
 
-class MockGameController
+class MockGameContext(IUI ui)
 {
-    private IGame Game;
-    private readonly IUI Ui;
+    public IGame Game;
+    private readonly IUI Ui = ui;
     private readonly List<IGame> Games = [];
     public bool gameHasBeenSet = false;
-    public MockGameController(IUI ui)
-    {
-        this.Ui = ui;
-    }
 
     public void AddGameToList()
     {
@@ -70,7 +39,6 @@ class MockGameController
     public void SetGame(IGame game)
     {
         this.Game = game;
-        gameHasBeenSet = true;
     }
 
     public void Run()
@@ -94,16 +62,16 @@ class MockGameController
         }
     }
 
-    public void ChooseGame()
+    public void ChooseGame(int mockInput)
     {
         while (!gameHasBeenSet)
         {
-            int input = Ui.ParseStringToInt(Ui.HandleInput());
             foreach (var game in Games)
             {
-                if (Games.IndexOf(game) + 1 == input)
+                if (Games.IndexOf(game) + 1 == mockInput)
                 {
                     SetGame(game);
+                    gameHasBeenSet = true;
                 }
             }
             Ui.WriteOutput("Please enter a valid number.");

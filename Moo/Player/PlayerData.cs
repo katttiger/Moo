@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Games.Player
+﻿namespace Games.Player
 {
-    public class PlayerData : IPLayer
+    public class PlayerData(string name, int guesses) : IPLayer
     {
-        public string Name { get; private set; }
-        public int NumberOfGamesPlayed { get; private set; }
-        public int TotalGuesses { get; set; }
-        public PlayerData(string name, int guesses)
-        {
-            Name = name;
-            NumberOfGamesPlayed = 1;
-            TotalGuesses = guesses;
-        }
+        public string Name { get; private set; } = name;
+        public int NumberOfGamesPlayed { get; private set; } = 1;
+        public int TotalGuesses { get; set; } = guesses;
+
         public void UpdatePlayerStatus(int guesses)
         {
             TotalGuesses += guesses;

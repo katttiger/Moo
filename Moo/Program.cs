@@ -10,8 +10,8 @@ namespace Games
         {
             UserInterface Ui = new();
             GameContext controller = new(Ui);
-            controller.PrintMenuOfGames();
-            controller.ChooseGame();
+            //controller.PrintMenuOfGames();
+            //controller.ChooseGame();
             controller.Run();
         }
     }

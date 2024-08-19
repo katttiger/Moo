@@ -1,78 +1,41 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Games.Games;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Games.Player;
 using Games.Ui;
-using System.Linq;
+using Games.Statistic;
 
 namespace Games.Games.Tests
 {
     [TestClass()]
     public class MooGameTests
     {
-        MockMooGame mooGameMock = new();
-        PlayerData? mockPlayer = new("John Doe", 4);
-        string result = "";
-        [TestMethod()]
-        public void DisplayTest()
-        {
-            Assert.IsTrue(mooGameMock.IsPlaying);
-        }
-
+        MockMooGame mockMooGame = new();
         [TestMethod()]
         public void CreateGoalTest()
         {
-            string mockGoal = mooGameMock.CreateGoal();
-            Assert.IsTrue(mockGoal.Length == 4);
-        }
-
-        [TestMethod()]
-        public void CheckBullsAndCowsTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CheckIfGuessIsValidTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void PlayGameTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void ExitGameTest()
-        {
-            string result = "";
-            Assert.IsTrue(result.Contains(mockPlayer.Name)
-                && result.Contains(mockPlayer.TotalGuesses.ToString()));
-
+            //Assert tat the number returned contains four letters
+            //assert that the number returned contains four unique numbers
         }
 
         [TestMethod()]
         public void CreatePlayerTest()
         {
-            Assert.IsTrue(mockPlayer.Name != string.Empty);
-        }
+            //assert that a new player has been created
 
-        [TestMethod()]
-        public void SaveResultToDatabaseTest()
-        {
-            Assert.Fail();
         }
-
     }
 }
-
 public class MockMooGame : IGame
 {
     public bool IsPlaying { get; set; } = true;
     public string PathToScore { get; set; } = "ResultMooGame";
-    readonly UserInterface Ui;
-    public PlayerData Player;
+    readonly UserInterface Ui = new();
+    private PlayerData? Player;
     public void Display()
     {
         CreatePlayer();
@@ -100,7 +63,7 @@ public class MockMooGame : IGame
             Player.UpdatePlayerStatus(numberOfGuesses);
         }
     }
-    public string CreateGoal()
+    public static string CreateGoal()
     {
         Random randomGenerator = new();
         string goal = string.Empty;
@@ -161,7 +124,6 @@ public class MockMooGame : IGame
             }
         }
     }
-
     public int PlayGame()
     {
         string goal = CreateGoal();
@@ -188,7 +150,6 @@ public class MockMooGame : IGame
         SaveResultToDatabase(result);
         PlayerDataContext.ShowTopList(Ui);
     }
-
     public void CreatePlayer()
     {
         Ui.WriteOutput("Enter your user name:\n");

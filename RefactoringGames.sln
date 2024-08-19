@@ -1,11 +1,10 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games", "Moo\Games.csproj", "{383433AF-42A0-4E6C-A609-15B2F42F3FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamesTests1", "GamesTests1\GamesTests1.csproj", "{06908F3E-ED26-4172-9603-0A5741E7AAC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamesTests2", "GamesTests2\GamesTests2.csproj", "{BE5B8C50-2FFD-46FD-88E3-4868BCB21082}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +16,10 @@ Global
 		{383433AF-42A0-4E6C-A609-15B2F42F3FCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{383433AF-42A0-4E6C-A609-15B2F42F3FCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{383433AF-42A0-4E6C-A609-15B2F42F3FCB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06908F3E-ED26-4172-9603-0A5741E7AAC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06908F3E-ED26-4172-9603-0A5741E7AAC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06908F3E-ED26-4172-9603-0A5741E7AAC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06908F3E-ED26-4172-9603-0A5741E7AAC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5B8C50-2FFD-46FD-88E3-4868BCB21082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5B8C50-2FFD-46FD-88E3-4868BCB21082}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5B8C50-2FFD-46FD-88E3-4868BCB21082}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5B8C50-2FFD-46FD-88E3-4868BCB21082}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
