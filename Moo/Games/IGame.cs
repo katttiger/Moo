@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Games.Games
+﻿namespace Games.Games
 {
     public interface IGame
     {
         public bool IsPlaying { get; }
         string PathToScore { get; set; }
         public void Display();
+        public int GameLogic();
+        public string CreateGoal();
+        void CreatePlayer();
     }
 }

@@ -1,12 +1,14 @@
 ﻿using Games.Player;
-namespace Games.Player.APIMethods
+using Games.Player.APIMethods;
+
+namespace Games.Statistic.APIMethods
 {
     public class DataMethods : IDataMethods
     {
-        public static void Add(PlayerDAO data, string pathToData)
+        public static void Add(string data, string pathToData)
         {
             StreamWriter writer = new(pathToData, append: true);
-            writer.Write(data + writer.NewLine);
+            writer.Write(data);
             writer.Close();
         }
         public static List<PlayerData> Get(string pathToData)
