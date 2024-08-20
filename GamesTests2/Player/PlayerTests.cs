@@ -18,7 +18,7 @@ namespace GamesTests2
         public void CannotHaveNegativeTotalGuessesTest()
         {
             var player = new Player("John Doe", 6);
-            Exception actualException = null;
+            Exception? actualException = null;
             try
             {
                 player.TotalGuesses = -10;

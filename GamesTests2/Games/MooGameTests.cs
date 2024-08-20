@@ -1,6 +1,5 @@
 ﻿using Games;
 using Games.Ui;
-using Games.Statistic;
 
 namespace GamesTests2
 {
@@ -31,8 +30,8 @@ namespace GamesTests2
         [TestMethod()]
         public void CheckIfGuessIsValidTest()
         {
-        MockMooGame mockMooGame = new();
-            string mockGuess = "";
+            //MockMooGame mockMooGame = new();
+            //string mockGuess = "";
             //Assert.IsFalse(mockMooGame.CheckIfGuessIsValid(mockGuess));
         }
 
@@ -181,7 +180,7 @@ public class MockMooGame : IGame
     }
 
     public void CreatePlayer()
-        {
+    {
         bool nameIsAccepted = false;
         while (!nameIsAccepted)
         {
@@ -190,29 +189,20 @@ public class MockMooGame : IGame
             {
                 string name = "John Doe";
                 if (name.Length < 1)
-            {
+                {
                     Ui.WriteOutput("You name must have at least 1 character.");
-            }
-            else
-            {
+                }
+                else
+                {
                     Player = new(name, 0);
                     nameIsAccepted = true;
-        }
-    }
-            catch (Exception exception)
-    {
-        string goal = CreateGoal();
-        int numberOfGuesses = 0;
-
-        //Comment out or remove next line to play real game
-        Ui.WriteOutput($"For practice, number is: {goal} \n");
-
-        string bullsAndCows = string.Empty;
-
+                }
+            }
+            catch (Exception)
+            {
                 throw new Exception("Name must have at least 1 character.");
             }
         }
-        return numberOfGuesses;
     }
     public void ExitGame()
     {

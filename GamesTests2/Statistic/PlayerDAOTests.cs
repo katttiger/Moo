@@ -14,7 +14,7 @@ namespace GamesTests2
             var player = new Player("John Doe", 1);
             var playerDao = new PlayerDAO(player, filepathForTesting);
 
-            Exception actualException = null;
+            Exception? actualException = null;
             try
             {
                 player.Name = string.Empty;

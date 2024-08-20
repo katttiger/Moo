@@ -1,19 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games.Context;
-using Games.Games;
+﻿using Games;
 using Games.UI;
-using Games;
 
 namespace GamesTests2
 {
     [TestClass()]
     public class GameContextTests
     {
-        readonly MockGameContext mockGameContext;
         private readonly MockUI mockUI = new();
-        GameContext gameContext;
-        readonly IGame? MockIGame = new MooGame();
-        List<IGame> games = new List<IGame>();
+        readonly MockGameContext mockGameContext;
+        private readonly GameContext gameContext;
 
 
         [TestInitialize()]
@@ -88,7 +83,7 @@ class MockGameContext(IUI ui)
         if (ListOfGames.Count > 0)
         {
 
-        Ui.WriteOutput("Menu of games:");
+            Ui.WriteOutput("Menu of games:");
 
             foreach (var game in ListOfGames)
             {
