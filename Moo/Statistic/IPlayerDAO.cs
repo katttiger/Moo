@@ -1,11 +1,9 @@
-﻿using Games.Player;
-
-namespace Games.Statistic
+﻿namespace Games
 {
     public interface IPlayerDAO
     {
-        PlayerData PlayerData { get; set; }
+        Player PlayerData { get; set; }
         void SavePlayerData();
-        List<PlayerData> GetPlayerData();
+        List<Player> GetPlayerData();
     }
 }

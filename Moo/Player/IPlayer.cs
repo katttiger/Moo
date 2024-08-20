@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Games.Player
+﻿namespace Games
 {
     public interface IPLayer
     {
         string Name { get; }
-        int NumberOfGamesPlayed { get; }
+        int NumberOfRoundsPlayed { get; }
         int TotalGuesses { get; set; }
         //public void UpdatePlayerScore(int guesses);
         //public double CalculatePlayerAverageScore();

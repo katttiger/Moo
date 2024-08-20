@@ -1,19 +1,48 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games.Context;
-using Games.Games;
 using Games.UI;
+using Games;
 
-namespace Games.Context.Tests
+namespace GamesTests2
 {
     [TestClass()]
     public class GameContextTests
     {
-        readonly MockGameContext? mockGameContext;
-        MockUI? mockUI = new();
+        readonly MockGameContext mockGameContext;
+        private readonly MockUI mockUI = new();
+        GameContext gameContext;
         readonly IGame? MockIGame = new MooGame();
+        List<IGame> games = new List<IGame>();
+
+
+        [TestInitialize()]
+        public void Initialize()
+        {
+            gameContext.AddGameToList();
+        }
 
         [TestMethod()]
-        public void RunTest()
+        public void PrintMenuOfGamesTest()
+        {
+            mockGameContext.AddGameToList();
+            Assert.IsNotNull(gameContext.GamesList);
+            //Assert.IsTrue(mockGameContext.ListOfGames.Count > 0);
+        }
+
+        [TestMethod()]
+        public void ChooseGameTest()
+        {
+            mockGameContext.AddGameToList();
+            Assert.IsTrue(mockGameContext.ListOfGames.Count > 0);
+        }
+
+        [TestMethod()]
+        public void SetGameTest()
+        {
+            Assert.IsFalse(mockGameContext.gameHasBeenSet);
+        }
+
+        [TestMethod()]
+        public void RunGameTest()
         {
             Assert.IsFalse(mockUI.ExitTest());
         }
@@ -24,12 +53,12 @@ class MockGameContext(IUI ui)
 {
     public IGame Game;
     private readonly IUI Ui = ui;
-    private readonly List<IGame> Games = [];
+    public readonly List<IGame> ListOfGames = [];
     public bool gameHasBeenSet = false;
 
     public void AddGameToList()
     {
-        Games.AddRange(
+        ListOfGames.AddRange(
         [
             new MooGame(),
                 new MasterMind()
@@ -54,11 +83,19 @@ class MockGameContext(IUI ui)
     public void PrintMenuOfGames()
     {
         AddGameToList();
-        Ui.WriteOutput("Menu of games:");
-
-        foreach (var game in Games)
+        if (ListOfGames.Count > 0)
         {
-            Ui.WriteOutput($"{Games.IndexOf(game) + 1}) {game.ToString().AsSpan(10)}");
+
+            Ui.WriteOutput("Menu of games:");
+
+            foreach (var game in ListOfGames)
+            {
+                Ui.WriteOutput($"{ListOfGames.IndexOf(game) + 1}) {game.ToString().AsSpan(10)}");
+            }
+        }
+        else
+        {
+            throw new Exception("Message");
         }
     }
 
@@ -66,9 +103,9 @@ class MockGameContext(IUI ui)
     {
         while (!gameHasBeenSet)
         {
-            foreach (var game in Games)
+            foreach (var game in ListOfGames)
             {
-                if (Games.IndexOf(game) + 1 == mockInput)
+                if (ListOfGames.IndexOf(game) + 1 == mockInput)
                 {
                     SetGame(game);
                     gameHasBeenSet = true;

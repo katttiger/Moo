@@ -14,7 +14,6 @@ namespace Games.Ui
         }
         public string HandleInput()
         {
-            //Can be made prettier
             return Console.ReadLine() ?? "";
         }
         public void WriteOutput(string message)

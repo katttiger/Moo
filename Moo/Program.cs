@@ -1,6 +1,4 @@
-﻿using Games.Context;
-using Games.Ui;
-using Games.UI;
+﻿using Games.Ui;
 
 namespace Games
 {
@@ -10,9 +8,11 @@ namespace Games
         {
             UserInterface Ui = new();
             GameContext controller = new(Ui);
+
+            //Uncomment to display menu and allow choice of games
             //controller.PrintMenuOfGames();
             //controller.ChooseGame();
-            controller.Run();
+            controller.RunGame();
         }
     }
 }

@@ -1,15 +1,12 @@
-﻿using Games.Games;
-using Games.Ui;
-using Games.UI;
-using System.Diagnostics;
+﻿using Games.UI;
 
-namespace Games.Context
+namespace Games
 {
     public class GameContext(IUI userInterface)
     {
         private IGame? Game;
         private readonly IUI userInterface = userInterface;
-        private readonly List<IGame> GamesList = [];
+        public readonly List<IGame> GamesList = [];
         private bool gameHasBeenSet = false;
         public void AddGameToList()
         {
@@ -19,7 +16,7 @@ namespace Games.Context
                 new MasterMind()
             ]);
         }
-        public void Run()
+        public void RunGame()
         {
             Game = new MooGame();
             while (Game.IsPlaying)
@@ -32,11 +29,18 @@ namespace Games.Context
         public void PrintMenuOfGames()
         {
             AddGameToList();
-            userInterface.WriteOutput("Menu of games:");
-
-            foreach (var game in GamesList)
+            if (GamesList.Count > 0)
             {
-                userInterface.WriteOutput($"{GamesList.IndexOf(game) + 1}) {game.ToString().AsSpan(12)}");
+                userInterface.WriteOutput("Menu of games:");
+
+                foreach (var game in GamesList)
+                {
+                    userInterface.WriteOutput($"{GamesList.IndexOf(game) + 1}) {game.ToString().AsSpan(12)}");
+                }
+            }
+            else
+            {
+                throw new Exception("The list of games is empty.");
             }
         }
         public void ChooseGame()
@@ -59,6 +63,5 @@ namespace Games.Context
             Game = game;
             gameHasBeenSet = true;
         }
-
     }
 }

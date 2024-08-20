@@ -1,15 +1,14 @@
-﻿using Games.Player;
-using Games.Statistic;
-using Games.Ui;
+﻿using Games.Ui;
 
-namespace Games.Games
+namespace Games
 {
     public class MasterMind : IGame
     {
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
         readonly UserInterface Ui = new();
-        private PlayerData Player;
+        private Player Player;
+
         public void Display()
         {
             CreatePlayer();

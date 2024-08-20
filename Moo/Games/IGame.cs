@@ -1,4 +1,4 @@
-﻿namespace Games.Games
+﻿namespace Games
 {
     public interface IGame
     {

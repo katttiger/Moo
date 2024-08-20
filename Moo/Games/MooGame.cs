@@ -1,15 +1,13 @@
-﻿using Games.Player;
-using Games.Statistic;
-using Games.Ui;
+﻿using Games.Ui;
 
-namespace Games.Games
+namespace Games
 {
     public class MooGame : IGame
     {
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
         readonly UserInterface Ui = new();
-        private PlayerData Player;
+        private Player Player;
         public void Display()
         {
             CreatePlayer();
@@ -29,8 +27,10 @@ namespace Games.Games
                     "\n Press n to exit.");
                 string? answerToPlayAgain = Ui.HandleInput();
 
+
                 if (answerToPlayAgain != null && answerToPlayAgain != "" && answerToPlayAgain.Contains('n'))
                 {
+                    //Infoga test: testa om det blir negativa tal
                     Player.TotalGuesses += numberOfGuesses;
                     ExitGame();
                 }
@@ -56,6 +56,7 @@ namespace Games.Games
             }
             return numberOfGuesses;
         }
+
         public string CreateGoal()
         {
             Random randomGenerator = new();
@@ -77,20 +78,13 @@ namespace Games.Games
             {
                 return "Your guess must only contain numerical digits.";
             }
+            else if (guess.Length != 4)
+            {
+                return "Your guess must contain 4 numerical digits.";
+            }
             else
             {
-                if (guess.Length > 4)
-                {
-                    return "Your guess has more than 4 digits.";
-                }
-                else if (guess.Length < 4)
-                {
-                    return "Your guess has less than 4 digits.";
-                }
-                else
-                {
-                    return CompareGuessWithGoal(goal, guess);
-                }
+                return CompareGuessWithGoal(goal, guess);
             }
         }
         public static string CompareGuessWithGoal(string goal, string guess)
@@ -117,11 +111,24 @@ namespace Games.Games
             }
             return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
         }
+
         public void CreatePlayer()
         {
-            Ui.WriteOutput("Enter your user name:\n");
-            string name = Ui.HandleInput() ?? "";
-            Player = new(name, 0);
+            bool nameIsAccepted = false;
+            while (!nameIsAccepted)
+            {
+                Ui.WriteOutput("Enter your user name:\n");
+                string name = Ui.HandleInput() ?? "";
+                if (name.Length < 1)
+                {
+                    Ui.WriteOutput("You name must have at least 1 character.");
+                }
+                else
+                {
+                    Player = new(name, 0);
+                    nameIsAccepted = true;
+                }
+            }
         }
         public void ExitGame()
         {
