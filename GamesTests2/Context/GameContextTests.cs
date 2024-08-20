@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games.Context;
+using Games.Games;
 using Games.UI;
 using Games;
 
@@ -86,7 +88,7 @@ class MockGameContext(IUI ui)
         if (ListOfGames.Count > 0)
         {
 
-            Ui.WriteOutput("Menu of games:");
+        Ui.WriteOutput("Menu of games:");
 
             foreach (var game in ListOfGames)
             {

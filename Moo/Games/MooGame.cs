@@ -56,6 +56,25 @@ namespace Games
             }
             return numberOfGuesses;
         }
+        public int GameLogic()
+        {
+            string goal = CreateGoal();
+            int numberOfGuesses = 0;
+
+            //Comment out or remove next line to play real game
+            Ui.WriteOutput($"For practice, number is: {goal} \n");
+
+            string bullsAndCows = string.Empty;
+
+            while (!bullsAndCows.Equals("BBBB,"))
+            {
+                string guess = Ui.HandleInput() ?? "";
+                bullsAndCows = CheckIfGuessIsValid(goal, guess);
+                numberOfGuesses++;
+                Ui.WriteOutput($"{bullsAndCows} \n");
+            }
+            return numberOfGuesses;
+        }
 
         public string CreateGoal()
         {

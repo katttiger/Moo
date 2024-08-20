@@ -110,14 +110,14 @@ class MockMastermind : IGame
                         numberExistsInRightPlace++;
                     }
                     else
-                    {
+        {
                         numberExistsInWrongPlace++;
                     }
                 }
             }
         }
         return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
-    }
+        }
     public void CreatePlayer()
     {
         Ui.WriteOutput("Enter your user name:\n");
@@ -130,7 +130,7 @@ class MockMastermind : IGame
         PlayerDAO playerDAO = new(Player, PathToScore);
         playerDAO.SavePlayerData();
         playerDAO.ShowTopList();
-    }
+}
 
 
 
