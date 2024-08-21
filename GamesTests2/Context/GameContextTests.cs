@@ -1,4 +1,5 @@
 ﻿using Games;
+using Games.Ui;
 using Games.UI;
 
 namespace GamesTests2
@@ -6,30 +7,37 @@ namespace GamesTests2
     [TestClass()]
     public class GameContextTests
     {
-        private readonly MockUI mockUI = new();
-        readonly MockGameContext mockGameContext;
-        private readonly GameContext gameContext;
+        private MockUI mockUI = new();
+        private MockGameContext mockGameContext;
+        private GameContext gameContext;
 
 
         [TestInitialize()]
         public void Initialize()
         {
+            UserInterface ui = new();
+
+            GameContext gameCtxt = new(ui);
+            this.gameContext = gameCtxt;
+
+            MockGameContext mockContxt = new(ui);
+            this.mockGameContext = mockContxt;
+
             gameContext.AddGameToList();
         }
 
         [TestMethod()]
         public void PrintMenuOfGamesTest()
         {
-            mockGameContext.AddGameToList();
+            gameContext.AddGameToList();
             Assert.IsNotNull(gameContext.GamesList);
-            //Assert.IsTrue(mockGameContext.ListOfGames.Count > 0);
         }
 
         [TestMethod()]
         public void ChooseGameTest()
         {
-            mockGameContext.AddGameToList();
-            Assert.IsTrue(mockGameContext.ListOfGames.Count > 0);
+            gameContext.AddGameToList();
+            Assert.IsTrue(gameContext.GamesList.Count > 0);
         }
 
         [TestMethod()]

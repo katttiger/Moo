@@ -6,7 +6,7 @@ namespace GamesTests2
     [TestClass()]
     public class PlayerDAOTests
     {
-        string filepathForTesting = "test.txt";
+        readonly string filepathForTesting = "test.txt";
 
         [TestMethod()]
         public void PlayerIsNotNullOrEmptyTest()
@@ -24,12 +24,12 @@ namespace GamesTests2
                 actualException = exception;
             }
             Assert.IsNotNull(actualException);
-        }       
+        }
 
         [TestMethod()]
         public void ConvertPlayerDataToStringTest()
         {
-            var player = new Player("John Doe", 1);
+            var player = new Player("John Doe",  1);
             Assert.IsTrue(player != null);
         }
         [TestMethod()]
@@ -44,19 +44,6 @@ namespace GamesTests2
         {
             var player = new Player("John Doe", 3);
             Assert.IsTrue(player.TotalGuesses > 0);
-        }
-
-
-        [TestMethod()]
-        public void GetPlayerDataTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void ShowTopListTest()
-        {
-            Assert.Fail();
         }
 
     }

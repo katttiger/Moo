@@ -1,10 +1,25 @@
 ﻿using Games.Ui;
+using System.IO.Enumeration;
 
 namespace Games
 {
     public class PlayerDAO(Player player, string filename) : IPlayerDAO
     {
-        private string PathToScore { get; set; } = filename;
+        private string _pathToSavedData = filename;
+        private string PathToSavedData
+        {
+            get
+            {
+                return _pathToSavedData;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                    throw new Exception("Data must have a source path.");
+                else
+                    _pathToSavedData = value;
+            }
+        }
 
         private Player _player = player;
         public Player PlayerData
@@ -15,7 +30,7 @@ namespace Games
             }
             set
             {
-                if (value == null || value.Name == string.Empty)
+                if (value.TotalGuesses == 0 || string.IsNullOrEmpty(value.Name))
                     throw new Exception("Player cannot be empty");
                 else
                 {
@@ -23,17 +38,18 @@ namespace Games
                 }
             }
         }
-        public List<Player> GetPlayerData()
-        {
-            return DataMethods.GetData(PathToScore);
-        }
         public void SavePlayerData()
         {
-            DataMethods.AddData(ConvertPlayerDataToString(), PathToScore);
+            DataMethods.AddData(ConvertPlayerDataToString(), PathToSavedData);
         }
         public string ConvertPlayerDataToString()
         {
-            return $"{PlayerData.Name}#&#{PlayerData.TotalGuesses}";
+            return $"{PlayerData.Name}#&#{PlayerData.CalculatePlayerAverageScore()}";
+        }
+
+        public List<Player> GetPlayerData()
+        {
+            return DataMethods.GetPlayerData(PathToSavedData);
         }
         public void ShowTopList()
         {

@@ -5,13 +5,13 @@
         public static void AddData(string data, string pathToData)
         {
             StreamWriter writer = new(pathToData, append: true);
-            writer.Write(data);
+            writer.WriteLine(data);
             writer.Close();
         }
-        public static List<Player> GetData(string pathToData)
+        public static List<Player> GetPlayerData(string pathToData)
         {
             StreamReader reader = new(pathToData);
-            string Seperator = "#&#";
+            const string Seperator = "#&#";
 
             List<Player> playerList = [];
 
@@ -21,18 +21,16 @@
                 string[] playerNameAndScore = line.Split(new string[] { Seperator }, StringSplitOptions.None);
                 string name = playerNameAndScore[0];
                 int guesses = Convert.ToInt32(playerNameAndScore[1]);
-
                 Player playerData = new(name, guesses);
-                int indexOfPlayerData = playerList.IndexOf(playerData);
 
                 //FIX: else is never hit.
-                if (indexOfPlayerData < 0)
+                if (playerList.IndexOf(playerData) < 0)
                 {
                     playerList.Add(playerData);
                 }
                 else
                 {
-                    playerList[indexOfPlayerData].UpdatePlayerStatus(guesses);
+                    playerList[playerList.IndexOf(playerData)].CalculatePlayerAverageScore();
                 }
             }
             reader.Close();
