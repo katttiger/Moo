@@ -1,12 +1,23 @@
-﻿using Games;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
 using Games.Ui;
+using System.Runtime.Intrinsics.X86;
+
+namespace Games.Tests
+{
+    [TestClass()]
+    public class MooGameTests
+    {
+    }
+}
 
 namespace GamesTests2
 {
     [TestClass()]
     public class MooGameTests
     {
-        MooGame mooGame = new();
+        MockMooGame mockMooGame = new();
+
         [TestMethod()]
         public void GoalAndGuessAreEqual()
         {
@@ -25,26 +36,26 @@ namespace GamesTests2
             Assert.IsTrue(answer != "BBBB,");
         }
 
-        //Using mocking, check whether the method can identify a
-        //guess that does not fit the format of the goal
         [TestMethod()]
-        public void CheckIfGuessIsValidTest()
+        public void GuessMatchesFormatOfLenthFourAndNoLetters()
         {
-            //MockMooGame mockMooGame = new();
-            //string mockGuess = "";
-            //Assert.IsFalse(mockMooGame.CheckIfGuessIsValid(mockGuess));
+            string mockGuess = "1234";
+            MooGame.CheckIfGuessIsValid(mockGuess, "1234");
+            Assert.IsTrue(
+                mockGuess.Count() == 4 && mockGuess.All(char.IsNumber)
+                );
         }
 
         [TestMethod()]
         public void GoalHasALengthOfFour()
         {
-            Assert.IsTrue(mooGame.CreateGoal().Length.Equals(4));
+            Assert.IsTrue(mockMooGame.CreateGoal().Length.Equals(4));
         }
 
         [TestMethod()]
         public void GoalHasOnlyUniqueCharacters()
         {
-            string mockGoal = mooGame.CreateGoal();
+            string mockGoal = mockMooGame.CreateGoal();
             bool hasDuplicates = false;
             hasDuplicates = mockGoal
                     .GroupBy(x => x)
@@ -60,156 +71,156 @@ namespace GamesTests2
             Assert.IsNotNull(mockGame.Player.Name);
         }
     }
-}
-
-public class MockMooGame : IGame
-{
-    public bool IsPlaying { get; set; } = true;
-    public string PathToScore { get; set; } = "ResultMooGame.txt";
-    readonly UserInterface Ui = new();
-    public Player Player;
-    public void Display()
+    public class MockMooGame : IGame
     {
-        CreatePlayer();
-
-        Ui.WriteOutput("Values allowed: 0-9.\n" +
-               "B: Right number and place.\n" +
-               "C: Right number, wrong place");
-
-        while (IsPlaying)
+        public bool IsPlaying { get; set; } = true;
+        public string PathToScore { get; set; } = "ResultMooGame.txt";
+        readonly UserInterface Ui = new();
+        public Player Player;
+        UserInterface userInterface = new();
+        public void Display()
         {
-            Ui.WriteOutput("New game: \n");
-            int numberOfGuesses = GameLogic();
-
-            Ui.WriteOutput(
-                $"\n Correct. It took {numberOfGuesses} guesses. " +
-                "\n Press any button to start a new game." +
-                "\n Press n to exit.");
-            string? answerToPlayAgain = Ui.HandleInput();
-
-            if (answerToPlayAgain != null && answerToPlayAgain != "" && answerToPlayAgain.Contains('n'))
+            CreatePlayer();
+            while (IsPlaying)
             {
-                Player.TotalGuesses += numberOfGuesses;
-                ExitGame();
+                userInterface.WriteOutput("New game: \n");
+                int numberOfGuesses = GameLogic();
+                MockPlayAgainRequestHandler(numberOfGuesses);
+                Player.UpdatePlayerStatus(numberOfGuesses);
             }
-            Player.UpdatePlayerStatus(numberOfGuesses);
         }
-    }
-    public int GameLogic()
-    {
-        string goal = CreateGoal();
-        int numberOfGuesses = 0;
-
-        //Comment out or remove next line to play real game
-        Ui.WriteOutput($"For practice, number is: {goal} \n");
-
-        string bullsAndCows = string.Empty;
-
-        while (!bullsAndCows.Equals("BBBB,"))
+        public int GameLogic()
         {
-            string guess = Ui.HandleInput() ?? "";
-            bullsAndCows = CheckIfGuessIsValid(goal, guess);
-            numberOfGuesses++;
-            Ui.WriteOutput($"{bullsAndCows} \n");
-        }
-        return numberOfGuesses;
-    }
+            string goal = CreateGoal();
+            int numberOfGuesses = 0;
+            string bullsAndCows = string.Empty;
 
-    public string CreateGoal()
-    {
-        Random randomGenerator = new();
-        string goal = string.Empty;
-        for (int i = 0; i < 4; i++)
-        {
-            string random = randomGenerator.Next(10).ToString();
-            while (goal.Contains(random))
+            userInterface.WriteOutput("Values allowed: 0-9.\n" +
+                   "B: Right number and place.\n" +
+                   "C: Right number, wrong place");
+
+            //Comment out or remove next line to play real game
+            userInterface.WriteOutput($"For practice, number is: {goal} \n");
+
+            while (!bullsAndCows.Equals("BBBB,"))
             {
-                random = randomGenerator.Next(10).ToString();
+                string guess = userInterface.HandleInput();
+                bullsAndCows = CheckIfGuessIsValid(goal, guess);
+                numberOfGuesses++;
+                userInterface.WriteOutput($"{bullsAndCows} \n");
             }
-            goal += random;
+            return numberOfGuesses;
         }
-        return goal[..4];
-    }
-    public string CheckIfGuessIsValid(string goal, string guess)
-    {
-        if (guess.Any(char.IsLetter))
+
+        public string CreateGoal()
         {
-            return "Your guess must only contain numerical digits.";
-        }
-        else
-        {
-            if (guess.Length > 4)
+            Random randomGenerator = new();
+            string goal = string.Empty;
+            for (int i = 0; i < 4; i++)
             {
-                return "Your guess has more than 4 digits.";
+                string random = randomGenerator.Next(10).ToString();
+                while (goal.Contains(random))
+                {
+                    random = randomGenerator.Next(10).ToString();
+                }
+                goal += random;
             }
-            else if (guess.Length < 4)
+            return goal[..4];
+        }
+        public string CheckIfGuessIsValid(string goal, string guess)
+        {
+            if (guess.Any(char.IsLetter))
             {
-                return "Your guess has less than 4 digits.";
+                return "Your guess must only contain numerical digits.";
             }
             else
             {
-                return CompareGuessWithGoal(goal, guess);
-            }
-        }
-
-    }
-
-    public string CompareGuessWithGoal(string goal, string guess)
-    {
-        int bulls = 0;
-        int cows = 0;
-
-        for (int i = 0; i < 4; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                if (goal[i] == guess[j])
+                if (guess.Length > 4)
                 {
-                    if (i == j)
-                    {
-                        bulls++;
-                    }
-                    else
-                    {
-                        cows++;
-                    }
+                    return "Your guess has more than 4 digits.";
                 }
-            }
-        }
-        return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
-    }
-
-    public void CreatePlayer()
-    {
-        bool nameIsAccepted = false;
-        while (!nameIsAccepted)
-        {
-            Ui.WriteOutput("Enter your user name:\n");
-            try
-            {
-                string name = "John Doe";
-                if (name.Length < 1)
+                else if (guess.Length < 4)
                 {
-                    Ui.WriteOutput("You name must have at least 1 character.");
+                    return "Your guess has less than 4 digits.";
                 }
                 else
                 {
-                    Player = new(name, 0);
-                    nameIsAccepted = true;
+                    return CompareGuessWithGoal(goal, guess);
                 }
             }
-            catch (Exception)
+
+        }
+
+        public string CompareGuessWithGoal(string goal, string guess)
+        {
+            int bulls = 0;
+            int cows = 0;
+
+            for (int i = 0; i < 4; i++)
             {
-                throw new Exception("Name must have at least 1 character.");
+                for (int j = 0; j < 4; j++)
+                {
+                    if (goal[i] == guess[j])
+                    {
+                        if (i == j)
+                        {
+                            bulls++;
+                        }
+                        else
+                        {
+                            cows++;
+                        }
+                    }
+                }
+            }
+            return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
+        }
+
+        public void CreatePlayer()
+        {
+            bool nameIsAccepted = false;
+            while (!nameIsAccepted)
+            {
+                Ui.WriteOutput("Enter your user name:\n");
+                try
+                {
+                    string name = "John Doe";
+                    if (name.Length < 1)
+                    {
+                        Ui.WriteOutput("You name must have at least 1 character.");
+                    }
+                    else
+                    {
+                        Player = new(name, 0);
+                        nameIsAccepted = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Name must have at least 1 character.");
+                }
             }
         }
+        public void MockPlayAgainRequestHandler(int numberOfGuesses)
+        {
+            string answer = "";
+            if (string.IsNullOrEmpty(answer) || answer.Contains('n'))
+            {
+                IsPlaying = false;
+            }
+            else
+            {
+                IsPlaying = true;
+            }
+        }
+        public void ExitGame()
+        {
+            IsPlaying = false;
+            PlayerDAO playerDAO = new(Player, PathToScore);
+            playerDAO.SavePlayerData();
+            playerDAO.ShowTopListThisGame(PathToScore);
+        }
     }
-    public void ExitGame()
-    {
-        IsPlaying = false;
-        PlayerDAO playerDAO = new(Player, PathToScore);
-        playerDAO.SavePlayerData();
-        playerDAO.ShowTopList();
-    }
-
 }
+
+

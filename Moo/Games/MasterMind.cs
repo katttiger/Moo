@@ -21,21 +21,13 @@ namespace Games
             {
                 Ui.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-
-                Ui.WriteOutput(
-                    $"\n Correct. It took {numberOfGuesses} guesses. " +
-                    "\n Press any button to start a new game." +
-                    "\n Press n to exit.");
-                string? answer = Ui.HandleInput();
-
-                if (answer != null && answer != "" && answer.Contains('n'))
-                {
-                    Player.TotalGuesses += numberOfGuesses;
-                    ExitGame();
-                }
+                PlayAgainRequestHandler(numberOfGuesses);
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
+
+
+
         public int GameLogic()
         {
 
@@ -46,7 +38,7 @@ namespace Games
 
             string mastermindCompare = string.Empty;
 
-            while (!mastermindCompare.Equals("XXXX"))
+            while (!mastermindCompare.Equals("AAAA,"))
             {
                 string guess = Ui.HandleInput();
                 mastermindCompare = CheckIfGuessIsValid(goal, guess);
@@ -105,18 +97,51 @@ namespace Games
             }
             return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
         }
+        public void PlayAgainRequestHandler(int numberOfGuesses)
+        {
+            Ui.WriteOutput(
+                $"\n Correct. It took {numberOfGuesses} guesses. " +
+                "\n Press any button to start a new game." +
+                "\n Press n to exit.");
+            string? answer = Ui.HandleInput();
+            if (string.IsNullOrEmpty(answer) || answer.Contains('n'))
+            {
+                IsPlaying = false;
+                Player.TotalGuesses += numberOfGuesses;
+                ExitGame();
+            }
+        }
         public void CreatePlayer()
         {
-            Ui.WriteOutput("Enter your user name:\n");
-            string name = Ui.HandleInput() ?? "";
-            Player = new(name, 0);
+            bool nameIsAccepted = false;
+            while (!nameIsAccepted)
+            {
+                Ui.WriteOutput("Enter your user name:\n");
+                try
+                {
+                    string name = "John Doe";
+                    if (name.Length < 1)
+                    {
+                        Ui.WriteOutput("You name must have at least 1 character.");
+                    }
+                    else
+                    {
+                        Player = new(name, 0);
+                        nameIsAccepted = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Name must have at least 1 character.");
+                }
+            }
         }
         void ExitGame()
         {
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerData();
-            playerDAO.ShowTopList();
+            playerDAO.ShowTopListThisGame(PathToScore);
         }
     }
 }

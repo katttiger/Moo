@@ -25,6 +25,7 @@ namespace Games
                 userInterface.Clear();
                 Game.Display();
             }
+            //Show toplist
             userInterface.Exit();
         }
         public void PrintMenuOfGames()
@@ -64,6 +65,8 @@ namespace Games
             Game = game;
             gameHasBeenSet = true;
         }
+
+
 
     }
 }

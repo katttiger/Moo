@@ -1,4 +1,5 @@
-﻿using Games;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
 using Games.Ui;
 
 namespace GamesTests2
@@ -13,6 +14,51 @@ namespace GamesTests2
             string mockGuess = mockMastermind.CreateGoal();
             Assert.IsTrue(mockGuess.Length == 4);
         }
+        public void GoalAndGuessAreEqual()
+        {
+            string mockGoal = "1234";
+            string mockGuess = "1234";
+            string answer = MooGame.CompareGuessWithGoal(mockGoal, mockGuess);
+            Assert.IsTrue(answer == "AAAA,");
+        }
+        public void GoalHasALengthOfFour()
+        {
+            Assert.IsTrue(mockMastermind.CreateGoal().Length.Equals(4));
+        }
+        [TestMethod()]
+        public void GoalAndGuessAreNotEqual()
+        {
+            string mockGoal = "1234";
+            string mockGuess = "4752";
+            string answer = MooGame.CompareGuessWithGoal(mockGoal, mockGuess);
+            Assert.IsTrue(answer != "AAAA,");
+        }
+        [TestMethod()]
+        public void DisplayTest()
+        {
+            Assert.IsTrue(mockMastermind.IsPlaying);
+        }
+
+        [TestMethod()]
+        public void PlayAgainRequestHandlerTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GameLogicTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreatePlayerTest()
+        {
+            MockMastermind mockGame = new MockMastermind();
+            mockGame.CreatePlayer();
+            Assert.IsNotNull(mockGame.Player.Name);
+        }
+
     }
 }
 
@@ -21,7 +67,7 @@ class MockMastermind : IGame
     public bool IsPlaying { get; set; } = true;
     public string PathToScore { get; set; } = "ResultMastemind.txt";
     readonly UserInterface Ui = new();
-    private Player Player;
+    public Player Player;
     public void Display()
     {
         CreatePlayer();
@@ -110,28 +156,44 @@ class MockMastermind : IGame
                         numberExistsInRightPlace++;
                     }
                     else
-        {
+                    {
                         numberExistsInWrongPlace++;
                     }
                 }
             }
         }
         return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
-        }
+    }
     public void CreatePlayer()
     {
-        Ui.WriteOutput("Enter your user name:\n");
-        string name = Ui.HandleInput() ?? "";
-        Player = new(name, 0);
+        bool nameIsAccepted = false;
+        while (!nameIsAccepted)
+        {
+            Ui.WriteOutput("Enter your user name:\n");
+            try
+            {
+                string name = "John Doe";
+                if (name.Length < 1)
+                {
+                    Ui.WriteOutput("You name must have at least 1 character.");
+                }
+                else
+                {
+                    Player = new(name, 0);
+                    nameIsAccepted = true;
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Name must have at least 1 character.");
+            }
+        }
     }
     void ExitGame()
     {
         IsPlaying = false;
         PlayerDAO playerDAO = new(Player, PathToScore);
         playerDAO.SavePlayerData();
-        playerDAO.ShowTopList();
-}
-
-
-
+        playerDAO.ShowTopListThisGame(PathToScore);
+    }
 }

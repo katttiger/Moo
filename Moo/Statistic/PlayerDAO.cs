@@ -1,5 +1,4 @@
 ﻿using Games.Ui;
-using System.IO.Enumeration;
 
 namespace Games
 {
@@ -47,19 +46,45 @@ namespace Games
             return $"{PlayerData.Name}#&#{PlayerData.CalculatePlayerAverageScore()}";
         }
 
-        public List<Player> GetPlayerData()
+        public List<Player> GetPlayerData(string pathToData)
         {
-            return DataMethods.GetPlayerData(PathToSavedData);
+            return DataMethods.GetPlayerData(pathToData);
         }
-        public void ShowTopList()
+
+        public void ShowTopListThisGame(string pathToData)
         {
             UserInterface userInterface = new();
-            List<Player> results = GetPlayerData();
-            results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
-            userInterface.WriteOutput("Player       games average");
+            List<Player> results = GetPlayerData(pathToData);
+            results.Sort((p1, p2) => p1.TotalGuesses.CompareTo(p2.TotalGuesses));
+
+            //DO NOT REMOVE: Usable when saving data to a database (has not been implemented).
+            //DO NOT REMOVE: results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
+
+            userInterface.WriteOutput("Player      games average");
             foreach (Player player in results)
             {
-                userInterface.WriteOutput(string.Format("{0,-9}{1,5:D}{2,9:F2}", player.Name, player.NumberOfRoundsPlayed, player.CalculatePlayerAverageScore()));
+                userInterface.WriteOutput(
+                    string.Format("{0,-9}{1,5:D}{2,9:F2}",
+                    player.Name, player.NumberOfRoundsPlayed,
+                    player.TotalGuesses));
+            }
+        }
+        public void ShowTopListAllGames()
+        {
+            UserInterface userInterface = new();
+            List<Player> results = GetPlayerData("result.txt");
+            results.Sort((p1, p2) => p1.TotalGuesses.CompareTo(p2.TotalGuesses));
+
+            //DO NOT REMOVE: Usable when saving data to a database (has not been implemented).
+            //DO NOT REMOVE: results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
+
+            userInterface.WriteOutput("Player      games average");
+            foreach (Player player in results)
+            {
+                userInterface.WriteOutput(
+                    string.Format("{0,-9}{1,5:D}{2,9:F2}",
+                    player.Name, player.NumberOfRoundsPlayed,
+                    player.TotalGuesses));
             }
         }
     }

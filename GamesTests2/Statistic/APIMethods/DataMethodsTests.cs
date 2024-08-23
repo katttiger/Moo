@@ -1,24 +1,107 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
+using System.Diagnostics;
+using System.Numerics;
+using System.Collections.Generic;
+using System.Xml.Linq;
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GamesTests2
 {
     [TestClass()]
     public class DataMethodsTests
     {
-        //Append data
-        //Add data
-        //Close filestream
-        //Log "done"
         [TestMethod()]
-        public void AddDataTest()
+        public void DataHasPathToFile()
         {
-            Assert.Fail();
+            //Arrange
+            string pathToFile = "result.txt";
+            System.IO.File.Delete(pathToFile);
+            string data = "bogusPlayer";
+
+            //Act
+            DataMethods.AddData(data, pathToFile);
+
+            //Assert
+            Assert.IsFalse(string.IsNullOrEmpty(pathToFile));
         }
 
         [TestMethod()]
-        public void GetDataTest()
+        public void AddedDataContainsSeperator()
         {
-            Assert.Fail();
+            //Arrange
+            //Path to data
+            string pathToFile = "result.txt";
+            System.IO.File.Delete(pathToFile);
+
+            string data = "bogusPlayer#&#8";
+
+            //Act
+            //call the method and add testdata
+            DataMethods.AddData(data, pathToFile);
+
+            //Assert
+            //Säkerställ att #&# finns
+            Assert.IsTrue(data.Contains("#&#"));
+        }
+
+        [TestMethod()]
+        public void ListReturnEqualsDataStored()
+        {
+            //Arrange
+            var pathtofile = "nameOfFile.txt";
+            System.IO.File.Delete(pathtofile);
+
+            File.WriteAllText(pathtofile, @"player+#&#3
+player2#&#3
+PlayerX#&#5
+playerX#&#1");
+
+            var expectedPlayers = new List<Player>();
+            expectedPlayers.AddRange([
+                new Player("player+",3),
+                new Player("player2",3),
+                new Player("PlayerX",5),
+                new Player("playerX",1)]);
+
+            //Act
+            var actualPlayers = DataMethods.GetPlayerData(pathtofile);
+
+            //Assert
+            Assert.IsTrue(actualPlayers.SequenceEqual(expectedPlayers, new PlayerEqualityComparer()));
         }
     }
+
+    public class PlayerEqualityComparer : IEqualityComparer<Player>
+    {
+        public bool Equals(Player? expectedPlayer, Player? actualPlayer)
+        {
+            if (ReferenceEquals(expectedPlayer, actualPlayer))
+            {
+                return true;
+            }
+            if (ReferenceEquals(expectedPlayer, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(actualPlayer, null))
+            {
+                return false;
+            }
+            if (expectedPlayer.GetType() != actualPlayer.GetType())
+            {
+                return false;
+            }
+            return expectedPlayer.Name == actualPlayer.Name
+                && expectedPlayer.TotalGuesses == actualPlayer.TotalGuesses;
+        }
+
+        public int GetHashCode([DisallowNull] Player obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
 }

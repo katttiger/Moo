@@ -4,6 +4,6 @@
     {
         Player PlayerData { get; set; }
         void SavePlayerData();
-        List<Player> GetPlayerData();
+        List<Player> GetPlayerData(string pathToData);
     }
 }
