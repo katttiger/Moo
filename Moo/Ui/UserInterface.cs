@@ -29,7 +29,9 @@ namespace Games.Ui
                 return value;
             }
             else
-                throw new Exception($"{message} could not be converted.");
+            {
+                return 0;
+            }
         }
     }
 }

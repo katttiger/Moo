@@ -11,6 +11,11 @@ namespace Games
         public void Display()
         {
             CreatePlayer();
+
+            userInterface.WriteOutput("Values allowed: 0-9.\n" +
+                   "B: Right number and place.\n" +
+                   "C: Right number, wrong place");
+
             while (IsPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
@@ -19,30 +24,12 @@ namespace Games
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
-        public void PlayAgainRequestHandler(int numberOfGuesses)
-        {
-            userInterface.WriteOutput(
-                $"\n Correct. It took {numberOfGuesses} guesses. " +
-                "\n Press any button to start a new game." +
-                "\n Press n to exit.");
-            string? answer = userInterface.HandleInput();
-            if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
-            {
-                IsPlaying = false;
-                Player.TotalGuesses += numberOfGuesses;
-                ExitGame();
-            }
-        }
-
         public int GameLogic()
         {
             string goal = CreateGoal();
             int numberOfGuesses = 0;
             string bullsAndCows = string.Empty;
 
-            userInterface.WriteOutput("Values allowed: 0-9.\n" +
-                   "B: Right number and place.\n" +
-                   "C: Right number, wrong place");
 
             //Comment out or remove next line to play real game
             userInterface.WriteOutput($"For practice, number is: {goal} \n");
@@ -50,9 +37,17 @@ namespace Games
             while (!bullsAndCows.Equals("BBBB,"))
             {
                 string guess = userInterface.HandleInput();
-                bullsAndCows = CheckIfGuessIsValid(goal, guess);
-                numberOfGuesses++;
-                userInterface.WriteOutput($"{bullsAndCows} \n");
+                string compare = CheckIfGuessIsValid(guess);
+                if (compare == string.Empty)
+                {
+                    bullsAndCows = CheckIfGuessIsValid(guess);
+                    numberOfGuesses++;
+                    userInterface.WriteOutput($"{bullsAndCows} \n");
+                }
+                else
+                {
+                    userInterface.WriteOutput($"{compare}");
+                }
             }
             return numberOfGuesses;
         }
@@ -72,7 +67,7 @@ namespace Games
             }
             return goal;
         }
-        public static string CheckIfGuessIsValid(string goal, string guess)
+        public static string CheckIfGuessIsValid(string guess)
         {
             if (guess.Any(char.IsLetter))
             {
@@ -84,7 +79,7 @@ namespace Games
             }
             else
             {
-                return CompareGuessWithGoal(goal, guess);
+                return string.Empty;
             }
         }
         public static string CompareGuessWithGoal(string goal, string guess)
@@ -110,6 +105,21 @@ namespace Games
                 }
             }
             return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
+        }
+
+        public void PlayAgainRequestHandler(int numberOfGuesses)
+        {
+            userInterface.WriteOutput(
+                $"\n Correct. It took {numberOfGuesses} guesses. " +
+                "\n Press any button to start a new game." +
+                "\n Press n to exit.");
+            string? answer = userInterface.HandleInput();
+            if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
+            {
+                IsPlaying = false;
+                Player.TotalGuesses += numberOfGuesses;
+                ExitGame();
+            }
         }
 
         public void CreatePlayer()

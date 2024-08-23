@@ -19,7 +19,6 @@ namespace Games
         }
         public void RunGame()
         {
-            Game = new MooGame();
             while (Game.IsPlaying)
             {
                 userInterface.Clear();
@@ -37,7 +36,8 @@ namespace Games
 
                 foreach (var game in GamesList)
                 {
-                    userInterface.WriteOutput($"{GamesList.IndexOf(game) + 1}) {game.ToString().AsSpan(12)}");
+                    userInterface.WriteOutput($"{GamesList.IndexOf(game) + 1})" +
+                        $" {game.ToString().AsSpan(6)}");
                 }
             }
             else
@@ -65,8 +65,5 @@ namespace Games
             Game = game;
             gameHasBeenSet = true;
         }
-
-
-
     }
 }

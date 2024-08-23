@@ -1,15 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games;
+﻿using Games;
 using Games.Ui;
-using System.Runtime.Intrinsics.X86;
-
-namespace Games.Tests
-{
-    [TestClass()]
-    public class MooGameTests
-    {
-    }
-}
 
 namespace GamesTests2
 {
@@ -19,16 +9,15 @@ namespace GamesTests2
         MockMooGame mockMooGame = new();
 
         [TestMethod()]
-        public void GoalAndGuessAreEqual()
+        public void GoalAndGuessAreEqualTest()
         {
             string mockGoal = "1234";
             string mockGuess = "1234";
             string answer = MooGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "BBBB,");
         }
-
         [TestMethod()]
-        public void GoalAndGuessAreNotEqual()
+        public void GoalAndGuessAreNotEqualTest()
         {
             string mockGoal = "1234";
             string mockGuess = "4752";
@@ -36,24 +25,14 @@ namespace GamesTests2
             Assert.IsTrue(answer != "BBBB,");
         }
 
-        [TestMethod()]
-        public void GuessMatchesFormatOfLenthFourAndNoLetters()
-        {
-            string mockGuess = "1234";
-            MooGame.CheckIfGuessIsValid(mockGuess, "1234");
-            Assert.IsTrue(
-                mockGuess.Count() == 4 && mockGuess.All(char.IsNumber)
-                );
-        }
 
         [TestMethod()]
-        public void GoalHasALengthOfFour()
+        public void GoalHasALengthOfFourTest()
         {
             Assert.IsTrue(mockMooGame.CreateGoal().Length.Equals(4));
         }
-
         [TestMethod()]
-        public void GoalHasOnlyUniqueCharacters()
+        public void GoalHasOnlyUniqueCharactersTest()
         {
             string mockGoal = mockMooGame.CreateGoal();
             bool hasDuplicates = false;
@@ -62,6 +41,23 @@ namespace GamesTests2
                     .Any(g => g.Count() > 1);
             Assert.IsFalse(hasDuplicates);
         }
+
+
+        [TestMethod()]
+        public void GuessHasLengthOfFourTest()
+        {
+            string mockGuess = "1234";
+            string answer = MooGame.CheckIfGuessIsValid(mockGuess);
+            Assert.IsTrue(answer == string.Empty);
+        }
+        [TestMethod()]
+        public void GuessHasNoLettersTest()
+        {
+            string mockGuess = "1234";
+            string answer = MooGame.CheckIfGuessIsValid(mockGuess);
+            Assert.IsTrue(answer == string.Empty);
+        }
+
 
         [TestMethod()]
         public void CreatePlayerTest()

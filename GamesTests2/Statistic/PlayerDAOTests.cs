@@ -27,20 +27,20 @@ namespace GamesTests2
         }
 
         [TestMethod()]
-        public void ConvertPlayerDataToStringTest()
+        public void PlayerToBeConvertedIsNotNullTest()
         {
             var player = new Player("John Doe",  1);
             Assert.IsTrue(player != null);
         }
         [TestMethod()]
-        public void ConvertPlayerDataToStringTest1()
+        public void PlayerToBeConvertedHasANameTest()
         {
             var player = new Player("John Doe", 1);
             Assert.IsTrue(player.Name != string.Empty);
         }
 
         [TestMethod()]
-        public void ConvertPlayerDataToStringTest2()
+        public void PlayerToBeConvertedHasScoredMoreThanOnePointTest()
         {
             var player = new Player("John Doe", 3);
             Assert.IsTrue(player.TotalGuesses > 0);

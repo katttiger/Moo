@@ -1,4 +1,6 @@
 ﻿using Games.Ui;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
 
 namespace Games
 {
@@ -6,47 +8,56 @@ namespace Games
     {
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
-        readonly UserInterface Ui = new();
+        readonly UserInterface userInterface = new();
         private Player Player;
 
         public void Display()
         {
             CreatePlayer();
 
-            Ui.WriteOutput("Values allowed: 0-6.\n" +
-                    "A: Right number and place.\n" +
-                    "B: Right number, wrong place");
+            userInterface.WriteOutput("Values allowed: 0-6.\n" +
+                               "A: Right number and place.\n" +
+                               "B: Right number, wrong place");
 
             while (IsPlaying)
             {
-                Ui.WriteOutput("New game: \n");
+                userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
                 PlayAgainRequestHandler(numberOfGuesses);
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
-
-
-
         public int GameLogic()
         {
-
             string goal = CreateGoal();
             int numberOfGuesses = 0;
+            string AsAndBs = string.Empty;
+
             //Comment out or remove next line to play real game
-            Ui.WriteOutput($"For practice, number is: {goal} \n");
+            userInterface.WriteOutput($"For practice, number is: {goal} \n");
 
-            string mastermindCompare = string.Empty;
-
-            while (!mastermindCompare.Equals("AAAA,"))
+            for (int i = 8; !AsAndBs.Contains("AAAA,"); i--)
             {
-                string guess = Ui.HandleInput();
-                mastermindCompare = CheckIfGuessIsValid(goal, guess);
-                numberOfGuesses++;
-                Ui.WriteOutput($"{mastermindCompare} \n");
+                userInterface.WriteOutput($"\nTries left: {i}.");
+
+                string guess = userInterface.HandleInput();
+                string compare = CheckIfGuessIsValid(guess);
+                if (compare == string.Empty)
+                {
+                    numberOfGuesses++;
+                    AsAndBs = CompareGuessWithGoal(guess, goal);
+                    userInterface.WriteOutput($"{AsAndBs}");
+                }
+                else
+                {
+                    userInterface.WriteOutput($"{compare} \n");
+                }
+                numberOfGuesses = (8 - i);
             }
             return numberOfGuesses;
         }
+
+
         public string CreateGoal()
         {
             Random randomGenerator = new();
@@ -58,22 +69,22 @@ namespace Games
             }
             return goal;
         }
-        private static string CheckIfGuessIsValid(string goal, string guess)
+        public static string CheckIfGuessIsValid(string guess)
         {
+            foreach (char c in guess)
+            {
+                if (c > '6')
+                {
+                    return "You may only use numbers 0-6";
+                }
+            }
             if (guess.Any(char.IsLetter) || guess.Length != 4)
             {
                 return "Your guess must only contain 4 numerical digits.";
             }
-            else if (guess.Contains('7') || guess.Contains('8') || guess.Contains('9'))
-            {
-                return "You may only use numbers 0-6";
-            }
-            else
-            {
-                return CompareGuessWithGoal(goal, guess);
-            }
+            return string.Empty;
         }
-        public static string CompareGuessWithGoal(string goal, string guess)
+        public static string CompareGuessWithGoal(string guess, string goal)
         {
             int numberExistsInRightPlace = 0;
             int numberExistsInWrongPlace = 0;
@@ -95,15 +106,17 @@ namespace Games
                     }
                 }
             }
+            if (numberExistsInRightPlace == 4)
+                return $"{"AAAA"[..numberExistsInRightPlace]},";
             return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
         }
         public void PlayAgainRequestHandler(int numberOfGuesses)
         {
-            Ui.WriteOutput(
+            userInterface.WriteOutput(
                 $"\n Correct. It took {numberOfGuesses} guesses. " +
                 "\n Press any button to start a new game." +
                 "\n Press n to exit.");
-            string? answer = Ui.HandleInput();
+            string? answer = userInterface.HandleInput();
             if (string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 IsPlaying = false;
@@ -111,18 +124,20 @@ namespace Games
                 ExitGame();
             }
         }
+
+
         public void CreatePlayer()
         {
             bool nameIsAccepted = false;
             while (!nameIsAccepted)
             {
-                Ui.WriteOutput("Enter your user name:\n");
+                userInterface.WriteOutput("Enter your user name:\n");
                 try
                 {
                     string name = "John Doe";
                     if (name.Length < 1)
                     {
-                        Ui.WriteOutput("You name must have at least 1 character.");
+                        userInterface.WriteOutput("You name must have at least 1 character.");
                     }
                     else
                     {
