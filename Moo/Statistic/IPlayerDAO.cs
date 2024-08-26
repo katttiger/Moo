@@ -3,7 +3,6 @@
     public interface IPlayerDAO
     {
         Player PlayerData { get; set; }
-        void SavePlayerData();
-        List<Player> GetPlayerData(string pathToData);
+        void SavePlayerdataToGameScoreTable();
     }
 }

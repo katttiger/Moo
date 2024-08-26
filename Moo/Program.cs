@@ -9,10 +9,10 @@ namespace Games
             UserInterface Ui = new();
             GameContext controller = new(Ui);
 
-            //Uncomment to display menu and allow choice of games
             controller.PrintMenuOfGames();
             controller.ChooseGame();
-            controller.RunGame();
+
+            controller.Run();
         }
     }
 }

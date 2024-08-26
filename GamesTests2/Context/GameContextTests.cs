@@ -1,4 +1,5 @@
-﻿using Games;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
 using Games.Ui;
 using Games.UI;
 
@@ -7,7 +8,7 @@ namespace GamesTests2
     [TestClass()]
     public class GameContextTests
     {
-        private MockUI mockUI = new();
+        private readonly MockUI mockUI = new();
         private MockGameContext mockGameContext;
         private GameContext gameContext;
 
@@ -29,8 +30,8 @@ namespace GamesTests2
         [TestMethod()]
         public void PrintMenuOfGamesTest()
         {
-            gameContext.AddGameToList();
-            Assert.IsNotNull(gameContext.GamesList);
+            mockGameContext.AddGameToList();
+            Assert.IsNotNull(mockGameContext.ListOfGames);
         }
 
         [TestMethod()]
@@ -47,9 +48,15 @@ namespace GamesTests2
         }
 
         [TestMethod()]
-        public void RunGameTest()
+        public void RunTest()
         {
             Assert.IsFalse(mockUI.ExitTest());
+        }
+
+        [TestMethod()]
+        public void RunTest2()
+        {
+            Assert.Fail();
         }
     }
 }

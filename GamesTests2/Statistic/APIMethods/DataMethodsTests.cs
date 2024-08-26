@@ -66,7 +66,7 @@ playerX#&#1");
                 new Player("playerX",1)]);
 
             //Act
-            var actualPlayers = DataMethods.GetPlayerData(pathtofile);
+            var actualPlayers = DataMethods.GetPlayerdataFromFile(pathtofile);
 
             //Assert
             Assert.IsTrue(actualPlayers.SequenceEqual(expectedPlayers, new PlayerEqualityComparer()));

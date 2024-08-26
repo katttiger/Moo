@@ -12,7 +12,7 @@ namespace GamesTests2
         public void PlayerIsNotNullOrEmptyTest()
         {
             var player = new Player("John Doe", 1);
-            var playerDao = new PlayerDAO(player, filepathForTesting);
+            var playerDao = new PlayerDAO(player, filepathForTesting, "MooTest");
 
             Exception? actualException = null;
             try
@@ -29,7 +29,7 @@ namespace GamesTests2
         [TestMethod()]
         public void PlayerToBeConvertedIsNotNullTest()
         {
-            var player = new Player("John Doe",  1);
+            var player = new Player("John Doe", 1);
             Assert.IsTrue(player != null);
         }
         [TestMethod()]
@@ -45,6 +45,5 @@ namespace GamesTests2
             var player = new Player("John Doe", 3);
             Assert.IsTrue(player.TotalGuesses > 0);
         }
-
     }
 }

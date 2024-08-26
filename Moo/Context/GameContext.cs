@@ -1,4 +1,5 @@
-﻿using Games.UI;
+﻿using Games.Statistic;
+using Games.UI;
 using System.Diagnostics;
 
 namespace Games
@@ -17,14 +18,18 @@ namespace Games
                 new MasterMind()
             ]);
         }
-        public void RunGame()
+        public void Run()
         {
             while (Game.IsPlaying)
             {
                 userInterface.Clear();
                 Game.Display();
             }
+
+            PlayerscorePresenter presentation = new();
             //Show toplist
+            presentation.ShowTopListForGame(Game.PathToScore);
+
             userInterface.Exit();
         }
         public void PrintMenuOfGames()

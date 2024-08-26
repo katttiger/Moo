@@ -1,12 +1,15 @@
-﻿using Games;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
 using Games.Ui;
+
 
 namespace GamesTests2
 {
     [TestClass()]
     public class MooGameTests
     {
-        MockMooGame mockMooGame = new();
+        readonly MockMooGame mockMooGame = new();
+        readonly MooGame mooGame = new();
 
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
@@ -62,9 +65,15 @@ namespace GamesTests2
         [TestMethod()]
         public void CreatePlayerTest()
         {
-            MockMooGame mockGame = new MockMooGame();
+            MockMooGame mockGame = new();
             mockGame.CreatePlayer();
             Assert.IsNotNull(mockGame.Player.Name);
+        }
+
+        [TestMethod()]
+        public void ExitGameTest()
+        {
+            Assert.IsTrue(mockMooGame.PathToScore != string.Empty);
         }
     }
     public class MockMooGame : IGame
@@ -73,7 +82,7 @@ namespace GamesTests2
         public string PathToScore { get; set; } = "ResultMooGame.txt";
         readonly UserInterface Ui = new();
         public Player Player;
-        UserInterface userInterface = new();
+        readonly UserInterface userInterface = new();
         public void Display()
         {
             CreatePlayer();
@@ -199,22 +208,24 @@ namespace GamesTests2
         }
         public void MockPlayAgainRequestHandler(int numberOfGuesses)
         {
-            string answer = "";
-            if (string.IsNullOrEmpty(answer) || answer.Contains('n'))
+            userInterface.WriteOutput(
+               $"\n Correct. It took {numberOfGuesses} guesses. " +
+               "\n Press any button to start a new game." +
+               "\n Press n to exit.");
+            string? answer = userInterface.HandleInput();
+
+            if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 IsPlaying = false;
-            }
-            else
-            {
-                IsPlaying = true;
+                Player.TotalGuesses += numberOfGuesses;
+                ExitGame();
             }
         }
         public void ExitGame()
         {
             IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore);
-            playerDAO.SavePlayerData();
-            playerDAO.ShowTopListThisGame(PathToScore);
+            PlayerDAO playerDAO = new(Player, PathToScore, "MooTest");
+            playerDAO.SavePlayerdataToGameScoreTable();
         }
     }
 }

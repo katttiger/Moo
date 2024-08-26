@@ -8,13 +8,14 @@ namespace GamesTests2
     [TestClass()]
     public class MasterMindTests
     {
-        MockMastermind mockMastermind = new();
-        MasterMind masterMind = new();
+        //readonly MockMastermind mockMastermind = new();
+        readonly MasterMind masterMind = new();
+
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
         {
-            string mockGoal = "3234";
-            string mockGuess = "1232";
+            string mockGoal = "1234";
+            string mockGuess = "1234";
             string answer = MasterMind.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "AAAA,");
         }
@@ -31,7 +32,7 @@ namespace GamesTests2
         [TestMethod()]
         public void GoalHasLengthOfFourTest()
         {
-            string mockGuess = mockMastermind.CreateGoal();
+            string mockGuess = masterMind.CreateGoal();
             Assert.IsTrue(mockGuess.Length == 4);
         }
 
@@ -64,7 +65,7 @@ namespace GamesTests2
         [TestMethod()]
         public void CreatePlayerTest()
         {
-            MockMastermind mockGame = new MockMastermind();
+            MockMastermind mockGame = new();
             mockGame.CreatePlayer();
             Assert.IsNotNull(mockGame.Player.Name);
         }
@@ -75,7 +76,7 @@ namespace GamesTests2
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
         readonly UserInterface Ui = new();
-        public Player Player;
+        public Player Player = new();
         public void Display()
         {
             CreatePlayer();
@@ -199,9 +200,8 @@ namespace GamesTests2
         void ExitGame()
         {
             IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore);
-            playerDAO.SavePlayerData();
-            playerDAO.ShowTopListThisGame(PathToScore);
+            PlayerDAO playerDAO = new(Player, PathToScore, "MastermindTest");
+            playerDAO.SavePlayerdataToGameScoreTable();
         }
     }
 }
