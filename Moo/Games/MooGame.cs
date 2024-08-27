@@ -24,6 +24,7 @@ namespace Games
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
+
         public int GameLogic()
         {
             string goal = CreateGoal();
@@ -145,7 +146,7 @@ namespace Games
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerData();
-            playerDAO.ShowTopListThisGame(PathToScore);
+            playerDAO.ShowTopListGame(PathToScore);
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using Games.Ui;
-using System.Data.Common;
-using System.Diagnostics.Contracts;
 
 namespace Games
 {
-    public class MasterMind : IGame
+    public class MasterMindGame : IGame
     {
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
@@ -44,7 +42,6 @@ namespace Games
                 string compare = CheckIfGuessIsValid(guess);
                 if (compare == string.Empty)
                 {
-                    numberOfGuesses++;
                     AsAndBs = CompareGuessWithGoal(guess, goal);
                     userInterface.WriteOutput($"{AsAndBs}");
                 }
@@ -56,7 +53,6 @@ namespace Games
             }
             return numberOfGuesses;
         }
-
 
         public string CreateGoal()
         {
@@ -110,6 +106,7 @@ namespace Games
                 return $"{"AAAA"[..numberExistsInRightPlace]},";
             return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
         }
+
         public void PlayAgainRequestHandler(int numberOfGuesses)
         {
             userInterface.WriteOutput(
@@ -124,7 +121,6 @@ namespace Games
                 ExitGame();
             }
         }
-
 
         public void CreatePlayer()
         {
@@ -156,7 +152,7 @@ namespace Games
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerData();
-            playerDAO.ShowTopListThisGame(PathToScore);
+            playerDAO.ShowTopListGame(PathToScore);
         }
     }
 }

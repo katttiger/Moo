@@ -6,13 +6,10 @@ namespace GamesTests2
     [TestClass()]
     public class PlayerDAOTests
     {
-        readonly string filepathForTesting = "test.txt";
-
         [TestMethod()]
         public void PlayerIsNotNullOrEmptyTest()
         {
             var player = new Player("John Doe", 1);
-            var playerDao = new PlayerDAO(player, filepathForTesting);
 
             Exception? actualException = null;
             try
@@ -29,7 +26,7 @@ namespace GamesTests2
         [TestMethod()]
         public void PlayerToBeConvertedIsNotNullTest()
         {
-            var player = new Player("John Doe",  1);
+            var player = new Player("John Doe", 1);
             Assert.IsTrue(player != null);
         }
         [TestMethod()]

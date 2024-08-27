@@ -66,7 +66,7 @@ playerX#&#1");
                 new Player("playerX",1)]);
 
             //Act
-            var actualPlayers = DataMethods.GetPlayerData(pathtofile);
+            var actualPlayers = DataMethods.GetPlayerdataFromFile(pathtofile);
 
             //Assert
             Assert.IsTrue(actualPlayers.SequenceEqual(expectedPlayers, new PlayerEqualityComparer()));
@@ -81,11 +81,11 @@ playerX#&#1");
             {
                 return true;
             }
-            if (ReferenceEquals(expectedPlayer, null))
+            if (expectedPlayer is null)
             {
                 return false;
             }
-            if (ReferenceEquals(actualPlayer, null))
+            if (actualPlayer is null)
             {
                 return false;
             }

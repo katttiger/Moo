@@ -1,21 +1,18 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games;
+﻿using Games;
 using Games.Ui;
-using System.Linq;
 
 namespace GamesTests2
 {
     [TestClass()]
     public class MasterMindTests
     {
-        MockMastermind mockMastermind = new();
-        MasterMind masterMind = new();
+        readonly MockMastermind mockMastermind = new();
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
         {
-            string mockGoal = "3234";
-            string mockGuess = "1232";
-            string answer = MasterMind.CompareGuessWithGoal(mockGoal, mockGuess);
+            string mockGoal = "1234";
+            string mockGuess = "1234";
+            string answer = MasterMindGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "AAAA,");
         }
 
@@ -40,7 +37,7 @@ namespace GamesTests2
         public void GuessHasLengthFourTest()
         {
             string mockGuess = "1323";
-            string answer = MasterMind.CheckIfGuessIsValid(mockGuess);
+            string answer = MasterMindGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
 
@@ -48,7 +45,7 @@ namespace GamesTests2
         public void GuessContainsValueHigherThanSixTest()
         {
             string mockGuess = "1234";
-            string answer = MasterMind.CheckIfGuessIsValid(mockGuess);
+            string answer = MasterMindGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
 
@@ -56,7 +53,7 @@ namespace GamesTests2
         public void GuessHasNoLettersTest()
         {
             string mockGuess = "1113";
-            string answer = MasterMind.CheckIfGuessIsValid(mockGuess);
+            string answer = MasterMindGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
 
@@ -64,7 +61,7 @@ namespace GamesTests2
         [TestMethod()]
         public void CreatePlayerTest()
         {
-            MockMastermind mockGame = new MockMastermind();
+            MockMastermind mockGame = new();
             mockGame.CreatePlayer();
             Assert.IsNotNull(mockGame.Player.Name);
         }
@@ -201,7 +198,7 @@ namespace GamesTests2
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerData();
-            playerDAO.ShowTopListThisGame(PathToScore);
+            playerDAO.ShowTopListGame(PathToScore);
         }
     }
 }

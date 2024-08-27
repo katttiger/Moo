@@ -48,31 +48,13 @@ namespace Games
 
         public List<Player> GetPlayerData(string pathToData)
         {
-            return DataMethods.GetPlayerData(pathToData);
+            return DataMethods.GetPlayerdataFromFile(pathToData);
         }
 
-        public void ShowTopListThisGame(string pathToData)
+        public void ShowTopListGame(string pathToData)
         {
             UserInterface userInterface = new();
             List<Player> results = GetPlayerData(pathToData);
-            results.Sort((p1, p2) => p1.TotalGuesses.CompareTo(p2.TotalGuesses));
-
-            //DO NOT REMOVE: Usable when saving data to a database (has not been implemented).
-            //DO NOT REMOVE: results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
-
-            userInterface.WriteOutput("Player      games average");
-            foreach (Player player in results)
-            {
-                userInterface.WriteOutput(
-                    string.Format("{0,-9}{1,5:D}{2,9:F2}",
-                    player.Name, player.NumberOfRoundsPlayed,
-                    player.TotalGuesses));
-            }
-        }
-        public void ShowTopListAllGames()
-        {
-            UserInterface userInterface = new();
-            List<Player> results = GetPlayerData("result.txt");
             results.Sort((p1, p2) => p1.TotalGuesses.CompareTo(p2.TotalGuesses));
 
             //DO NOT REMOVE: Usable when saving data to a database (has not been implemented).

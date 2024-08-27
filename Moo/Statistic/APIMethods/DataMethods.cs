@@ -14,7 +14,7 @@ namespace Games
                 writer.Close();
             }
         }
-        public static List<Player> GetPlayerData(string pathToData)
+        public static List<Player> GetPlayerdataFromFile(string pathToData)
         {
             StreamReader reader = new(pathToData);
             const string Seperator = "#&#";

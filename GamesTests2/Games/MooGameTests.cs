@@ -6,7 +6,7 @@ namespace GamesTests2
     [TestClass()]
     public class MooGameTests
     {
-        MockMooGame mockMooGame = new();
+        readonly MockMooGame mockMooGame = new();
 
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
@@ -62,7 +62,7 @@ namespace GamesTests2
         [TestMethod()]
         public void CreatePlayerTest()
         {
-            MockMooGame mockGame = new MockMooGame();
+            MockMooGame mockGame = new();
             mockGame.CreatePlayer();
             Assert.IsNotNull(mockGame.Player.Name);
         }
@@ -73,7 +73,7 @@ namespace GamesTests2
         public string PathToScore { get; set; } = "ResultMooGame.txt";
         readonly UserInterface Ui = new();
         public Player Player;
-        UserInterface userInterface = new();
+        readonly UserInterface userInterface = new();
         public void Display()
         {
             CreatePlayer();
@@ -81,7 +81,7 @@ namespace GamesTests2
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-                MockPlayAgainRequestHandler(numberOfGuesses);
+                MockPlayAgainRequestHandler();
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
@@ -123,7 +123,7 @@ namespace GamesTests2
             }
             return goal[..4];
         }
-        public string CheckIfGuessIsValid(string goal, string guess)
+        public static string CheckIfGuessIsValid(string goal, string guess)
         {
             if (guess.Any(char.IsLetter))
             {
@@ -147,7 +147,7 @@ namespace GamesTests2
 
         }
 
-        public string CompareGuessWithGoal(string goal, string guess)
+        public static string CompareGuessWithGoal(string goal, string guess)
         {
             int bulls = 0;
             int cows = 0;
@@ -197,7 +197,7 @@ namespace GamesTests2
                 }
             }
         }
-        public void MockPlayAgainRequestHandler(int numberOfGuesses)
+        public void MockPlayAgainRequestHandler()
         {
             string answer = "";
             if (string.IsNullOrEmpty(answer) || answer.Contains('n'))
@@ -214,7 +214,7 @@ namespace GamesTests2
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerData();
-            playerDAO.ShowTopListThisGame(PathToScore);
+            playerDAO.ShowTopListGame(PathToScore);
         }
     }
 }

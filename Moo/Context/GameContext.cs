@@ -1,4 +1,5 @@
-﻿using Games.UI;
+﻿using Games.Statistic;
+using Games.UI;
 using System.Diagnostics;
 
 namespace Games
@@ -14,17 +15,27 @@ namespace Games
             GamesList.AddRange(
             [
                 new MooGame(),
-                new MasterMind()
+                new MasterMindGame()
             ]);
         }
-        public void RunGame()
+        public void Run()
         {
             while (Game.IsPlaying)
             {
                 userInterface.Clear();
                 Game.Display();
             }
-            //Show toplist
+
+            if (string.IsNullOrEmpty(Game.PathToScore))
+            {
+                throw new Exception("List of scores cannot be found.");
+            }
+            else
+            {
+                //Show toplist
+                PlayerscorePresenter.ShowTopListForGame(Game.PathToScore);
+            }
+
             userInterface.Exit();
         }
         public void PrintMenuOfGames()

@@ -66,7 +66,7 @@ class MockGameContext(IUI ui)
         ListOfGames.AddRange(
         [
             new MooGame(),
-                new MasterMind()
+                new MasterMindGame()
         ]);
     }
 
