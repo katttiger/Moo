@@ -35,13 +35,13 @@
                 }
             }
         }
-        public void SavePlayerdataToGameScoreTable()
-        {
-            DataMethods.AddData(ConvertPlayerDataToString(), PathToSavedData);
-        }
         public string ConvertPlayerDataToString()
         {
             return $"{PlayerData.Name}#&#{PlayerData.CalculatePlayerAverageScore()}";
+        }
+        public void SavePlayerdataToGameScoreTable()
+        {
+            DataMethods.AddData(ConvertPlayerDataToString(), PathToSavedData);
         }
     }
 }

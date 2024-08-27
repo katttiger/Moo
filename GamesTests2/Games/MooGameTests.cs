@@ -89,7 +89,7 @@ namespace GamesTests2
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-                MockPlayAgainRequestHandler();
+                MockPlayAgainRequest(numberOfGuesses);
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
@@ -205,12 +205,12 @@ namespace GamesTests2
                 }
             }
         }
-        public void MockPlayAgainRequestHandler()
+        public void MockPlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
-               $"\n Correct. It took {numberOfGuesses} guesses. " +
-               "\n Press any button to start a new game." +
-               "\n Press n to exit.");
+                $"\n Correct. It took {numberOfGuesses} guesses. " +
+                "\n Press any button to start a new game." +
+                "\n Press n to exit.");
             string? answer = userInterface.HandleInput();
 
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
@@ -220,6 +220,7 @@ namespace GamesTests2
                 ExitGame();
             }
         }
+
         public void ExitGame()
         {
             IsPlaying = false;

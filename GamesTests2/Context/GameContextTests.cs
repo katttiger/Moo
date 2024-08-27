@@ -81,7 +81,7 @@ namespace GamesTests2
             ListOfGames.AddRange(
             [
                 new MooGame(),
-                new MasterMind()
+                new MasterMindGame()
             ]);
         }
 

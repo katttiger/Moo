@@ -7,14 +7,15 @@ namespace GamesTests2
     public class MasterMindTests
     {
         //readonly MockMastermind mockMastermind = new();
-        readonly MasterMind masterMind = new();
+        readonly MasterMindGame masterMind = new();
+
 
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
         {
             string mockGoal = "1234";
             string mockGuess = "1234";
-            string answer = MasterMind.CompareGuessWithGoal(mockGoal, mockGuess);
+            string answer = MasterMindGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "AAAA,");
         }
 
@@ -63,9 +64,9 @@ namespace GamesTests2
         [TestMethod()]
         public void CreatePlayerTest()
         {
-            MockMastermind mockGame = new();
-            mockGame.CreatePlayer();
-            Assert.IsNotNull(mockGame.Player.Name);
+            MockMastermind masterMind = new();
+            masterMind.CreatePlayer();
+            Assert.IsNotNull(masterMind.Player.Name);
         }
     }
 
