@@ -1,8 +1,8 @@
 ﻿namespace Games
 {
-    public class Player : IPLayer
+    public class Player(string name, int guesses) : IPLayer
     {
-        private string _name { get; set; }
+        private string _name { get; set; } = name;
         public string Name
         {
             get
@@ -24,7 +24,8 @@
 
         public int NumberOfRoundsPlayed { get; set; } = 1;
 
-        private int _totalGuesses;
+        private int _totalGuesses = guesses;
+
         public int TotalGuesses
         {
             get
@@ -38,18 +39,6 @@
                 else
                     _totalGuesses = value;
             }
-        }
-
-
-        public Player(string name, int guesses)
-        {
-            _name = name;
-            _totalGuesses = guesses;
-        }
-
-        public Player()
-        {
-
         }
 
         public void UpdatePlayerStatus(int guesses)
@@ -68,7 +57,7 @@
         {
             if (NumberOfRoundsPlayed < 0)
             {
-                throw new Exception("Player cannot have played 0 games.");
+                throw new Exception("Player cannot have played 0 rounds.");
             }
             else if (TotalGuesses < 0)
             {

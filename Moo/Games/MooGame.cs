@@ -148,7 +148,7 @@ namespace Games
         public void ExitGame()
         {
             IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore, "Moo");
+            PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
 
         }

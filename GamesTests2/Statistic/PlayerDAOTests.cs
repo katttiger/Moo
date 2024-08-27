@@ -1,18 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games;
+﻿using Games;
 
 namespace GamesTests2
 {
     [TestClass()]
     public class PlayerDAOTests
     {
-        readonly string filepathForTesting = "test.txt";
-
         [TestMethod()]
         public void PlayerIsNotNullOrEmptyTest()
         {
             var player = new Player("John Doe", 1);
-            var playerDao = new PlayerDAO(player, filepathForTesting, "MooTest");
 
             Exception? actualException = null;
             try

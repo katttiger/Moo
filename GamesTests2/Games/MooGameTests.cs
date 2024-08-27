@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games;
+﻿using Games;
 using Games.Ui;
 
 
@@ -224,7 +223,7 @@ namespace GamesTests2
         public void ExitGame()
         {
             IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore, "MooTest");
+            PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

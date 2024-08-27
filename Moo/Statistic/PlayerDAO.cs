@@ -1,8 +1,6 @@
-﻿using Games.Ui;
-
-namespace Games
+﻿namespace Games
 {
-    public class PlayerDAO(Player player, string filename, string game) : IPlayerDAO
+    public class PlayerDAO(Player player, string filename) : IPlayerDAO
     {
         private string _pathToSavedData = filename;
         private string PathToSavedData
@@ -19,8 +17,6 @@ namespace Games
                     _pathToSavedData = value;
             }
         }
-
-        private string Game = game;
 
         private Player _player = player;
         public Player PlayerData

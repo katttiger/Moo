@@ -42,7 +42,6 @@ namespace Games
                 string compare = CheckIfGuessIsValid(guess);
                 if (compare == string.Empty)
                 {
-                    numberOfGuesses++;
                     AsAndBs = CompareGuessWithGoal(guess, goal);
                     userInterface.WriteOutput($"{AsAndBs}");
                 }
@@ -154,7 +153,7 @@ namespace Games
         void ExitGame()
         {
             IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore, "Mastermind");
+            PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

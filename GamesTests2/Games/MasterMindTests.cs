@@ -1,7 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games;
+﻿using Games;
 using Games.Ui;
-using System.Linq;
 
 namespace GamesTests2
 {
@@ -76,7 +74,7 @@ namespace GamesTests2
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
         readonly UserInterface Ui = new();
-        public Player Player = new();
+        public Player Player;
         public void Display()
         {
             CreatePlayer();
@@ -200,7 +198,7 @@ namespace GamesTests2
         void ExitGame()
         {
             IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore, "MastermindTest");
+            PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

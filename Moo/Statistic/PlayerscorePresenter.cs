@@ -1,19 +1,14 @@
 ﻿using Games.Ui;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Games.Statistic
 {
     public class PlayerscorePresenter
     {
-        public List<Player> GetPlayerData(string pathToData)
+        public static List<Player> GetPlayerData(string pathToData)
         {
             return DataMethods.GetPlayerdataFromFile(pathToData);
         }
-        public void ShowTopListForGame(string pathToData)
+        public static void ShowTopListForGame(string pathToData)
         {
             UserInterface userInterface = new();
             List<Player> results = GetPlayerData(pathToData);
