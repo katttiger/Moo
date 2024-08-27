@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games;
-using System.Diagnostics;
-using System.Numerics;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using System.Collections;
+﻿using Games;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GamesTests2

@@ -20,7 +20,7 @@ namespace Games
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-                PlayAgainRequestHandler(numberOfGuesses);
+                PlayAgainRequest(numberOfGuesses);
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
@@ -41,7 +41,7 @@ namespace Games
                 string compare = CheckIfGuessIsValid(guess);
                 if (compare == string.Empty)
                 {
-                    bullsAndCows = CheckIfGuessIsValid(guess);
+                    bullsAndCows = CompareGuessWithGoal(goal, guess);
                     numberOfGuesses++;
                     userInterface.WriteOutput($"{bullsAndCows} \n");
                 }
@@ -105,16 +105,21 @@ namespace Games
                     }
                 }
             }
+            if (bulls == 4)
+            {
+                return $"{"BBBB"[..bulls]},";
+            }
             return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
         }
 
-        public void PlayAgainRequestHandler(int numberOfGuesses)
+        public void PlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
                 $"\n Correct. It took {numberOfGuesses} guesses. " +
                 "\n Press any button to start a new game." +
                 "\n Press n to exit.");
             string? answer = userInterface.HandleInput();
+
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 IsPlaying = false;
@@ -145,8 +150,8 @@ namespace Games
         {
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
-            playerDAO.SavePlayerData();
-            playerDAO.ShowTopListGame(PathToScore);
+            playerDAO.SavePlayerdataToGameScoreTable();
+
         }
     }
 }

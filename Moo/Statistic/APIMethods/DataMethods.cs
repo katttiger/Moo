@@ -1,5 +1,4 @@
 ﻿using Games.Ui;
-using System.Runtime.CompilerServices;
 
 namespace Games
 {
@@ -23,7 +22,7 @@ namespace Games
 
             while (!reader.EndOfStream)
             {
-                string line = reader.ReadLine();
+                string? line = reader.ReadLine();
                 if (line != null)
                 {
                     string[] playerNameAndScoreArray = line.Split(

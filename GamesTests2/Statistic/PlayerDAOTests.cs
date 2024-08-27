@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Games;
+﻿using Games;
 
 namespace GamesTests2
 {
@@ -42,6 +41,5 @@ namespace GamesTests2
             var player = new Player("John Doe", 3);
             Assert.IsTrue(player.TotalGuesses > 0);
         }
-
     }
 }

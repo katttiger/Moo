@@ -6,13 +6,15 @@ namespace GamesTests2
     [TestClass()]
     public class MasterMindTests
     {
-        readonly MockMastermind mockMastermind = new();
+        //readonly MockMastermind mockMastermind = new();
+        readonly MasterMind masterMind = new();
+
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
         {
             string mockGoal = "1234";
             string mockGuess = "1234";
-            string answer = MasterMindGame.CompareGuessWithGoal(mockGoal, mockGuess);
+            string answer = MasterMind.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "AAAA,");
         }
 
@@ -28,7 +30,7 @@ namespace GamesTests2
         [TestMethod()]
         public void GoalHasLengthOfFourTest()
         {
-            string mockGuess = mockMastermind.CreateGoal();
+            string mockGuess = masterMind.CreateGoal();
             Assert.IsTrue(mockGuess.Length == 4);
         }
 
@@ -197,8 +199,7 @@ namespace GamesTests2
         {
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
-            playerDAO.SavePlayerData();
-            playerDAO.ShowTopListGame(PathToScore);
+            playerDAO.SavePlayerdataToGameScoreTable();
         }
     }
 }

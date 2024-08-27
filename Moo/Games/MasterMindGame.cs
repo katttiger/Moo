@@ -21,7 +21,7 @@ namespace Games
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-                PlayAgainRequestHandler(numberOfGuesses);
+                PlayAgainRequest(numberOfGuesses);
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
         }
@@ -49,7 +49,7 @@ namespace Games
                 {
                     userInterface.WriteOutput($"{compare} \n");
                 }
-                numberOfGuesses = (8 - i);
+                numberOfGuesses = (8 - i) + 1;
             }
             return numberOfGuesses;
         }
@@ -104,17 +104,19 @@ namespace Games
             }
             if (numberExistsInRightPlace == 4)
                 return $"{"AAAA"[..numberExistsInRightPlace]},";
-            return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
+            else
+                return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
         }
 
-        public void PlayAgainRequestHandler(int numberOfGuesses)
+        public void PlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
                 $"\n Correct. It took {numberOfGuesses} guesses. " +
                 "\n Press any button to start a new game." +
                 "\n Press n to exit.");
+
             string? answer = userInterface.HandleInput();
-            if (string.IsNullOrEmpty(answer) || answer.Contains('n'))
+            if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 IsPlaying = false;
                 Player.TotalGuesses += numberOfGuesses;
@@ -130,7 +132,7 @@ namespace Games
                 userInterface.WriteOutput("Enter your user name:\n");
                 try
                 {
-                    string name = "John Doe";
+                    string name = userInterface.HandleInput();
                     if (name.Length < 1)
                     {
                         userInterface.WriteOutput("You name must have at least 1 character.");
@@ -151,8 +153,7 @@ namespace Games
         {
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
-            playerDAO.SavePlayerData();
-            playerDAO.ShowTopListGame(PathToScore);
+            playerDAO.SavePlayerdataToGameScoreTable();
         }
     }
 }

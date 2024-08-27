@@ -2,7 +2,7 @@
 
 namespace Games.Statistic
 {
-    public static class PlayerscorePresenter
+    public class PlayerscorePresenter
     {
         public static List<Player> GetPlayerData(string pathToData)
         {

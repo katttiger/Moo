@@ -1,15 +1,15 @@
 ﻿using Games.Statistic;
 using Games.UI;
-using System.Diagnostics;
 
 namespace Games
 {
     public class GameContext(IUI userInterface)
     {
-        private IGame? Game;
+        private IGame Game;
         private readonly IUI userInterface = userInterface;
         public readonly List<IGame> GamesList = [];
         private bool gameHasBeenSet = false;
+
         public void AddGameToList()
         {
             GamesList.AddRange(
@@ -18,6 +18,7 @@ namespace Games
                 new MasterMindGame()
             ]);
         }
+
         public void Run()
         {
             while (Game.IsPlaying)

@@ -21,9 +21,11 @@
                 }
             }
         }
+
         public int NumberOfRoundsPlayed { get; set; } = 1;
 
         private int _totalGuesses = guesses;
+
         public int TotalGuesses
         {
             get
@@ -55,7 +57,7 @@
         {
             if (NumberOfRoundsPlayed < 0)
             {
-                throw new Exception("Player cannot have played 0 games.");
+                throw new Exception("Player cannot have played 0 rounds.");
             }
             else if (TotalGuesses < 0)
             {
