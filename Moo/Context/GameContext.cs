@@ -7,33 +7,32 @@ namespace Games
     public class GameContext
     {
         private IGame Game;
-        private IUserInterface userInterface { get; set; }
+        private IUserInterface UserInterface { get; set; }
         private GameLobby gamelobby = new(new UserInterface());
         public GameContext(IUserInterface userinterface)
         {
-            this.userInterface = userinterface;
+            this.UserInterface = userinterface;
         }
         public void Run()
         {
             gamelobby.PrintMenuOfGames();
             Game = gamelobby.ChooseGame();
 
-            while (Game.IsPlaying)
+            while (Game.isPlaying)
             {
-                userInterface.Clear();
+                UserInterface.Clear();
                 Game.Display();
             }
 
             if (string.IsNullOrEmpty(Game.PathToScore))
             {
-                userInterface.WriteOutput("List of scores cannot be found.");
+                UserInterface.WriteOutput("List of scores cannot be found.");
             }
             else
             {
                 PlayerscorePresenter.ShowTopListForGame(Game.PathToScore);
             }
-
-            userInterface.Exit();
+            UserInterface.Exit();
         }
     }
 
@@ -66,7 +65,7 @@ namespace Games
             }
             else
             {
-                userInterface.WriteOutput("No games are available. \n Closing application.");
+                userInterface.WriteOutput("No games are available. \nClosing application.");
                 userInterface.Exit();
             }
         }

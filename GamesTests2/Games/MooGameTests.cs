@@ -76,7 +76,7 @@ namespace GamesTests2
     }
     public class MockMooGame : IGame
     {
-        public bool IsPlaying { get; set; } = true;
+        public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
         readonly UserInterface Ui = new();
         public Player Player;
@@ -84,12 +84,12 @@ namespace GamesTests2
         public void Display()
         {
             CreatePlayer();
-            while (IsPlaying)
+            while (isPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
                 MockPlayAgainRequest(numberOfGuesses);
-                Player.UpdatePlayerStatus(numberOfGuesses);
+                Player.UpdatePlayerScoreAndRounds(numberOfGuesses);
             }
             SavePlayerdata();
         }
@@ -215,7 +215,7 @@ namespace GamesTests2
 
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
-                IsPlaying = false;
+                isPlaying = false;
                 Player.TotalGuesses += numberOfGuesses;
 
             }

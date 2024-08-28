@@ -71,7 +71,7 @@ namespace GamesTests2
 
     class MockMastermind : IGame
     {
-        public bool IsPlaying { get; set; } = true;
+        public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
         readonly UserInterface Ui = new();
         public Player Player;
@@ -83,7 +83,7 @@ namespace GamesTests2
                     "A: Right number and place.\n" +
                     "B: Right number, wrong place");
 
-            while (IsPlaying)
+            while (isPlaying)
             {
                 Ui.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
@@ -99,7 +99,7 @@ namespace GamesTests2
                     Player.TotalGuesses += numberOfGuesses;
                     ExitGame();
                 }
-                Player.UpdatePlayerStatus(numberOfGuesses);
+                Player.UpdatePlayerScoreAndRounds(numberOfGuesses);
             }
         }
         public int GameLogic()
@@ -198,7 +198,7 @@ namespace GamesTests2
         }
         void ExitGame()
         {
-            IsPlaying = false;
+            isPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }

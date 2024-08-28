@@ -47,7 +47,19 @@
             _totalGuesses = guesses;
         }
 
-        public void UpdatePlayerStatus(int guesses)
+        public void UpdatePlayerScore(int guesses)
+        {
+            if (guesses < 0)
+            {
+                throw new Exception("Number of guesses cannot be negative.");
+            }
+            else
+            {
+                TotalGuesses += guesses;
+            }
+        }
+
+        public void UpdatePlayerScoreAndRounds(int guesses)
         {
             if (guesses < 0)
             {

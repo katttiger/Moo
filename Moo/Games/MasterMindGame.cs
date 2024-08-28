@@ -4,10 +4,10 @@ namespace Games
 {
     public class MastermindGame : IGame
     {
-        public bool IsPlaying { get; set; } = true;
+        public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
         readonly UserInterface userInterface = new();
-        private Player Player;
+        private IPlayer CurrentPlayer;
 
         public void Display()
         {
@@ -17,13 +17,14 @@ namespace Games
                                "A: Right number and place.\n" +
                                "B: Right number, wrong place");
 
-            while (IsPlaying)
+            while (isPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
+                userInterface.WriteOutput($"Correct. It took {numberOfGuesses} guesses.");
                 PlayAgainRequest(numberOfGuesses);
-                Player.UpdatePlayerStatus(numberOfGuesses);
             }
+            SavePlayerdata();
         }
         public int GameLogic()
         {
@@ -111,16 +112,18 @@ namespace Games
         public void PlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
-                $"\n Correct. It took {numberOfGuesses} guesses. " +
-                "\n Press any button to start a new game." +
+                $"\n Press any button to start a new game." +
                 "\n Press n to exit.");
-
             string? answer = userInterface.HandleInput();
+
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
-                IsPlaying = false;
-                Player.TotalGuesses += numberOfGuesses;
-                SavePlayerdata();
+                CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
+                isPlaying = false;
+            }
+            else
+            {
+                CurrentPlayer.UpdatePlayerScoreAndRounds(numberOfGuesses);
             }
         }
 
@@ -139,7 +142,7 @@ namespace Games
                     }
                     else
                     {
-                        Player = new(name, 0);
+                        CurrentPlayer = new Player(name, 0);
                         nameIsAccepted = true;
                     }
                 }
@@ -151,8 +154,7 @@ namespace Games
         }
         void SavePlayerdata()
         {
-            IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore);
+            IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

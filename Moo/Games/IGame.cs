@@ -2,7 +2,7 @@
 {
     public interface IGame
     {
-        public bool IsPlaying { get; }
+        public bool isPlaying { get; }
         string PathToScore { get; set; }
         public void Display();
         public int GameLogic();

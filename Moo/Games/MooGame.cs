@@ -5,53 +5,34 @@ namespace Games
 {
     public class MooGame : IGame
     {
-        public bool IsPlaying { get; set; } = true;
+        public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
         public UserInterface userInterface = new();
-        private Player Player;
+        private IPlayer CurrentPlayer;
+
         public void Display()
         {
             CreatePlayer();
-
             userInterface.WriteOutput("Values allowed: 0-9.\n" +
                    "B: Right number and place.\n" +
                    "C: Right number, wrong place");
 
-            while (IsPlaying)
+            while (isPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
+                userInterface.WriteOutput($"Correct. It took {numberOfGuesses} guesses.");
                 PlayAgainRequest(numberOfGuesses);
-                Player.UpdatePlayerStatus(numberOfGuesses);
             }
             SavePlayerdata();
         }
 
-        public void CreatePlayer()
-        {
-            bool nameIsAccepted = false;
-            while (!nameIsAccepted)
-            {
-                userInterface.WriteOutput("Enter your user name:\n");
-                string name = userInterface.HandleInput() ?? "";
-                if (name.Length < 1)
-                {
-                    userInterface.WriteOutput("You name must have at least 1 character.");
-                }
-                else
-                {
-                    Player = new(name, 0);
-                    nameIsAccepted = true;
-                }
-            }
-        }
 
         public int GameLogic()
         {
             string goal = CreateGoal();
             int numberOfGuesses = 0;
             string bullsAndCows = string.Empty;
-
 
             //Comment out or remove next line to play real game
             userInterface.WriteOutput($"For practice, number is: {goal} \n");
@@ -60,7 +41,8 @@ namespace Games
             {
                 string guess = userInterface.HandleInput();
                 string compare = CheckIfGuessIsValid(guess);
-                if (compare == string.Empty)
+
+                if (string.IsNullOrEmpty(compare))
                 {
                     bullsAndCows = CompareGuessWithGoal(goal, guess);
                     numberOfGuesses++;
@@ -73,7 +55,6 @@ namespace Games
             }
             return numberOfGuesses;
         }
-
         public string CreateGoal()
         {
             Random randomGenerator = new();
@@ -137,21 +118,41 @@ namespace Games
         public void PlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
-                $"\n Correct. It took {numberOfGuesses} guesses. " +
-                "\n Press any button to start a new game." +
+                $"\n Press any button to start a new game." +
                 "\n Press n to exit.");
             string? answer = userInterface.HandleInput();
 
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
-                IsPlaying = false;
-                Player.TotalGuesses += numberOfGuesses;
+                CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
+                isPlaying = false;
+            }
+            else
+            {
+                CurrentPlayer.UpdatePlayerScoreAndRounds(numberOfGuesses);
             }
         }
-
+        public void CreatePlayer()
+        {
+            bool nameIsAccepted = false;
+            while (!nameIsAccepted)
+            {
+                userInterface.WriteOutput("Enter your user name:\n");
+                string name = userInterface.HandleInput() ?? "";
+                if (name.Length < 1)
+                {
+                    userInterface.WriteOutput("You name must have at least 1 character.");
+                }
+                else
+                {
+                    CurrentPlayer = new Player(name, 0);
+                    nameIsAccepted = true;
+                }
+            }
+        }
         public void SavePlayerdata()
         {
-            IPlayerDAO playerDAO = new PlayerDAO(Player, PathToScore);
+            IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

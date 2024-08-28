@@ -1,4 +1,5 @@
-﻿using Games;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
 
 namespace GamesTests2
 {
@@ -41,6 +42,22 @@ namespace GamesTests2
         {
             var player = new Player("John Doe", 1);
             Assert.IsTrue(player.NumberOfRoundsPlayed > 0);
+        }
+
+        [TestMethod()]
+        public void UpdatePlayerScoreTest()
+        {
+            var player = new Player("John Doe", 6);
+            Exception? actualException = null;
+            try
+            {
+                player.TotalGuesses = -10;
+            }
+            catch (Exception exception)
+            {
+                actualException = exception;
+            }
+            Assert.IsNotNull(actualException);
         }
     }
 }

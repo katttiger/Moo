@@ -74,7 +74,7 @@ namespace GamesTests2
 
         public void Run()
         {
-            while (Game.IsPlaying)
+            while (Game.isPlaying)
             {
                 userInterface.Clear();
                 Game.Display();

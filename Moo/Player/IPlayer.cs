@@ -5,8 +5,9 @@
         string Name { get; }
         int NumberOfRoundsPlayed { get; }
         int TotalGuesses { get; set; }
-        public void UpdatePlayerStatus(int guesses);
+        public void UpdatePlayerScoreAndRounds(int guesses);
         public double CalculatePlayerAverageScore();
+        public void UpdatePlayerScore(int guesses);
 
     }
 }
