@@ -4,10 +4,9 @@ using Games.Ui;
 namespace GamesTests2
 {
     [TestClass()]
-    public class MasterMindTests
+    public class MastermindTests
     {
-        //readonly MockMastermind mockMastermind = new();
-        readonly MasterMindGame masterMind = new();
+        readonly MastermindGame masterMind = new();
 
 
         [TestMethod()]
@@ -15,7 +14,7 @@ namespace GamesTests2
         {
             string mockGoal = "1234";
             string mockGuess = "1234";
-            string answer = MasterMindGame.CompareGuessWithGoal(mockGoal, mockGuess);
+            string answer = MastermindGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "AAAA,");
         }
 
@@ -40,7 +39,7 @@ namespace GamesTests2
         public void GuessHasLengthFourTest()
         {
             string mockGuess = "1323";
-            string answer = MasterMindGame.CheckIfGuessIsValid(mockGuess);
+            string answer = MastermindGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
 
@@ -48,7 +47,7 @@ namespace GamesTests2
         public void GuessContainsValueHigherThanSixTest()
         {
             string mockGuess = "1234";
-            string answer = MasterMindGame.CheckIfGuessIsValid(mockGuess);
+            string answer = MastermindGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
 
@@ -56,7 +55,7 @@ namespace GamesTests2
         public void GuessHasNoLettersTest()
         {
             string mockGuess = "1113";
-            string answer = MasterMindGame.CheckIfGuessIsValid(mockGuess);
+            string answer = MastermindGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
 
@@ -107,6 +106,7 @@ namespace GamesTests2
         {
             string goal = CreateGoal();
             int numberOfGuesses = 0;
+
             //Comment out or remove next line to play real game
             Ui.WriteOutput($"For practice, number is: {goal} \n");
 

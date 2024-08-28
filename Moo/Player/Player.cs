@@ -1,8 +1,8 @@
 ﻿namespace Games
 {
-    public class Player(string name, int guesses) : IPLayer
+    public class Player : IPlayer
     {
-        private string _name { get; set; } = name;
+        private string _name { get; set; }
         public string Name
         {
             get
@@ -24,7 +24,7 @@
 
         public int NumberOfRoundsPlayed { get; set; } = 1;
 
-        private int _totalGuesses = guesses;
+        private int _totalGuesses;
 
         public int TotalGuesses
         {
@@ -39,6 +39,12 @@
                 else
                     _totalGuesses = value;
             }
+        }
+
+        public Player(string name, int guesses)
+        {
+            _name = name;
+            _totalGuesses = guesses;
         }
 
         public void UpdatePlayerStatus(int guesses)

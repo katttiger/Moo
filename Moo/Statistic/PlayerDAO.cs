@@ -1,8 +1,8 @@
 ﻿namespace Games
 {
-    public class PlayerDAO(Player player, string filename) : IPlayerDAO
+    public class PlayerDAO : IPlayerDAO
     {
-        private string _pathToSavedData = filename;
+        private string _pathToSavedData;
         private string PathToSavedData
         {
             get
@@ -18,8 +18,8 @@
             }
         }
 
-        private Player _player = player;
-        public Player PlayerData
+        private IPlayer _player;
+        public IPlayer PlayerData
         {
             get
             {
@@ -35,6 +35,12 @@
                 }
             }
         }
+        public PlayerDAO(IPlayer player, string filename)
+        {
+            _player = player;
+            _pathToSavedData = filename;
+        }
+
         public string ConvertPlayerDataToString()
         {
             return $"{PlayerData.Name}#&#{PlayerData.CalculatePlayerAverageScore()}";

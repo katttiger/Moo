@@ -1,11 +1,12 @@
 ﻿namespace Games
 {
-    public interface IPLayer
+    public interface IPlayer
     {
         string Name { get; }
         int NumberOfRoundsPlayed { get; }
         int TotalGuesses { get; set; }
-        //public void UpdatePlayerScore(int guesses);
-        //public double CalculatePlayerAverageScore();
+        public void UpdatePlayerStatus(int guesses);
+        public double CalculatePlayerAverageScore();
+
     }
 }

@@ -32,7 +32,6 @@ namespace GamesTests2
         [TestMethod()]
         public void UpdatePlayerStatusIsNotNegativeTest()
         {
-            //Arrange
             var player = new Player("John Doe", 1);
             Assert.IsTrue(player.TotalGuesses > 0);
         }

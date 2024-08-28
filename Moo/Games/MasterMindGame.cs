@@ -2,7 +2,7 @@
 
 namespace Games
 {
-    public class MasterMindGame : IGame
+    public class MastermindGame : IGame
     {
         public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
@@ -120,7 +120,7 @@ namespace Games
             {
                 IsPlaying = false;
                 Player.TotalGuesses += numberOfGuesses;
-                ExitGame();
+                SavePlayerdata();
             }
         }
 
@@ -149,7 +149,7 @@ namespace Games
                 }
             }
         }
-        void ExitGame()
+        void SavePlayerdata()
         {
             IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);

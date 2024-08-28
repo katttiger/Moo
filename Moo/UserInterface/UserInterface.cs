@@ -2,7 +2,7 @@
 
 namespace Games.Ui
 {
-    public class UserInterface : IUI
+    public class UserInterface : IUserInterface
     {
         public void Exit()
         {
@@ -20,7 +20,6 @@ namespace Games.Ui
         {
             Console.WriteLine(message);
         }
-
         public int ParseStringToInt(string message)
         {
             bool conversionWasSuccesful = int.TryParse(message, out int value);

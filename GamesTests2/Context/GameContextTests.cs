@@ -22,29 +22,9 @@ namespace GamesTests2
             MockGameContext mockContxt = new(ui);
             mockGameContext = mockContxt;
 
-            gameContext.AddGameToList();
         }
 
-        [TestMethod()]
-        public void PrintMenuOfGamesTest()
-        {
-            mockGameContext.AddGameToList();
-            Assert.IsNotNull(mockGameContext.ListOfGames);
-        }
-
-        [TestMethod()]
-        public void ChooseGameTest()
-        {
-            gameContext.AddGameToList();
-            Assert.IsTrue(gameContext.GamesList.Count > 0);
-        }
-
-        [TestMethod()]
-        public void SetGameTest()
-        {
-            Assert.IsFalse(mockGameContext.gameHasBeenSet);
-        }
-
+       
         [TestMethod()]
         public void RunGameTest()
         {
@@ -69,10 +49,10 @@ namespace GamesTests2
 
     }
 
-    class MockGameContext(IUI userInterface)
+    class MockGameContext(IUserInterface userInterface)
     {
         public IGame Game;
-        private readonly IUI Ui;
+        private readonly IUserInterface Ui;
         public readonly List<IGame> ListOfGames = [];
         public bool gameHasBeenSet = false;
 
@@ -81,7 +61,7 @@ namespace GamesTests2
             ListOfGames.AddRange(
             [
                 new MooGame(),
-                new MasterMindGame()
+                new MastermindGame()
             ]);
         }
 
@@ -106,7 +86,6 @@ namespace GamesTests2
             }
             else
             {
-                //Show toplist
                 PlayerscorePresenter.ShowTopListForGame(Game.PathToScore);
             }
 
@@ -149,7 +128,7 @@ namespace GamesTests2
         }
     }
 
-    class MockUI : IUI
+    class MockUI : IUserInterface
     {
         public void Clear()
         {

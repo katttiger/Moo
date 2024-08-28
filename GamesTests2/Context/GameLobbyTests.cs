@@ -1,48 +1,38 @@
-﻿using Games.Statistic;
+﻿using Games;
 using Games.Ui;
 using Games.UI;
 
-namespace Games
+namespace GamesTests2
 {
-    public class GameContext
+    [TestClass()]
+    public class GameLobbyTests
     {
-        private IGame Game;
-        private IUserInterface userInterface { get; set; }
-        private GameLobby gamelobby = new(new UserInterface());
-        public GameContext(IUserInterface userinterface)
+        MockGameLobby mockGameLobby = new(new UserInterface());
+        [TestMethod()]
+        public void GameLobbyTest()
         {
-            this.userInterface = userinterface;
+            Assert.IsNotNull(mockGameLobby.userInterface);
         }
-        public void Run()
+
+        [TestMethod()]
+        public void PrintMenuOfGamesTest()
         {
-            gamelobby.PrintMenuOfGames();
-            Game = gamelobby.ChooseGame();
+            Assert.IsTrue(mockGameLobby.GamesList.Count > 0);
+        }
 
-            while (Game.IsPlaying)
-            {
-                userInterface.Clear();
-                Game.Display();
-            }
-
-            if (string.IsNullOrEmpty(Game.PathToScore))
-            {
-                userInterface.WriteOutput("List of scores cannot be found.");
-            }
-            else
-            {
-                PlayerscorePresenter.ShowTopListForGame(Game.PathToScore);
-            }
-
-            userInterface.Exit();
+        [TestMethod()]
+        public void ChooseGameTest()
+        {
+            Assert.IsTrue(mockGameLobby.GamesList.Count > 0);
         }
     }
 
-    public class GameLobby
+    public class MockGameLobby
     {
         public readonly List<IGame> GamesList;
-        IUserInterface userInterface;
+        public IUserInterface userInterface;
 
-        public GameLobby(IUserInterface ui)
+        public MockGameLobby(IUserInterface ui)
         {
             GamesList =
             [
@@ -66,8 +56,8 @@ namespace Games
             }
             else
             {
-                userInterface.WriteOutput("No games are available. \n Closing application.");
-                userInterface.Exit();
+                //throw == redundant?
+                throw new Exception("The list of games is empty.");
             }
         }
         public IGame ChooseGame()

@@ -2,7 +2,7 @@
 {
     public interface IPlayerDAO
     {
-        Player PlayerData { get; set; }
+        IPlayer PlayerData { get; set; }
         void SavePlayerdataToGameScoreTable();
     }
 }

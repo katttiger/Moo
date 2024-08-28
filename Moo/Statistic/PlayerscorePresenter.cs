@@ -4,18 +4,15 @@ namespace Games.Statistic
 {
     public class PlayerscorePresenter
     {
-        public static List<Player> GetPlayerData(string pathToData)
+        public static List<IPlayer> GetPlayerData(string pathToData)
         {
             return DataMethods.GetPlayerdataFromFile(pathToData);
         }
         public static void ShowTopListForGame(string pathToData)
         {
             UserInterface userInterface = new();
-            List<Player> results = GetPlayerData(pathToData);
+            List<IPlayer> results = GetPlayerData(pathToData);
             results.Sort((p1, p2) => p1.TotalGuesses.CompareTo(p2.TotalGuesses));
-
-            //DO NOT REMOVE: Usable when saving data to a database (has not been implemented).
-            //DO NOT REMOVE: results.Sort((p1, p2) => p1.CalculatePlayerAverageScore().CompareTo(p2.CalculatePlayerAverageScore()));
 
             userInterface.WriteOutput("Player      games average");
             foreach (Player player in results)

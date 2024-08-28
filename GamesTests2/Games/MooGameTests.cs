@@ -8,7 +8,6 @@ namespace GamesTests2
     public class MooGameTests
     {
         readonly MockMooGame mockMooGame = new();
-        readonly MooGame mooGame = new();
 
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
@@ -70,7 +69,7 @@ namespace GamesTests2
         }
 
         [TestMethod()]
-        public void ExitGameTest()
+        public void SavePlayerdataTest()
         {
             Assert.IsTrue(mockMooGame.PathToScore != string.Empty);
         }
@@ -92,6 +91,7 @@ namespace GamesTests2
                 MockPlayAgainRequest(numberOfGuesses);
                 Player.UpdatePlayerStatus(numberOfGuesses);
             }
+            SavePlayerdata();
         }
         public int GameLogic()
         {
@@ -217,13 +217,12 @@ namespace GamesTests2
             {
                 IsPlaying = false;
                 Player.TotalGuesses += numberOfGuesses;
-                ExitGame();
+
             }
         }
 
-        public void ExitGame()
+        public void SavePlayerdata()
         {
-            IsPlaying = false;
             PlayerDAO playerDAO = new(Player, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }

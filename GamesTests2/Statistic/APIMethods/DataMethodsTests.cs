@@ -9,41 +9,31 @@ namespace GamesTests2
         [TestMethod()]
         public void DataHasPathToFile()
         {
-            //Arrange
             string pathToFile = "result.txt";
             System.IO.File.Delete(pathToFile);
             string data = "bogusPlayer";
 
-            //Act
             DataMethods.AddData(data, pathToFile);
 
-            //Assert
             Assert.IsFalse(string.IsNullOrEmpty(pathToFile));
         }
 
         [TestMethod()]
         public void AddedDataContainsSeperator()
         {
-            //Arrange
-            //Path to data
             string pathToFile = "result.txt";
             System.IO.File.Delete(pathToFile);
 
             string data = "bogusPlayer#&#8";
 
-            //Act
-            //call the method and add testdata
             DataMethods.AddData(data, pathToFile);
 
-            //Assert
-            //Säkerställ att #&# finns
             Assert.IsTrue(data.Contains("#&#"));
         }
 
         [TestMethod()]
         public void ListReturnEqualsDataStored()
         {
-            //Arrange
             var pathtofile = "nameOfFile.txt";
             System.IO.File.Delete(pathtofile);
 
@@ -59,17 +49,15 @@ playerX#&#1");
                 new Player("PlayerX",5),
                 new Player("playerX",1)]);
 
-            //Act
             var actualPlayers = DataMethods.GetPlayerdataFromFile(pathtofile);
 
-            //Assert
             Assert.IsTrue(actualPlayers.SequenceEqual(expectedPlayers, new PlayerEqualityComparer()));
         }
     }
 
-    public class PlayerEqualityComparer : IEqualityComparer<Player>
+    public class PlayerEqualityComparer : IEqualityComparer<IPlayer>
     {
-        public bool Equals(Player? expectedPlayer, Player? actualPlayer)
+        public bool Equals(IPlayer? expectedPlayer, IPlayer? actualPlayer)
         {
             if (ReferenceEquals(expectedPlayer, actualPlayer))
             {
@@ -91,7 +79,7 @@ playerX#&#1");
                 && expectedPlayer.TotalGuesses == actualPlayer.TotalGuesses;
         }
 
-        public int GetHashCode([DisallowNull] Player obj)
+        public int GetHashCode([DisallowNull] IPlayer obj)
         {
             throw new NotImplementedException();
         }

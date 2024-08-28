@@ -1,5 +1,6 @@
 ﻿using Games.Ui;
 
+
 namespace Games
 {
     public class MooGame : IGame
@@ -22,6 +23,26 @@ namespace Games
                 int numberOfGuesses = GameLogic();
                 PlayAgainRequest(numberOfGuesses);
                 Player.UpdatePlayerStatus(numberOfGuesses);
+            }
+            SavePlayerdata();
+        }
+
+        public void CreatePlayer()
+        {
+            bool nameIsAccepted = false;
+            while (!nameIsAccepted)
+            {
+                userInterface.WriteOutput("Enter your user name:\n");
+                string name = userInterface.HandleInput() ?? "";
+                if (name.Length < 1)
+                {
+                    userInterface.WriteOutput("You name must have at least 1 character.");
+                }
+                else
+                {
+                    Player = new(name, 0);
+                    nameIsAccepted = true;
+                }
             }
         }
 
@@ -112,6 +133,7 @@ namespace Games
             return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
         }
 
+
         public void PlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
@@ -124,34 +146,13 @@ namespace Games
             {
                 IsPlaying = false;
                 Player.TotalGuesses += numberOfGuesses;
-                ExitGame();
             }
         }
 
-        public void CreatePlayer()
+        public void SavePlayerdata()
         {
-            bool nameIsAccepted = false;
-            while (!nameIsAccepted)
-            {
-                userInterface.WriteOutput("Enter your user name:\n");
-                string name = userInterface.HandleInput() ?? "";
-                if (name.Length < 1)
-                {
-                    userInterface.WriteOutput("You name must have at least 1 character.");
-                }
-                else
-                {
-                    Player = new(name, 0);
-                    nameIsAccepted = true;
-                }
-            }
-        }
-        public void ExitGame()
-        {
-            IsPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore);
+            IPlayerDAO playerDAO = new PlayerDAO(Player, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
-
         }
     }
 }
