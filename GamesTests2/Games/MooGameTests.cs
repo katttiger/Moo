@@ -1,5 +1,6 @@
-﻿using Games;
-using Games.Ui;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
+using Games.UI;
 
 
 namespace GamesTests2
@@ -7,7 +8,8 @@ namespace GamesTests2
     [TestClass()]
     public class MooGameTests
     {
-        readonly MockMooGame mockMooGame = new();
+        //MockMooGame mockMooGame = new();
+        readonly MockMooGame mockMooGame = new(new UserInterface());
 
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
@@ -63,9 +65,9 @@ namespace GamesTests2
         [TestMethod()]
         public void CreatePlayerTest()
         {
-            MockMooGame mockGame = new();
+            MockMooGame mockGame = new(new UserInterface());
             mockGame.CreatePlayer();
-            Assert.IsNotNull(mockGame.Player.Name);
+            Assert.IsNotNull(mockGame.CurrentPlayer.Name);
         }
 
         [TestMethod()]
@@ -73,35 +75,55 @@ namespace GamesTests2
         {
             Assert.IsTrue(mockMooGame.PathToScore != string.Empty);
         }
+
+        [TestMethod()]
+        public void MooGameTest()
+        {
+            Assert.IsNotNull(mockMooGame.userInterface);
+        }
+
+        [TestMethod()]
+        public void MooGameIsPlayingIsTrueTest()
+        {
+            MooGame game = new(new UserInterface());
+            Assert.IsTrue(game.isPlaying);
+        }
     }
     public class MockMooGame : IGame
     {
         public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
-        readonly UserInterface Ui = new();
-        public Player Player;
-        readonly UserInterface userInterface = new();
+        public IUserInterface userInterface;
+        public IPlayer CurrentPlayer;
+
+        public MockMooGame(IUserInterface ui)
+        {
+            userInterface = ui;
+        }
+
         public void Display()
         {
             CreatePlayer();
+            userInterface.WriteOutput("Values allowed: 0-9.\n" +
+                   "B: Right number and place.\n" +
+                   "C: Right number, wrong place");
+
             while (isPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-                MockPlayAgainRequest(numberOfGuesses);
-                Player.UpdatePlayerScoreAndRounds(numberOfGuesses);
+                userInterface.WriteOutput($"Correct. It took {numberOfGuesses} guesses.");
+                PlayAgainRequest(numberOfGuesses);
             }
             SavePlayerdata();
         }
+
+
         public int GameLogic()
         {
             string goal = CreateGoal();
             int numberOfGuesses = 0;
             string bullsAndCows = string.Empty;
-
-            userInterface.WriteOutput("Values allowed: 0-9.\n" +
-                   "B: Right number and place.\n" +
-                   "C: Right number, wrong place");
 
             //Comment out or remove next line to play real game
             userInterface.WriteOutput($"For practice, number is: {goal} \n");
@@ -109,13 +131,21 @@ namespace GamesTests2
             while (!bullsAndCows.Equals("BBBB,"))
             {
                 string guess = userInterface.HandleInput();
-                bullsAndCows = CheckIfGuessIsValid(goal, guess);
-                numberOfGuesses++;
-                userInterface.WriteOutput($"{bullsAndCows} \n");
+                string compare = CheckIfGuessIsValid(guess);
+
+                if (string.IsNullOrEmpty(compare))
+                {
+                    bullsAndCows = CompareGuessWithGoal(goal, guess);
+                    numberOfGuesses++;
+                    userInterface.WriteOutput($"{bullsAndCows} \n");
+                }
+                else
+                {
+                    userInterface.WriteOutput($"{compare}");
+                }
             }
             return numberOfGuesses;
         }
-
         public string CreateGoal()
         {
             Random randomGenerator = new();
@@ -129,32 +159,23 @@ namespace GamesTests2
                 }
                 goal += random;
             }
-            return goal[..4];
+            return goal;
         }
-        public static string CheckIfGuessIsValid(string goal, string guess)
+        public static string CheckIfGuessIsValid(string guess)
         {
             if (guess.Any(char.IsLetter))
             {
                 return "Your guess must only contain numerical digits.";
             }
+            else if (guess.Length != 4)
+            {
+                return "Your guess must contain 4 numerical digits.";
+            }
             else
             {
-                if (guess.Length > 4)
-                {
-                    return "Your guess has more than 4 digits.";
-                }
-                else if (guess.Length < 4)
-                {
-                    return "Your guess has less than 4 digits.";
-                }
-                else
-                {
-                    return CompareGuessWithGoal(goal, guess);
-                }
+                return string.Empty;
             }
-
         }
-
         public static string CompareGuessWithGoal(string goal, string guess)
         {
             int bulls = 0;
@@ -177,53 +198,52 @@ namespace GamesTests2
                     }
                 }
             }
+            if (bulls == 4)
+            {
+                return $"{"BBBB"[..bulls]},";
+            }
             return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
         }
 
-        public void CreatePlayer()
-        {
-            bool nameIsAccepted = false;
-            while (!nameIsAccepted)
-            {
-                Ui.WriteOutput("Enter your user name:\n");
-                try
-                {
-                    string name = "John Doe";
-                    if (name.Length < 1)
-                    {
-                        Ui.WriteOutput("You name must have at least 1 character.");
-                    }
-                    else
-                    {
-                        Player = new(name, 0);
-                        nameIsAccepted = true;
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Name must have at least 1 character.");
-                }
-            }
-        }
-        public void MockPlayAgainRequest(int numberOfGuesses)
+
+        public void PlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
-                $"\n Correct. It took {numberOfGuesses} guesses. " +
-                "\n Press any button to start a new game." +
+                $"\n Press any button to start a new game." +
                 "\n Press n to exit.");
             string? answer = userInterface.HandleInput();
 
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
+                CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
                 isPlaying = false;
-                Player.TotalGuesses += numberOfGuesses;
-
+            }
+            else
+            {
+                CurrentPlayer.UpdatePlayerScoreAndRounds(numberOfGuesses);
             }
         }
-
+        public void CreatePlayer()
+        {
+            bool nameIsAccepted = false;
+            while (!nameIsAccepted)
+            {
+                userInterface.WriteOutput("Enter your user name:\n");
+                string name = "John Doe";
+                if (name.Length < 1)
+                {
+                    throw new Exception("You name must have at least 1 character.");
+                }
+                else
+                {
+                    CurrentPlayer = new Player(name, 0);
+                    nameIsAccepted = true;
+                }
+            }
+        }
         public void SavePlayerdata()
         {
-            PlayerDAO playerDAO = new(Player, PathToScore);
+            IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

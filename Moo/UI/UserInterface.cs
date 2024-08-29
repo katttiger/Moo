@@ -1,6 +1,4 @@
-﻿using Games.UI;
-
-namespace Games.Ui
+﻿namespace Games.UI
 {
     public class UserInterface : IUserInterface
     {

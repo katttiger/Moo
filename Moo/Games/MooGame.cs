@@ -1,4 +1,4 @@
-﻿using Games.Ui;
+﻿using Games.UI;
 
 
 namespace Games
@@ -7,8 +7,14 @@ namespace Games
     {
         public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
-        public UserInterface userInterface = new();
+
+        public IUserInterface userInterface;
         private IPlayer CurrentPlayer;
+
+        public MooGame(IUserInterface ui)
+        {
+            userInterface = ui;
+        }
 
         public void Display()
         {

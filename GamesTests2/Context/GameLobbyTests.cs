@@ -1,5 +1,4 @@
 ﻿using Games;
-using Games.Ui;
 using Games.UI;
 
 namespace GamesTests2
@@ -7,7 +6,7 @@ namespace GamesTests2
     [TestClass()]
     public class GameLobbyTests
     {
-        MockGameLobby mockGameLobby = new(new UserInterface());
+        readonly MockGameLobby mockGameLobby = new(new UserInterface());
         [TestMethod()]
         public void GameLobbyTest()
         {
@@ -36,8 +35,8 @@ namespace GamesTests2
         {
             GamesList =
             [
-                    new MooGame(),
-                    new MastermindGame(),
+                    new MooGame(ui),
+                    new MastermindGame(ui),
             ];
 
             userInterface = ui;

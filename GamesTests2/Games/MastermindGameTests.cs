@@ -1,12 +1,13 @@
-﻿using Games;
-using Games.Ui;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
+using Games.UI;
 
 namespace GamesTests2
 {
     [TestClass()]
-    public class MastermindTests
+    public class MastermindGameTests
     {
-        readonly MastermindGame masterMind = new();
+        readonly MastermindGame masterMind = new(new UserInterface());
 
 
         [TestMethod()]
@@ -66,6 +67,18 @@ namespace GamesTests2
             MockMastermind masterMind = new();
             masterMind.CreatePlayer();
             Assert.IsNotNull(masterMind.Player.Name);
+        }
+
+        [TestMethod()]
+        public void MastermindGameTest()
+        {
+            Assert.IsTrue(masterMind.isPlaying);
+        }
+
+        [TestMethod()]
+        public void MastermindGameTest1()
+        {
+            Assert.IsNotNull(masterMind.userInterface);
         }
     }
 

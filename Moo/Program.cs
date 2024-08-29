@@ -1,4 +1,4 @@
-﻿using Games.Ui;
+﻿using Games.UI;
 
 namespace Games
 {

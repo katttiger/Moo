@@ -1,5 +1,4 @@
 ﻿using Games.Statistic;
-using Games.Ui;
 using Games.UI;
 
 namespace Games
@@ -8,7 +7,7 @@ namespace Games
     {
         private IGame Game;
         private IUserInterface UserInterface { get; set; }
-        private GameLobby gamelobby = new(new UserInterface());
+        private readonly GameLobby gamelobby = new(new UserInterface());
         public GameContext(IUserInterface userinterface)
         {
             this.UserInterface = userinterface;
@@ -39,14 +38,14 @@ namespace Games
     public class GameLobby
     {
         public readonly List<IGame> GamesList;
-        IUserInterface userInterface;
+        readonly IUserInterface userInterface;
 
         public GameLobby(IUserInterface ui)
         {
             GamesList =
             [
-                    new MooGame(),
-                    new MastermindGame(),
+                    new MooGame(ui),
+                    new MastermindGame(ui),
             ];
 
             userInterface = ui;

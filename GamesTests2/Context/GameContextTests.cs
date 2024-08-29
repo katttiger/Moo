@@ -1,6 +1,5 @@
 ﻿using Games;
 using Games.Statistic;
-using Games.Ui;
 using Games.UI;
 
 namespace GamesTests2
@@ -9,126 +8,114 @@ namespace GamesTests2
     public class GameContextTests
     {
         private MockGameContext mockGameContext;
-        private GameContext gameContext;
 
         [TestInitialize()]
         public void Initialize()
         {
-            UserInterface ui = new();
-
-            GameContext gameCtxt = new(ui);
-            gameContext = gameCtxt;
-
-            MockGameContext mockContxt = new(ui);
+            MockGameContext mockContxt = new(new UserInterface());
             mockGameContext = mockContxt;
-
         }
 
-       
         [TestMethod()]
         public void RunGameTest()
         {
-            Assert.IsFalse(MockUI.ExitTest());
-        }
-
-        [TestMethod()]
-        public void RunGameHasBeenSetTest()
-        {
-            IGame game = new MooGame();
-            mockGameContext.SetGame(game);
-            Assert.IsTrue(mockGameContext.gameHasBeenSet);
+            Assert.IsFalse(ContextMockUI.ExitTest());
         }
 
         [TestMethod()]
         public void PresentScoreTest()
         {
-            MooGame game = new();
-            mockGameContext.SetGame(game);
-            Assert.IsFalse(string.IsNullOrEmpty(mockGameContext.Game.PathToScore));
+            MooGame game = new(new UserInterface());
+            Assert.IsFalse(string.IsNullOrEmpty(game.PathToScore));
         }
-
     }
 
-    class MockGameContext(IUserInterface userInterface)
+    class MockGameContext
     {
-        public IGame Game;
-        private readonly IUserInterface Ui;
-        public readonly List<IGame> ListOfGames = [];
-        public bool gameHasBeenSet = false;
-
-        public void AddGameToList()
+        private IGame Game;
+        private IUserInterface UserInterface { get; set; }
+        private readonly GameLobby gamelobby = new(new UserInterface());
+        public MockGameContext(IUserInterface userinterface)
         {
-            ListOfGames.AddRange(
-            [
-                new MooGame(),
-                new MastermindGame()
-            ]);
+            this.UserInterface = userinterface;
         }
-
-        public void SetGame(IGame game)
-        {
-
-            Game = game;
-            gameHasBeenSet = true;
-        }
-
         public void Run()
         {
+            gamelobby.PrintMenuOfGames();
+            Game = gamelobby.ChooseGame();
+
             while (Game.isPlaying)
             {
-                userInterface.Clear();
+                UserInterface.Clear();
                 Game.Display();
             }
 
             if (string.IsNullOrEmpty(Game.PathToScore))
             {
-                throw new Exception("List of scores cannot be found.");
+                UserInterface.WriteOutput("List of scores cannot be found.");
             }
             else
             {
                 PlayerscorePresenter.ShowTopListForGame(Game.PathToScore);
             }
+            UserInterface.Exit();
+        }
 
-            userInterface.Exit();
+    }
+
+    class MockGameLobby2
+    {
+        public List<IGame> GamesList;
+        readonly IUserInterface userInterface;
+
+        public MockGameLobby2(IUserInterface ui)
+        {
+            GamesList =
+            [
+                    new MooGame(ui),
+                    new MastermindGame(ui),
+            ];
+
+            userInterface = ui;
         }
 
         public void PrintMenuOfGames()
         {
-            AddGameToList();
-            if (ListOfGames.Count > 0)
+            if (GamesList.Count > 0)
             {
-
-                Ui.WriteOutput("Menu of games:");
-
-                foreach (var game in ListOfGames)
+                userInterface.WriteOutput("Menu of games:");
+                foreach (IGame game in GamesList)
                 {
-                    Ui.WriteOutput($"{ListOfGames.IndexOf(game) + 1}) {game.ToString().AsSpan(10)}");
+                    userInterface.WriteOutput($"{GamesList.IndexOf(game) + 1})" +
+                        $" {game.ToString()[6..^4]}");
                 }
             }
             else
             {
-                throw new Exception("Message");
+                userInterface.WriteOutput("No games are available. \nClosing application.");
+                userInterface.Exit();
             }
         }
-
-        public void ChooseGame(int mockInput)
+        public IGame ChooseGame()
         {
-            while (!gameHasBeenSet)
+            IGame selectedGame = null;
+            while (selectedGame is null)
             {
-                foreach (var game in ListOfGames)
+                int input = userInterface.ParseStringToInt(userInterface.HandleInput());
+                foreach (var game in GamesList)
                 {
-                    if (ListOfGames.IndexOf(game) + 1 == mockInput)
+                    if (GamesList.IndexOf(game) + 1 == input)
                     {
-                        SetGame(game);
-                        gameHasBeenSet = true;
+                        selectedGame = game;
                     }
                 }
-                Ui.WriteOutput("Please enter a valid number.");
+                userInterface.WriteOutput("Please enter a valid number.");
             }
+            return selectedGame;
         }
     }
 
-    class MockUI : IUserInterface
+    class ContextMockUI : IUserInterface
     {
         public void Clear()
         {
@@ -138,8 +125,7 @@ namespace GamesTests2
         {
             return false;
         }
-        public void Exit()
-        { }
+        public void Exit() { }
 
         public string HandleInput()
         {

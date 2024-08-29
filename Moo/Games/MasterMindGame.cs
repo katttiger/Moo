@@ -1,4 +1,4 @@
-﻿using Games.Ui;
+﻿using Games.UI;
 
 namespace Games
 {
@@ -6,8 +6,13 @@ namespace Games
     {
         public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
-        readonly UserInterface userInterface = new();
+        public readonly IUserInterface userInterface;
         private IPlayer CurrentPlayer;
+
+        public MastermindGame(IUserInterface ui)
+        {
+            userInterface = ui;
+        }
 
         public void Display()
         {
