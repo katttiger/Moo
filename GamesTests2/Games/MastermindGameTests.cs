@@ -7,7 +7,7 @@ namespace GamesTests2
     [TestClass()]
     public class MastermindGameTests
     {
-        readonly MastermindGame masterMind = new(new UserInterface());
+        readonly MastermindGame mockMasterMind = new(new UserInterface());
 
 
         [TestMethod()]
@@ -28,16 +28,16 @@ namespace GamesTests2
             Assert.IsTrue(answer != "AAAA,");
         }
 
+
         [TestMethod()]
         public void GoalHasLengthOfFourTest()
         {
-            string mockGuess = masterMind.CreateGoal();
+            string mockGuess = mockMasterMind.CreateGoal();
             Assert.IsTrue(mockGuess.Length == 4);
         }
 
-
         [TestMethod()]
-        public void GuessHasLengthFourTest()
+        public void GuessHasLengthOfFourTest()
         {
             string mockGuess = "1323";
             string answer = MastermindGame.CheckIfGuessIsValid(mockGuess);
@@ -62,23 +62,31 @@ namespace GamesTests2
 
 
         [TestMethod()]
-        public void CreatePlayerTest()
+        public void MastermindGameIsPlayingIsTrueTest()
         {
-            MockMastermind masterMind = new();
-            masterMind.CreatePlayer();
-            Assert.IsNotNull(masterMind.Player.Name);
+            MastermindGame game = new(new UserInterface());
+            Assert.IsTrue(game.isPlaying);
         }
 
         [TestMethod()]
         public void MastermindGameTest()
         {
-            Assert.IsTrue(masterMind.isPlaying);
+            Assert.IsNotNull(mockMasterMind.userInterface);
+        }
+
+
+        [TestMethod()]
+        public void CreatePlayerTest()
+        {
+            MockMastermind masterMind = new(new UserInterface());
+            masterMind.CreatePlayer();
+            Assert.IsNotNull(masterMind.CurrentPlayer.Name);
         }
 
         [TestMethod()]
-        public void MastermindGameTest1()
+        public void SavePlayerdataTest()
         {
-            Assert.IsNotNull(masterMind.userInterface);
+            Assert.IsTrue(mockMasterMind.PathToScore != string.Empty);
         }
     }
 
@@ -86,54 +94,61 @@ namespace GamesTests2
     {
         public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
-        readonly UserInterface Ui = new();
-        public Player Player;
+
+        public readonly IUserInterface userInterface;
+        public IPlayer CurrentPlayer;
+
+        public MockMastermind(IUserInterface ui)
+        {
+            this.userInterface = ui;
+        }
+
         public void Display()
         {
             CreatePlayer();
 
-            Ui.WriteOutput("Values allowed: 0-6.\n" +
-                    "A: Right number and place.\n" +
-                    "B: Right number, wrong place");
+            userInterface.WriteOutput("Values allowed: 0-6.\n" +
+                               "A: Right number and place.\n" +
+                               "B: Right number, wrong place");
 
             while (isPlaying)
             {
-                Ui.WriteOutput("New game: \n");
+                userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-
-                Ui.WriteOutput(
-                    $"\n Correct. It took {numberOfGuesses} guesses. " +
-                    "\n Press any button to start a new game." +
-                    "\n Press n to exit.");
-                string? answer = Ui.HandleInput();
-
-                if (answer != null && answer != "" && answer.Contains('n'))
-                {
-                    Player.TotalGuesses += numberOfGuesses;
-                    ExitGame();
-                }
-                Player.UpdatePlayerScoreAndRounds(numberOfGuesses);
+                userInterface.WriteOutput($"Correct. It took {numberOfGuesses} guesses.");
+                PlayAgainRequest(numberOfGuesses);
             }
+            SavePlayerdata();
         }
         public int GameLogic()
         {
             string goal = CreateGoal();
             int numberOfGuesses = 0;
+            string AsAndBs = string.Empty;
 
             //Comment out or remove next line to play real game
-            Ui.WriteOutput($"For practice, number is: {goal} \n");
+            userInterface.WriteOutput($"For practice, number is: {goal} \n");
 
-            string mastermindCompare = string.Empty;
-
-            while (!mastermindCompare.Equals("AAAA,"))
+            for (int i = 8; !AsAndBs.Contains("AAAA,"); i--)
             {
-                string guess = Ui.HandleInput();
-                mastermindCompare = CheckIfGuessIsValid(guess);
-                numberOfGuesses++;
-                Ui.WriteOutput($"{mastermindCompare} \n");
+                userInterface.WriteOutput($"\nTries left: {i}.");
+
+                string guess = userInterface.HandleInput();
+                string compare = CheckIfGuessIsValid(guess);
+                if (compare == string.Empty)
+                {
+                    AsAndBs = CompareGuessWithGoal(guess, goal);
+                    userInterface.WriteOutput($"{AsAndBs}");
+                }
+                else
+                {
+                    userInterface.WriteOutput($"{compare} \n");
+                }
+                numberOfGuesses = (8 - i) + 1;
             }
             return numberOfGuesses;
         }
+
         public string CreateGoal()
         {
             Random randomGenerator = new();
@@ -160,7 +175,7 @@ namespace GamesTests2
             }
             return string.Empty;
         }
-        public static string CompareGuessWithGoal(string goal, string guess)
+        public static string CompareGuessWithGoal(string guess, string goal)
         {
             int numberExistsInRightPlace = 0;
             int numberExistsInWrongPlace = 0;
@@ -182,24 +197,46 @@ namespace GamesTests2
                     }
                 }
             }
-            return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
+            if (numberExistsInRightPlace == 4)
+                return $"{"AAAA"[..numberExistsInRightPlace]},";
+            else
+                return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
         }
+
+        public void PlayAgainRequest(int numberOfGuesses)
+        {
+            userInterface.WriteOutput(
+                $"\n Press any button to start a new game." +
+                "\n Press n to exit.");
+            string? answer = userInterface.HandleInput();
+
+            if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
+            {
+                CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
+                isPlaying = false;
+            }
+            else
+            {
+                CurrentPlayer.UpdatePlayerScoreAndRounds(numberOfGuesses);
+            }
+        }
+
         public void CreatePlayer()
         {
             bool nameIsAccepted = false;
             while (!nameIsAccepted)
             {
-                Ui.WriteOutput("Enter your user name:\n");
+                userInterface.WriteOutput("Enter your user name:\n");
                 try
                 {
                     string name = "John Doe";
                     if (name.Length < 1)
                     {
-                        Ui.WriteOutput("You name must have at least 1 character.");
+                        userInterface.WriteOutput("You name must have at least 1 character.");
                     }
                     else
                     {
-                        Player = new(name, 0);
+                        CurrentPlayer = new Player(name, 0);
                         nameIsAccepted = true;
                     }
                 }
@@ -209,10 +246,9 @@ namespace GamesTests2
                 }
             }
         }
-        void ExitGame()
+        void SavePlayerdata()
         {
-            isPlaying = false;
-            PlayerDAO playerDAO = new(Player, PathToScore);
+            IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

@@ -8,7 +8,6 @@ namespace GamesTests2
     [TestClass()]
     public class MooGameTests
     {
-        //MockMooGame mockMooGame = new();
         readonly MockMooGame mockMooGame = new(new UserInterface());
 
         [TestMethod()]
@@ -63,32 +62,32 @@ namespace GamesTests2
 
 
         [TestMethod()]
-        public void CreatePlayerTest()
+        public void MooGameIsPlayingIsTrueTest()
         {
-            MockMooGame mockGame = new(new UserInterface());
-            mockGame.CreatePlayer();
-            Assert.IsNotNull(mockGame.CurrentPlayer.Name);
+            MooGame game = new(new UserInterface());
+            Assert.IsTrue(game.isPlaying);
         }
-
-        [TestMethod()]
-        public void SavePlayerdataTest()
-        {
-            Assert.IsTrue(mockMooGame.PathToScore != string.Empty);
-        }
-
         [TestMethod()]
         public void MooGameTest()
         {
             Assert.IsNotNull(mockMooGame.userInterface);
         }
 
+
         [TestMethod()]
-        public void MooGameIsPlayingIsTrueTest()
+        public void CreatePlayerTest()
         {
-            MooGame game = new(new UserInterface());
-            Assert.IsTrue(game.isPlaying);
+            MockMooGame mockGame = new(new UserInterface());
+            mockGame.CreatePlayer();
+            Assert.IsNotNull(mockGame.CurrentPlayer.Name);
+        }
+        [TestMethod()]
+        public void SavePlayerdataTest()
+        {
+            Assert.IsTrue(mockMooGame.PathToScore != string.Empty);
         }
     }
+
     public class MockMooGame : IGame
     {
         public bool isPlaying { get; set; } = true;
@@ -243,7 +242,7 @@ namespace GamesTests2
         }
         public void SavePlayerdata()
         {
-            IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
+            PlayerDAO playerDAO = new(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

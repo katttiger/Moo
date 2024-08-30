@@ -1,6 +1,5 @@
 ﻿using Games.UI;
 
-
 namespace Games
 {
     public class MooGame : IGame
@@ -8,12 +7,12 @@ namespace Games
         public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
 
-        public IUserInterface userInterface;
-        private IPlayer CurrentPlayer;
+        public readonly IUserInterface userInterface;
+        private Player CurrentPlayer;
 
         public MooGame(IUserInterface ui)
         {
-            userInterface = ui;
+            this.userInterface = ui;
         }
 
         public void Display()
@@ -158,7 +157,7 @@ namespace Games
         }
         public void SavePlayerdata()
         {
-            IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
+            PlayerDAO playerDAO = new(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }

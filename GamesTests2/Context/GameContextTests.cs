@@ -7,19 +7,10 @@ namespace GamesTests2
     [TestClass()]
     public class GameContextTests
     {
-        private MockGameContext mockGameContext;
-
-        [TestInitialize()]
-        public void Initialize()
-        {
-            MockGameContext mockContxt = new(new UserInterface());
-            mockGameContext = mockContxt;
-        }
-
         [TestMethod()]
         public void RunGameTest()
         {
-            Assert.IsFalse(ContextMockUI.ExitTest());
+            Assert.IsFalse(MockGameContextUI.ExitTest());
         }
 
         [TestMethod()]
@@ -98,7 +89,7 @@ namespace GamesTests2
         }
         public IGame ChooseGame()
         {
-            IGame selectedGame = null;
+            IGame? selectedGame = null;
             while (selectedGame is null)
             {
                 int input = userInterface.ParseStringToInt(userInterface.HandleInput());
@@ -115,7 +106,7 @@ namespace GamesTests2
         }
     }
 
-    class ContextMockUI : IUserInterface
+    class MockGameContextUI : IUserInterface
     {
         public void Clear()
         {
@@ -134,7 +125,7 @@ namespace GamesTests2
 
         public void WriteOutput(string message)
         {
-            message = "Hello world";
+            //message = "Hello world";
         }
 
         public int ParseStringToInt(string message)

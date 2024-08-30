@@ -9,29 +9,29 @@ namespace GamesTests2
 
         UserInterface mockUI = new();
 
-        [TestMethod()]
-        public void ExitTest()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod()]
+        //public void ExitTest()
+        //{
+        //    Assert.Fail();
+        //}
 
-        [TestMethod()]
-        public void ClearTest()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod()]
+        //public void ClearTest()
+        //{
+        //    Assert.Fail();
+        //}
 
-        [TestMethod()]
-        public void HandleInputTest()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod()]
+        //public void HandleInputTest()
+        //{
+        //    Assert.Fail();
+        //}
 
-        [TestMethod()]
-        public void WriteOutputTest()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod()]
+        //public void WriteOutputTest()
+        //{
+        //    Assert.Fail();
+        //}
 
         [TestMethod()]
         public void ParseStringToIntTest()

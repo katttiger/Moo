@@ -55,7 +55,6 @@ namespace GamesTests2
             }
             else
             {
-                //throw == redundant?
                 throw new Exception("The list of games is empty.");
             }
         }

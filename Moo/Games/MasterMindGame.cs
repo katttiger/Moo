@@ -6,12 +6,13 @@ namespace Games
     {
         public bool isPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
+        
         public readonly IUserInterface userInterface;
         private IPlayer CurrentPlayer;
 
         public MastermindGame(IUserInterface ui)
         {
-            userInterface = ui;
+            this.userInterface = ui;
         }
 
         public void Display()
@@ -157,7 +158,7 @@ namespace Games
                 }
             }
         }
-        void SavePlayerdata()
+        public void SavePlayerdata()
         {
             IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();

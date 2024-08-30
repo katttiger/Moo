@@ -5,7 +5,7 @@ namespace Games
 {
     public class GameContext
     {
-        private IGame Game;
+        private IGame? Game;
         private IUserInterface UserInterface { get; set; }
         private readonly GameLobby gamelobby = new(new UserInterface());
         public GameContext(IUserInterface userinterface)
@@ -58,8 +58,8 @@ namespace Games
                 userInterface.WriteOutput("Menu of games:");
                 foreach (IGame game in GamesList)
                 {
-                    userInterface.WriteOutput($"{GamesList.IndexOf(game) + 1})" +
-                        $" {game.ToString()[6..^4]}");
+                    userInterface.WriteOutput($"{GamesList.IndexOf(game) + 1})"
+                        + $" {game.ToString()[6..^4]}");
                 }
             }
             else
