@@ -14,7 +14,8 @@ namespace Games.Statistic
             List<Player> results = GetPlayerData(pathToData);
             results.Sort((p1, p2) => p1.TotalGuesses.CompareTo(p2.TotalGuesses));
 
-            userInterface.WriteOutput("Player      games average");
+            userInterface.WriteOutput("\n----------HIGHSCORE-------------");
+            userInterface.WriteOutput("\nPlayer      games average");
             foreach (Player player in results)
             {
                 userInterface.WriteOutput(

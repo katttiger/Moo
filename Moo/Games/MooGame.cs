@@ -42,7 +42,7 @@ namespace Games
                    "C: Right number, wrong place");
 
             //Comment out or remove next line to hide answer
-            userInterface.WriteOutput($"For practice, number is: {goal} \n");
+            userInterface.WriteOutput($"\nFor practice, number is: {goal} \n");
 
             while (!bullsAndCows.Equals("BBBB,"))
             {
@@ -114,6 +114,7 @@ namespace Games
                     }
                 }
             }
+
             if (bulls == 4)
             {
                 return $"{"BBBB"[..bulls]},";

@@ -24,7 +24,14 @@ namespace Games
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
-                userInterface.WriteOutput($"Correct. It took {numberOfGuesses} guesses.");
+                if (numberOfGuesses < 8)
+                {
+                    userInterface.WriteOutput($"\nCorrect. It took {numberOfGuesses} guesses.");
+                }
+                else
+                {
+                    userInterface.WriteOutput($"\nYou have run out of guesses.");
+                }
                 PlayAgainRequest(numberOfGuesses);
             }
             SavePlayerdata();
@@ -33,30 +40,37 @@ namespace Games
         {
             string goal = CreateGoal();
             int numberOfGuesses = 0;
-            string AsAndBs = string.Empty;
+            string answer = string.Empty;
 
             userInterface.WriteOutput("Values allowed: 0-6.\n" +
                    "A: Right number and place.\n" +
-                   "B: Right number, wrong place." +
+                   "B: Right number, wrong place.\n" +
                    "Duplicated values may occur.");
 
             //Comment out or remove next line to hide answer
-            userInterface.WriteOutput($"For practice, number is: {goal} \n");
+            userInterface.WriteOutput($"\n For practice, number is: {goal} \n");
 
-            for (int i = 8; !AsAndBs.Contains("AAAA,"); i--)
+            for (int i = 8; !answer.Contains("AAAA,"); i--)
             {
-                userInterface.WriteOutput($"\nTries left: {i}.");
-
-                string guess = userInterface.HandleInput();
-                string compare = CheckIfGuessIsValid(guess);
-                if (compare == string.Empty)
-                {
-                    AsAndBs = CompareGuessWithGoal(guess, goal);
-                    userInterface.WriteOutput($"{AsAndBs}");
-                }
+                if (i == 0)
+                    break;
                 else
                 {
-                    userInterface.WriteOutput($"{compare} \n");
+
+                    userInterface.WriteOutput($"\nTries left: {i}.");
+
+                    string guess = userInterface.HandleInput();
+                    string compare = CheckIfGuessIsValid(guess);
+                    if (string.IsNullOrEmpty(compare))
+                    {
+                        answer = CompareGuessWithGoal(guess, goal);
+                        userInterface.WriteOutput($"{answer}");
+                    }
+                    else
+                    {
+                        userInterface.WriteOutput($"{compare} \n");
+                        i++;
+                    }
                 }
                 numberOfGuesses = (8 - i) + 1;
             }
@@ -91,8 +105,8 @@ namespace Games
         }
         public static string CompareGuessWithGoal(string guess, string goal)
         {
-            int numberExistsInRightPlace = 0;
-            int numberExistsInWrongPlace = 0;
+            int rightNumberAndPlace = 0;
+            int rightNumberWrongPlace = 0;
 
             for (int i = 0; i < 4; i++)
             {
@@ -102,19 +116,22 @@ namespace Games
                     {
                         if (i == j)
                         {
-                            numberExistsInRightPlace++;
+                            rightNumberAndPlace++;
                         }
                         else
                         {
-                            numberExistsInWrongPlace++;
+                            rightNumberWrongPlace++;
                         }
                     }
                 }
             }
-            if (numberExistsInRightPlace == 4)
-                return $"{"AAAA"[..numberExistsInRightPlace]},";
+
+            if (rightNumberAndPlace == 4)
+            {
+                return $"AAAA,";
+            }
             else
-                return $"{"AAAA"[..numberExistsInRightPlace]},{"BBBB"[..numberExistsInWrongPlace]}";
+                return $"A:{rightNumberAndPlace}, B:{rightNumberWrongPlace}";
         }
 
         public void PlayAgainRequest(int numberOfGuesses)

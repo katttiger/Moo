@@ -14,8 +14,8 @@ namespace GamesTests2
         [TestMethod()]
         public void GoalAndGuessAreEqualTest()
         {
-            string mockGoal = "1234";
-            string mockGuess = "1234";
+            string mockGoal = "1223";
+            string mockGuess = "1223";
             string answer = MastermindGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "AAAA,");
         }
@@ -23,9 +23,9 @@ namespace GamesTests2
         [TestMethod()]
         public void GoalAndGuessAreNotEqualTest()
         {
-            string mockGoal = "1234";
-            string mockGuess = "4752";
-            string answer = MooGame.CompareGuessWithGoal(mockGoal, mockGuess);
+            string mockGoal = "1144";
+            string mockGuess = "1111";
+            string answer = MastermindGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer != "AAAA,");
         }
 
