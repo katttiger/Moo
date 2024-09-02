@@ -57,7 +57,7 @@ namespace Games
                 }
                 else
                 {
-                    userInterface.WriteOutput($"{compare}");
+                    userInterface.WriteOutput($"{compare}\n");
                 }
             }
             return numberOfGuesses;

@@ -16,12 +16,12 @@ namespace Games.Statistic
 
             userInterface.WriteOutput("\n----------HIGHSCORE-------------");
             userInterface.WriteOutput("\nPlayer      games average");
+
             foreach (Player player in results)
             {
                 userInterface.WriteOutput(
                     string.Format("{0,-9}{1,5:D}{2,9:F2}",
-                    player.Name, player.NumberOfRoundsPlayed,
-                    player.TotalGuesses));
+                    player.Name, player.NumberOfRoundsPlayed, player.TotalGuesses));
             }
         }
     }
