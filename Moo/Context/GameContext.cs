@@ -17,7 +17,7 @@ namespace Games
             gamelobby.PrintMenuOfGames();
             Game = gamelobby.ChooseGame();
 
-            while (Game.isPlaying)
+            while (Game.IsPlaying)
             {
                 UserInterface.Clear();
                 Game.Display();
@@ -70,7 +70,7 @@ namespace Games
         }
         public IGame ChooseGame()
         {
-            IGame selectedGame = null;
+            IGame? selectedGame = null;
             while (selectedGame is null)
             {
                 int input = userInterface.ParseStringToInt(userInterface.HandleInput());

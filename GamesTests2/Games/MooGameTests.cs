@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Games;
 using Games.UI;
+using Games.Statistic.PlayerDAO;
 
 
 namespace GamesTests2
@@ -65,7 +66,7 @@ namespace GamesTests2
         public void MooGameIsPlayingIsTrueTest()
         {
             MooGame game = new(new UserInterface());
-            Assert.IsTrue(game.isPlaying);
+            Assert.IsTrue(game.IsPlaying);
         }
         [TestMethod()]
         public void MooGameTest()
@@ -88,9 +89,9 @@ namespace GamesTests2
         }
     }
 
-    public class MockMooGame : IGame
+    internal class MockMooGame : IGame
     {
-        public bool isPlaying { get; set; } = true;
+        public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
         public IUserInterface userInterface;
         public IPlayer CurrentPlayer;
@@ -107,7 +108,7 @@ namespace GamesTests2
                    "B: Right number and place.\n" +
                    "C: Right number, wrong place");
 
-            while (isPlaying)
+            while (IsPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
@@ -215,7 +216,7 @@ namespace GamesTests2
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
-                isPlaying = false;
+                IsPlaying = false;
             }
             else
             {

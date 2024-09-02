@@ -7,7 +7,7 @@ namespace GamesTests2
     public class DataMethodsTests
     {
         [TestMethod()]
-        public void DataHasPathToFile()
+        public void DataHasPathToFileTest()
         {
             string pathToFile = "result.txt";
             System.IO.File.Delete(pathToFile);
@@ -19,7 +19,7 @@ namespace GamesTests2
         }
 
         [TestMethod()]
-        public void AddedDataContainsSeperator()
+        public void AddedDataContainsSeperatorTest()
         {
             string pathToFile = "result.txt";
             System.IO.File.Delete(pathToFile);
@@ -32,7 +32,7 @@ namespace GamesTests2
         }
 
         [TestMethod()]
-        public void ListReturnEqualsDataStored()
+        public void ListReturnEqualsDataStoredTest()
         {
             var pathtofile = "nameOfFile.txt";
             System.IO.File.Delete(pathtofile);
@@ -42,6 +42,8 @@ player2#&#3
 PlayerX#&#5
 playerX#&#1");
 
+            //Note: Before running, add these inputs to the file that contains the results from the game.
+            //Otherwise the test will not work.
             var expectedPlayers = new List<Player>();
             expectedPlayers.AddRange([
                 new Player("player+",3),
@@ -55,7 +57,8 @@ playerX#&#1");
         }
     }
 
-    public class PlayerEqualityComparer : IEqualityComparer<IPlayer>
+    //Note: Without this method, TestMethod ListReturnEqualDataStoredTest will not work.
+    internal class PlayerEqualityComparer : IEqualityComparer<IPlayer>
     {
         public bool Equals(IPlayer? expectedPlayer, IPlayer? actualPlayer)
         {
@@ -84,6 +87,4 @@ playerX#&#1");
             throw new NotImplementedException();
         }
     }
-
-
 }

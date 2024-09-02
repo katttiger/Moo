@@ -1,4 +1,4 @@
-﻿namespace Games
+﻿namespace Games.Statistic.PlayerDAO
 {
     public class PlayerDAO : IPlayerDAO
     {

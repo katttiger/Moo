@@ -7,6 +7,7 @@ namespace GamesTests2
     public class GameLobbyTests
     {
         readonly MockGameLobby mockGameLobby = new(new UserInterface());
+
         [TestMethod()]
         public void GameLobbyTest()
         {
@@ -26,7 +27,7 @@ namespace GamesTests2
         }
     }
 
-    public class MockGameLobby
+    internal class MockGameLobby
     {
         public readonly List<IGame> GamesList;
         public IUserInterface userInterface;

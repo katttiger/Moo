@@ -1,14 +1,15 @@
-﻿using Games.UI;
+﻿using Games.Statistic.PlayerDAO;
+using Games.UI;
 
 namespace Games
 {
     public class MooGame : IGame
     {
-        public bool isPlaying { get; set; } = true;
+        public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMooGame.txt";
 
         public readonly IUserInterface userInterface;
-        private Player CurrentPlayer;
+        private IPlayer CurrentPlayer;
 
         public MooGame(IUserInterface ui)
         {
@@ -18,11 +19,8 @@ namespace Games
         public void Display()
         {
             CreatePlayer();
-            userInterface.WriteOutput("Values allowed: 0-9.\n" +
-                   "B: Right number and place.\n" +
-                   "C: Right number, wrong place");
 
-            while (isPlaying)
+            while (IsPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
@@ -39,7 +37,11 @@ namespace Games
             int numberOfGuesses = 0;
             string bullsAndCows = string.Empty;
 
-            //Comment out or remove next line to play real game
+            userInterface.WriteOutput("Values allowed: 0-9.\n" +
+                   "B: Right number and place.\n" +
+                   "C: Right number, wrong place");
+
+            //Comment out or remove next line to hide answer
             userInterface.WriteOutput($"For practice, number is: {goal} \n");
 
             while (!bullsAndCows.Equals("BBBB,"))
@@ -130,7 +132,7 @@ namespace Games
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
-                isPlaying = false;
+                IsPlaying = false;
             }
             else
             {

@@ -13,12 +13,12 @@ namespace Games
                 writer.Close();
             }
         }
-        public static List<IPlayer> GetPlayerdataFromFile(string pathToData)
+        public static List<Player> GetPlayerdataFromFile(string pathToData)
         {
             StreamReader reader = new(pathToData);
             const string Seperator = "#&#";
             UserInterface ui = new();
-            List<IPlayer> playerList = [];
+            List<Player> playerList = [];
 
             while (!reader.EndOfStream)
             {

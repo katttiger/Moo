@@ -1,12 +1,13 @@
-﻿using Games.UI;
+﻿using Games.Statistic.PlayerDAO;
+using Games.UI;
 
 namespace Games
 {
     public class MastermindGame : IGame
     {
-        public bool isPlaying { get; set; } = true;
+        public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
-        
+
         public readonly IUserInterface userInterface;
         private IPlayer CurrentPlayer;
 
@@ -19,11 +20,7 @@ namespace Games
         {
             CreatePlayer();
 
-            userInterface.WriteOutput("Values allowed: 0-6.\n" +
-                               "A: Right number and place.\n" +
-                               "B: Right number, wrong place");
-
-            while (isPlaying)
+            while (IsPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
@@ -38,7 +35,12 @@ namespace Games
             int numberOfGuesses = 0;
             string AsAndBs = string.Empty;
 
-            //Comment out or remove next line to play real game
+            userInterface.WriteOutput("Values allowed: 0-6.\n" +
+                   "A: Right number and place.\n" +
+                   "B: Right number, wrong place." +
+                   "Duplicated values may occur.");
+
+            //Comment out or remove next line to hide answer
             userInterface.WriteOutput($"For practice, number is: {goal} \n");
 
             for (int i = 8; !AsAndBs.Contains("AAAA,"); i--)
@@ -125,7 +127,7 @@ namespace Games
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
-                isPlaying = false;
+                IsPlaying = false;
             }
             else
             {

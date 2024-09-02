@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Games;
 using Games.UI;
+using Games.Statistic.PlayerDAO;
 
 namespace GamesTests2
 {
@@ -65,7 +66,7 @@ namespace GamesTests2
         public void MastermindGameIsPlayingIsTrueTest()
         {
             MastermindGame game = new(new UserInterface());
-            Assert.IsTrue(game.isPlaying);
+            Assert.IsTrue(game.IsPlaying);
         }
 
         [TestMethod()]
@@ -90,9 +91,9 @@ namespace GamesTests2
         }
     }
 
-    class MockMastermind : IGame
+    internal class MockMastermind : IGame
     {
-        public bool isPlaying { get; set; } = true;
+        public bool IsPlaying { get; set; } = true;
         public string PathToScore { get; set; } = "ResultMastemind.txt";
 
         public readonly IUserInterface userInterface;
@@ -111,7 +112,7 @@ namespace GamesTests2
                                "A: Right number and place.\n" +
                                "B: Right number, wrong place");
 
-            while (isPlaying)
+            while (IsPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
@@ -213,7 +214,7 @@ namespace GamesTests2
             if (!string.IsNullOrEmpty(answer) || answer.Contains('n'))
             {
                 CurrentPlayer.UpdatePlayerScore(numberOfGuesses);
-                isPlaying = false;
+                IsPlaying = false;
             }
             else
             {
