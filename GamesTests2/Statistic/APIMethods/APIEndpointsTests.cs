@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace GamesTests2
 {
     [TestClass()]
-    public class DataMethodsTests
+    public class APIEndpointsTests
     {
         [TestMethod()]
         public void DataHasPathToFileTest()
@@ -13,7 +13,7 @@ namespace GamesTests2
             System.IO.File.Delete(pathToFile);
             string data = "bogusPlayer";
 
-            DataMethods.AddData(data, pathToFile);
+            APIEndpoints.AddData(data, pathToFile);
 
             Assert.IsFalse(string.IsNullOrEmpty(pathToFile));
         }
@@ -26,13 +26,13 @@ namespace GamesTests2
 
             string data = "bogusPlayer#&#8";
 
-            DataMethods.AddData(data, pathToFile);
+            APIEndpoints.AddData(data, pathToFile);
 
             Assert.IsTrue(data.Contains("#&#"));
         }
 
         [TestMethod()]
-        public void ListReturnEqualsDataStoredTest()
+        public void ListReturnedEqualsDataStoredTest()
         {
             var pathtofile = "nameOfFile.txt";
             System.IO.File.Delete(pathtofile);
@@ -51,7 +51,7 @@ playerX#&#1");
                 new Player("PlayerX",5),
                 new Player("playerX",1)]);
 
-            var actualPlayers = DataMethods.GetPlayerdataFromFile(pathtofile);
+            var actualPlayers = APIEndpoints.GetPlayerdataFromFile(pathtofile);
 
             Assert.IsTrue(actualPlayers.SequenceEqual(expectedPlayers, new PlayerEqualityComparer()));
         }

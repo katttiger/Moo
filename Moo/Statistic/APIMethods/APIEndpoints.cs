@@ -2,7 +2,7 @@
 
 namespace Games
 {
-    public class DataMethods : IDataMethods
+    public class APIEndpoints : IAPIEndpoints
     {
         public static void AddData(string data, string pathToData)
         {
@@ -23,7 +23,7 @@ namespace Games
             while (!reader.EndOfStream)
             {
                 string? line = reader.ReadLine();
-                if (line != null)
+                if (!string.IsNullOrWhiteSpace(line))
                 {
                     string[] playerNameAndScoreArray = line.Split(
                         new string[] { Seperator }, StringSplitOptions.None);

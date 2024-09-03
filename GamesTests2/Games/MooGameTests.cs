@@ -16,7 +16,7 @@ namespace GamesTests2
         {
             string mockGoal = "1234";
             string mockGuess = "1234";
-            string answer = MooGame.CompareGuessWithGoal(mockGoal, mockGuess);
+            string answer = mockMooGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer == "BBBB,");
         }
         [TestMethod()]
@@ -24,7 +24,7 @@ namespace GamesTests2
         {
             string mockGoal = "1234";
             string mockGuess = "4752";
-            string answer = MooGame.CompareGuessWithGoal(mockGoal, mockGuess);
+            string answer = mockMooGame.CompareGuessWithGoal(mockGoal, mockGuess);
             Assert.IsTrue(answer != "BBBB,");
         }
 
@@ -50,14 +50,14 @@ namespace GamesTests2
         public void GuessHasLengthOfFourTest()
         {
             string mockGuess = "1234";
-            string answer = MooGame.CheckIfGuessIsValid(mockGuess);
+            string answer = mockMooGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
         [TestMethod()]
         public void GuessHasNoLettersTest()
         {
             string mockGuess = "1234";
-            string answer = MooGame.CheckIfGuessIsValid(mockGuess);
+            string answer = mockMooGame.CheckIfGuessIsValid(mockGuess);
             Assert.IsTrue(answer == string.Empty);
         }
 
@@ -161,7 +161,7 @@ namespace GamesTests2
             }
             return goal;
         }
-        public static string CheckIfGuessIsValid(string guess)
+        public string CheckIfGuessIsValid(string guess)
         {
             if (guess.Any(char.IsLetter))
             {
@@ -176,7 +176,7 @@ namespace GamesTests2
                 return string.Empty;
             }
         }
-        public static string CompareGuessWithGoal(string goal, string guess)
+        public string CompareGuessWithGoal(string goal, string guess)
         {
             int bulls = 0;
             int cows = 0;

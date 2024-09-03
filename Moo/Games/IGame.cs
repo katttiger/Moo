@@ -8,5 +8,6 @@
         public int GameLogic();
         public string CreateGoal();
         void CreatePlayer();
+        void SavePlayerdata();
     }
 }

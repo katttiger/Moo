@@ -1,4 +1,5 @@
-﻿using Games;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Games;
 using Games.Statistic;
 using Games.UI;
 
@@ -7,12 +8,18 @@ namespace GamesTests2
     [TestClass()]
     public class GameContextTests
     {
-        private MockGameLobby mockGameLobby = new(new UserInterface());
+        readonly MockGameContext mockGameContext = new(new UserInterface());
 
         [TestMethod()]
         public void RunGameTest()
         {
             Assert.IsFalse(MockGameContextUI.ExitTest());
+        }
+
+        [TestMethod()]
+        public void GameContextTest()
+        {
+            Assert.IsNotNull(mockGameContext.UserInterface);
         }
 
         [TestMethod()]
@@ -25,9 +32,9 @@ namespace GamesTests2
 
     internal class MockGameContext
     {
-        private IGame Game;
-        private IUserInterface UserInterface { get; set; }
-        private readonly GameLobby gamelobby = new(new UserInterface());
+        public IGame Game;
+        public IUserInterface UserInterface { get; set; }
+        public readonly GameLobby gamelobby = new(new UserInterface());
         public MockGameContext(IUserInterface userinterface)
         {
             this.UserInterface = userinterface;

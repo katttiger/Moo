@@ -47,7 +47,7 @@
         }
         public void SavePlayerdataToGameScoreTable()
         {
-            DataMethods.AddData(ConvertPlayerDataToString(), PathToSavedData);
+            APIEndpoints.AddData(ConvertPlayerDataToString(), PathToSavedData);
         }
     }
 }

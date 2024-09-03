@@ -6,7 +6,7 @@ namespace Games.Statistic
     {
         public static List<Player> GetPlayerData(string pathToData)
         {
-            return DataMethods.GetPlayerdataFromFile(pathToData);
+            return APIEndpoints.GetPlayerdataFromFile(pathToData);
         }
         public static void ShowTopListForGame(string pathToData)
         {

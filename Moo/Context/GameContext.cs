@@ -6,6 +6,7 @@ namespace Games
     public class GameContext
     {
         private IGame? Game;
+
         private IUserInterface UserInterface { get; set; }
         private readonly GameLobby gamelobby = new(new UserInterface());
         public GameContext(IUserInterface userinterface)
@@ -22,7 +23,12 @@ namespace Games
                 UserInterface.Clear();
                 Game.Display();
             }
+            PresentScore();
+            UserInterface.Exit();
+        }
 
+        public void PresentScore()
+        {
             if (string.IsNullOrEmpty(Game.PathToScore))
             {
                 UserInterface.WriteOutput("List of scores cannot be found.");
@@ -31,7 +37,6 @@ namespace Games
             {
                 PlayerscorePresenter.ShowTopListForGame(Game.PathToScore);
             }
-            UserInterface.Exit();
         }
     }
 

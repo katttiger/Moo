@@ -9,7 +9,7 @@ namespace Games
         public string PathToScore { get; set; } = "ResultMooGame.txt";
 
         public readonly IUserInterface userInterface;
-        private IPlayer CurrentPlayer;
+        private Player CurrentPlayer;
 
         public MooGame(IUserInterface ui)
         {
@@ -19,7 +19,6 @@ namespace Games
         public void Display()
         {
             CreatePlayer();
-
             while (IsPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
@@ -77,7 +76,7 @@ namespace Games
             }
             return goal;
         }
-        public static string CheckIfGuessIsValid(string guess)
+        public string CheckIfGuessIsValid(string guess)
         {
             if (guess.Any(char.IsLetter))
             {
@@ -92,7 +91,7 @@ namespace Games
                 return string.Empty;
             }
         }
-        public static string CompareGuessWithGoal(string goal, string guess)
+        public string CompareGuessWithGoal(string goal, string guess)
         {
             int bulls = 0;
             int cows = 0;
@@ -153,7 +152,7 @@ namespace Games
                 }
                 else
                 {
-                    CurrentPlayer = new Player(name, 0);
+                    CurrentPlayer = new(name, 0);
                     nameIsAccepted = true;
                 }
             }

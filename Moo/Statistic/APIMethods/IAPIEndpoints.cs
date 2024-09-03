@@ -1,6 +1,6 @@
 ﻿namespace Games
 {
-    public interface IDataMethods
+    public interface IAPIEndpoints
     {
         public static void Add() { }
         public static void Get() { }

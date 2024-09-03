@@ -9,7 +9,7 @@ namespace Games
         public string PathToScore { get; set; } = "ResultMastemind.txt";
 
         public readonly IUserInterface userInterface;
-        private IPlayer CurrentPlayer;
+        private Player CurrentPlayer;
 
         public MastermindGame(IUserInterface ui)
         {
@@ -19,7 +19,6 @@ namespace Games
         public void Display()
         {
             CreatePlayer();
-
             while (IsPlaying)
             {
                 userInterface.WriteOutput("New game: \n");
@@ -88,7 +87,7 @@ namespace Games
             }
             return goal;
         }
-        public static string CheckIfGuessIsValid(string guess)
+        public string CheckIfGuessIsValid(string guess)
         {
             foreach (char c in guess)
             {
@@ -103,7 +102,7 @@ namespace Games
             }
             return string.Empty;
         }
-        public static string CompareGuessWithGoal(string guess, string goal)
+        public string CompareGuessWithGoal(string guess, string goal)
         {
             int rightNumberAndPlace = 0;
             int rightNumberWrongPlace = 0;
@@ -151,6 +150,7 @@ namespace Games
                 CurrentPlayer.UpdatePlayerScoreAndRounds(numberOfGuesses);
             }
         }
+
 
         public void CreatePlayer()
         {
