@@ -23,6 +23,7 @@ namespace Games
             {
                 userInterface.WriteOutput("New game: \n");
                 int numberOfGuesses = GameLogic();
+
                 if (numberOfGuesses < 8)
                 {
                     userInterface.WriteOutput($"\nCorrect. It took {numberOfGuesses} guesses.");
@@ -31,10 +32,13 @@ namespace Games
                 {
                     userInterface.WriteOutput($"\nYou have run out of guesses.");
                 }
+
                 PlayAgainRequest(numberOfGuesses);
             }
             SavePlayerdata();
         }
+
+
         public int GameLogic()
         {
             string goal = CreateGoal();
@@ -75,7 +79,6 @@ namespace Games
             }
             return numberOfGuesses;
         }
-
         public string CreateGoal()
         {
             Random randomGenerator = new();

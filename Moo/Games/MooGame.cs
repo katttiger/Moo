@@ -121,7 +121,6 @@ namespace Games
             return $"{"BBBB"[..bulls]},{"CCCC"[..cows]}";
         }
 
-
         public void PlayAgainRequest(int numberOfGuesses)
         {
             userInterface.WriteOutput(
@@ -139,6 +138,8 @@ namespace Games
                 CurrentPlayer.UpdatePlayerScoreAndRounds(numberOfGuesses);
             }
         }
+
+
         public void CreatePlayer()
         {
             bool nameIsAccepted = false;
