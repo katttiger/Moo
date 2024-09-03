@@ -182,7 +182,7 @@ namespace Games
         }
         public void SavePlayerdata()
         {
-            IPlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
+            PlayerDAO playerDAO = new PlayerDAO(CurrentPlayer, PathToScore);
             playerDAO.SavePlayerdataToGameScoreTable();
         }
     }
